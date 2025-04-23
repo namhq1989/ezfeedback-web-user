@@ -4,13 +4,12 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft, Loader2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -22,17 +21,19 @@ interface VerificationFormProps {
   onBack: () => void
 }
 
+const RESEND_COUNTDOWN = 5
+
 const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [resendLoading, setResendLoading] = useState(false)
+  const [resendCountdown, setResendCountdown] = useState(RESEND_COUNTDOWN)
   const { t } = useTranslation('auth')
 
   // Create validation schema with translated messages
   const formSchema = z.object({
     code: z
       .string()
-      .min(6, t('validation.codeTooShort'))
-      .max(8, t('validation.codeTooLong'))
+      .length(6, t('validation.invalidCode'))
       .regex(/^\d+$/, t('validation.codeFormat')),
   })
 
@@ -72,6 +73,7 @@ const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       toast.success(t('verificationForm.resendSuccess'))
+      setResendCountdown(RESEND_COUNTDOWN)
     } catch (error) {
       toast.error(t('verificationForm.resendError'))
       console.error('Error resending verification code:', error)
@@ -79,6 +81,15 @@ const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
       setResendLoading(false)
     }
   }
+
+  // Countdown effect for resend button
+  useEffect(() => {
+    if (resendCountdown === 0) return
+    const timer = setInterval(() => {
+      setResendCountdown((prev) => (prev > 0 ? prev - 1 : 0))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [resendCountdown])
 
   return (
     <Form {...form}>
@@ -88,7 +99,6 @@ const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
           name='code'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('verificationForm.verificationCode')}</FormLabel>
               <FormControl>
                 <Input
                   placeholder={t('verificationForm.codePlaceholder')}
@@ -112,7 +122,7 @@ const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
           )}
         </Button>
 
-        <div className='flex justify-between items-center mt-4 pt-2 text-sm'>
+        <div className='flex justify-between items-center text-sm'>
           <Button
             type='button'
             variant='ghost'
@@ -130,13 +140,17 @@ const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
             variant='link'
             size='sm'
             onClick={handleResendCode}
-            disabled={isLoading || resendLoading}
+            disabled={isLoading || resendLoading || resendCountdown > 0}
           >
             {resendLoading ? (
               <>
                 <Loader2 className='mr-1 h-3 w-3 animate-spin' />
                 {t('verificationForm.resending')}
               </>
+            ) : resendCountdown > 0 ? (
+              t('verificationForm.resendCountdown', {
+                seconds: resendCountdown,
+              })
             ) : (
               t('verificationForm.resendCode')
             )}

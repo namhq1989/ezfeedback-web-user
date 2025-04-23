@@ -6,7 +6,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Language, useLanguage } from '@/i18n/hooks/use-language'
-import { Globe } from 'lucide-react'
 import React from 'react'
 
 export const LanguageSwitcher: React.FC = () => {
@@ -19,8 +18,7 @@ export const LanguageSwitcher: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='sm' className='flex items-center gap-2'>
-          <Globe className='h-4 w-4' />
+        <Button variant='outline' size='sm' className='flex items-center gap-2'>
           <span>{currentLanguageInfo.flag}</span>
         </Button>
       </DropdownMenuTrigger>

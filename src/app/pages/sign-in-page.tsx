@@ -6,8 +6,8 @@ import { Separator } from '@/components/ui/separator'
 import { LanguageSwitcher } from '@/i18n'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router'
+import { Trans, useTranslation } from 'react-i18next'
+import { Link, useNavigate } from 'react-router'
 
 import Logo from '@/assets/images/logo.png'
 
@@ -33,25 +33,26 @@ const SignInPage = () => {
   }
 
   return (
-    <div className='flex min-h-screen flex-col bg-muted/40'>
-      {/* Language switcher in top right */}
-      <div className='absolute top-4 right-4'>
-        <LanguageSwitcher />
-      </div>
-
+    <div className='flex min-h-screen flex-col'>
       {/* Main content */}
       <div className='flex flex-1 items-center justify-center p-4'>
         <div className='w-full max-w-md'>
           <div className='mb-8 flex justify-center'>
-            <img src={Logo} alt='EzFeedback Logo' className='h-16 w-auto' />
+            <img src={Logo} alt='EzFeedback Logo' className='h-30 w-auto' />
           </div>
 
-          <Card className='border-border/40 shadow-lg'>
-            <CardHeader className='space-y-2 text-center'>
+          <Card className='flex flex-col gap-8 border-border/40 py-12 px-2'>
+            <CardHeader className='text-center'>
               <h1 className='text-2xl font-bold tracking-tight'>
-                {t('title')}
+                {t(
+                  `${step === 'email' ? 'emailForm' : 'verificationForm'}.title`,
+                )}
               </h1>
-              <p className='text-sm text-muted-foreground'>{t('subtitle')}</p>
+              <p className='text-sm text-muted-foreground'>
+                {t(
+                  `${step === 'email' ? 'emailForm' : 'verificationForm'}.subtitle`,
+                )}
+              </p>
             </CardHeader>
 
             <CardContent>
@@ -64,9 +65,6 @@ const SignInPage = () => {
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <p className='mb-4 text-sm text-muted-foreground'>
-                      {t('instructions.email')}
-                    </p>
                     <EmailForm onSubmit={handleEmailSubmit} />
                   </motion.div>
                 ) : (
@@ -77,9 +75,6 @@ const SignInPage = () => {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <p className='mb-4 text-sm text-muted-foreground'>
-                      {t('instructions.code')}
-                    </p>
                     <VerificationForm
                       email={email}
                       onSuccess={handleVerificationSuccess}
@@ -90,20 +85,39 @@ const SignInPage = () => {
               </AnimatePresence>
             </CardContent>
 
-            <CardFooter className='flex flex-col space-y-4 border-t px-6 py-4'>
+            <div className='px-8 my-2'>
               <Separator />
-              <p className='text-center text-xs text-muted-foreground'>
-                {t('signIn.disclaimer')}
+            </div>
+
+            <CardFooter className='flex flex-row gap-8 justify-between items-center'>
+              <p className='text-sm text-muted-foreground'>
+                <Trans
+                  i18nKey='auth:signIn.disclaimer'
+                  components={{
+                    termsLink: (
+                      <Link
+                        to='/terms'
+                        className='underline hover:text-primary'
+                      />
+                    ),
+                    privacyLink: (
+                      <Link
+                        to='/privacy'
+                        className='underline hover:text-primary'
+                      />
+                    ),
+                  }}
+                />
               </p>
+              <LanguageSwitcher />
             </CardFooter>
           </Card>
+          {/* Footer */}
+          <footer className='py-6 text-center text-xs text-muted-foreground'>
+            © {new Date().getFullYear()} Easy Feedback. {t('signIn.copyright')}
+          </footer>
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className='py-6 text-center text-xs text-muted-foreground'>
-        © {new Date().getFullYear()} EzFeedback. {t('signIn.copyright')}
-      </footer>
     </div>
   )
 }
