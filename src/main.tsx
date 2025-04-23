@@ -1,10 +1,11 @@
-import App from '@/app'
+import App from '@/app.tsx'
 import '@/assets/stylesheets/global.css'
 import { ThemeProvider } from '@/components/theme/theme.tsx'
 import '@/i18n/i18n'
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
+import { Toaster } from './components/ui/sonner'
 
 const Loading = () => (
   <div className='flex h-screen w-screen items-center justify-center'>
@@ -15,6 +16,7 @@ const Loading = () => (
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Suspense fallback={<Loading />}>
+      <Toaster />
       <BrowserRouter>
         <ThemeProvider defaultTheme='dark' storageKey='ui-theme'>
           <App />

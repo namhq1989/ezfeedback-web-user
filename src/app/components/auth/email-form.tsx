@@ -4,7 +4,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -67,7 +66,6 @@ const EmailForm = ({ onSubmit }: EmailFormProps) => {
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('emailForm.email')}</FormLabel>
               <FormControl>
                 <Input
                   placeholder={t('emailForm.emailPlaceholder')}
