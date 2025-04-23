@@ -1,52 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Button } from '@/components/ui/button.tsx'
-import { useTheme } from './components/theme/theme'
-import { MoonStar } from 'lucide-react'
-import { Switch } from '@/components/ui/switch.tsx'
+import { Route, Routes } from 'react-router'
+import AuthenticatedLayout from './app/components/authenticated-layout'
+import HomePage from './app/pages/home-page'
+import ProjectPage from './app/pages/project-page'
+import SignInPage from './app/pages/sign-in-page'
 
-function App() {
-  const [count, setCount] = useState(0)
-  const { setTheme, theme } = useTheme()
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <Button>Click me</Button>
-      <div className='flex bg-container p-4 justify-between items-center'>
-        <div className='flex flex-row gap-2 items-center justify-center'>
-          <MoonStar size={20} className='text-muted-foreground' />
-          <p className='text-sm text-foreground'>Dark mode</p>
-        </div>
-        <Switch
-          checked={theme === 'dark'}
-          onCheckedChange={(checked) => {
-            setTheme(checked ? 'dark' : 'light')
-          }}
-        />
-      </div>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      {/* Public route */}
+      <Route path='/signin' element={<SignInPage />} />
+
+      {/* Protected routes */}
+      <Route path='/' element={<AuthenticatedLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path='project' element={<ProjectPage />} />
+      </Route>
+    </Routes>
   )
 }
 

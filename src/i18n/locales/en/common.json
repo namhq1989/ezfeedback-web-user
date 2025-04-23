@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "EzFeedback",
+    "tagline": "Collect feedback effortlessly"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next"
+  },
+  "messages": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success!",
+    "confirm": "Are you sure?",
+    "notFound": "Not found",
+    "comingSoon": "Coming soon"
+  },
+  "navigation": {
+    "home": "Home",
+    "projects": "Projects",
+    "settings": "Settings",
+    "help": "Help"
+  },
+  "dateTime": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "days_ago": "{{count}} day ago",
+    "days_ago_plural": "{{count}} days ago",
+    "just_now": "Just now",
+    "minutes_ago": "{{count}} minute ago",
+    "minutes_ago_plural": "{{count}} minutes ago"
+  }
+}

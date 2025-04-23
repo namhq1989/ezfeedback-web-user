@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "EzFeedback",
+    "tagline": "Thu thập phản hồi một cách dễ dàng"
+  },
+  "actions": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo mới",
+    "submit": "Gửi",
+    "confirm": "Xác nhận",
+    "back": "Quay lại",
+    "next": "Tiếp theo"
+  },
+  "messages": {
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "success": "Thành công!",
+    "confirm": "Bạn có chắc không?",
+    "notFound": "Không tìm thấy",
+    "comingSoon": "Sắp ra mắt"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "projects": "Dự án",
+    "settings": "Cài đặt",
+    "help": "Trợ giúp"
+  },
+  "dateTime": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "days_ago": "{{count}} ngày trước",
+    "days_ago_plural": "{{count}} ngày trước",
+    "just_now": "Vừa xong",
+    "minutes_ago": "{{count}} phút trước",
+    "minutes_ago_plural": "{{count}} phút trước"
+  }
+}
