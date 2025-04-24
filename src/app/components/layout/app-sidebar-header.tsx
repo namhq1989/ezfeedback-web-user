@@ -20,21 +20,14 @@ import { useEffect, useState } from 'react'
 const TRANSITION_DURATION = 300
 const SHOW_TEXT_DELAY = 150
 
-const AppSidebarHeader = ({
-  versions,
-  defaultVersion,
-}: {
-  versions: string[]
-  defaultVersion: string
-}) => {
+const AppSidebarHeader = () => {
   const { open, isMobile } = useSidebar()
-  // Use the slug as "version" for compatibility with the prop API
-  const [selectedVersion, setSelectedVersion] = useState(
-    defaultVersion || projects[0]?.slug,
+  const [selectedProjectSlug, setSelectedProjectSlug] = useState(
+    projects[0]?.slug,
   )
 
   const selectedProject =
-    projects.find((p) => p.slug === selectedVersion) || projects[0]
+    projects.find((p) => p.slug === selectedProjectSlug) || projects[0]
 
   const [showText, setShowText] = useState(open)
   useEffect(() => {
@@ -97,7 +90,7 @@ const AppSidebarHeader = ({
               {projects.map((project) => (
                 <DropdownMenuItem
                   key={project.slug}
-                  onSelect={() => setSelectedVersion(project.slug)}
+                  onSelect={() => setSelectedProjectSlug(project.slug)}
                   className='p-0'
                 >
                   <button
@@ -113,7 +106,7 @@ const AppSidebarHeader = ({
                         {project.stats.totalFeedback.toLocaleString()} feedback
                       </span>
                     </div>
-                    {project.slug === selectedVersion ? (
+                    {project.slug === selectedProjectSlug ? (
                       <Check className='ml-auto' />
                     ) : null}
                   </button>
