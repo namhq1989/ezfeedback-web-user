@@ -1,28 +1,24 @@
-import AuthenticatedLayout from '@/app/components/layout/authenticated-layout'
-import CategoryPage from '@/app/pages/category-page'
-import DashboardPage from '@/app/pages/dashboard-page'
-import FeedbackPage from '@/app/pages/feedback-page'
-import MemberPage from '@/app/pages/member-page'
-import SettingPage from '@/app/pages/setting-page'
-import SignInPage from '@/app/pages/sign-in-page'
+import { AppRoute, appRoutes } from '@/app/router/routes'
+import { JSX } from 'react'
 import { Route, Routes } from 'react-router'
 
-const App = () => {
-  return (
-    <Routes>
-      {/* Public route */}
-      <Route path='/signin' element={<SignInPage />} />
-
-      {/* Protected routes */}
-      <Route path='/' element={<AuthenticatedLayout />}>
-        <Route index element={<DashboardPage />} />
-        <Route path='feedback' element={<FeedbackPage />} />
-        <Route path='category' element={<CategoryPage />} />
-        <Route path='member' element={<MemberPage />} />
-        <Route path='setting' element={<SettingPage />} />
+// Helper to recursively convert AppRoute tree to <Route> elements
+function renderRoutes(routes: AppRoute[]): JSX.Element[] {
+  return routes.map((route) => {
+    const hasChildren = route.children && route.children.length > 0
+    if (route.index) {
+      return <Route index key='index' element={route.element} />
+    }
+    return (
+      <Route key={route.path} path={route.path} element={route.element}>
+        {hasChildren ? renderRoutes(route.children!) : null}
       </Route>
-    </Routes>
-  )
+    )
+  })
+}
+
+const App = () => {
+  return <Routes>{renderRoutes(appRoutes)}</Routes>
 }
 
 export default App

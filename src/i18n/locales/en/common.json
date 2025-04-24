@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "EzFeedback",
+    "name": "Easy Feedback",
     "tagline": "Collect feedback effortlessly"
   },
   "actions": {
@@ -23,9 +23,13 @@
     "comingSoon": "Coming soon"
   },
   "navigation": {
-    "home": "Home",
-    "projects": "Projects",
-    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "feedback": "Feedback",
+    "category": "Category",
+    "member": "Member",
+    "setting": "Setting",
+    "signin": "Sign In",
+    "project": "Project",
     "help": "Help"
   },
   "dateTime": {

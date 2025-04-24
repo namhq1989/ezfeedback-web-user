@@ -13,21 +13,21 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { projects } from '@/mock/projects'
 import { Check, ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 const TRANSITION_DURATION = 300
 const SHOW_TEXT_DELAY = 150
 
-const AppSidebarHeader = ({
-  versions,
-  defaultVersion,
-}: {
-  versions: string[]
-  defaultVersion: string
-}) => {
+const AppSidebarHeader = () => {
   const { open, isMobile } = useSidebar()
-  const [selectedVersion, setSelectedVersion] = useState(defaultVersion)
+  const [selectedProjectSlug, setSelectedProjectSlug] = useState(
+    projects[0]?.slug,
+  )
+
+  const selectedProject =
+    projects.find((p) => p.slug === selectedProjectSlug) || projects[0]
 
   const [showText, setShowText] = useState(open)
   useEffect(() => {
@@ -63,10 +63,11 @@ const AppSidebarHeader = ({
                       {showText && (
                         <>
                           <span className='font-semibold truncate overflow-hidden whitespace-nowrap'>
-                            BapBi
+                            {selectedProject.name}
                           </span>
                           <span className='text-xs text-muted-foreground'>
-                            2,395 feedback
+                            {selectedProject.stats.totalFeedback.toLocaleString()}{' '}
+                            feedback
                           </span>
                         </>
                       )}
@@ -86,10 +87,10 @@ const AppSidebarHeader = ({
               align='start'
               className='flex flex-col gap-1 mt-2 bg-background'
             >
-              {versions.map((version) => (
+              {projects.map((project) => (
                 <DropdownMenuItem
-                  key={version}
-                  onSelect={() => setSelectedVersion(version)}
+                  key={project.slug}
+                  onSelect={() => setSelectedProjectSlug(project.slug)}
                   className='p-0'
                 >
                   <button
@@ -100,12 +101,12 @@ const AppSidebarHeader = ({
                       <GalleryVerticalEnd className='size-4 text-primary-foreground' />
                     </div>
                     <div className='flex flex-col gap-1 leading-none text-left'>
-                      <span className='font-semibold'>BapBi</span>
+                      <span className='font-semibold'>{project.name}</span>
                       <span className='text-xs text-muted-foreground'>
-                        2,395 feedback
+                        {project.stats.totalFeedback.toLocaleString()} feedback
                       </span>
                     </div>
-                    {version === selectedVersion ? (
+                    {project.slug === selectedProjectSlug ? (
                       <Check className='ml-auto' />
                     ) : null}
                   </button>
