@@ -23,9 +23,13 @@
     "comingSoon": "Sắp ra mắt"
   },
   "navigation": {
-    "home": "Trang chủ",
-    "projects": "Dự án",
-    "settings": "Cài đặt",
+    "dashboard": "Tổng quan",
+    "feedback": "Phản hồi",
+    "category": "Danh mục",
+    "member": "Thành viên",
+    "setting": "Cài đặt",
+    "signin": "Đăng nhập",
+    "project": "Dự án",
     "help": "Trợ giúp"
   },
   "dateTime": {
