@@ -1,7 +1,7 @@
+import AppSidebarContent from '@/app/components/layout/app-sidebar-content'
+import AppSidebarFooter from '@/app/components/layout/app-sidebar-footer'
+import AppSidebarHeader from '@/app/components/layout/app-sidebar-header'
 import { Sidebar } from '@/components/ui/sidebar'
-import AppSidebarContent from './app-sidebar-content'
-import AppSidebarFooter from './app-sidebar-footer'
-import AppSidebarHeader from './app-sidebar-header'
 
 const data = {
   versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
@@ -9,7 +9,7 @@ const data = {
 
 const AppSidebar = () => {
   return (
-    <Sidebar>
+    <Sidebar collapsible='icon'>
       <AppSidebarHeader
         versions={data.versions}
         defaultVersion={data.versions[0]}

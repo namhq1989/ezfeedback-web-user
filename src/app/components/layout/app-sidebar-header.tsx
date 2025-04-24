@@ -1,7 +1,3 @@
-import { Separator } from '@/components/ui/separator'
-import { Check, ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react'
-import * as React from 'react'
-
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -9,12 +5,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Separator } from '@/components/ui/separator'
 import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
+import { Check, ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+
+const TRANSITION_DURATION = 300
+const SHOW_TEXT_DELAY = 150
 
 const AppSidebarHeader = ({
   versions,
@@ -23,46 +26,65 @@ const AppSidebarHeader = ({
   versions: string[]
   defaultVersion: string
 }) => {
-  const [selectedVersion, setSelectedVersion] = React.useState(defaultVersion)
-  const triggerRef = React.useRef<HTMLButtonElement | null>(null)
-  const [dropdownWidth, setDropdownWidth] = React.useState<number | undefined>(
-    undefined,
-  )
+  const { open, isMobile } = useSidebar()
+  const [selectedVersion, setSelectedVersion] = useState(defaultVersion)
 
-  // When dropdown opens, set width
-  React.useEffect(() => {
-    if (triggerRef.current) {
-      setDropdownWidth(triggerRef.current.offsetWidth)
+  const [showText, setShowText] = useState(open)
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+    if (open) {
+      timeout = setTimeout(() => setShowText(true), SHOW_TEXT_DELAY)
+    } else {
+      setShowText(false)
     }
-  }, [triggerRef.current])
+    return () => clearTimeout(timeout)
+  }, [open])
 
   return (
-    <SidebarHeader className='flex items-center px-4 py-6'>
+    <SidebarHeader className='flex items-center mt-2'>
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
-                ref={triggerRef}
                 size='lg'
                 className='flex gap-4 items-center justify-center'
               >
-                <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
-                  <GalleryVerticalEnd className='size-4 text-primary-foreground' />
-                </div>
-                <div className='flex flex-col gap-1 leading-none'>
-                  <span className='font-semibold'>BapBi</span>
-                  <span className='text-xs text-muted-foreground'>
-                    2,395 feedback
-                  </span>
-                </div>
-                <ChevronsUpDown className='ml-auto' />
+                {open ? (
+                  <>
+                    <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                      <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                    </div>
+                    <div
+                      className={`flex flex-col gap-1 leading-none transition-all duration-${TRANSITION_DURATION} overflow-hidden
+                      ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
+                      style={{ width: isMobile ? 170 : 150 }}
+                    >
+                      {showText && (
+                        <>
+                          <span className='font-semibold truncate overflow-hidden whitespace-nowrap'>
+                            BapBi
+                          </span>
+                          <span className='text-xs text-muted-foreground'>
+                            2,395 feedback
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <ChevronsUpDown className='ml-auto' />
+                  </>
+                ) : (
+                  <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                    <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                  </div>
+                )}
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              style={dropdownWidth ? { width: dropdownWidth } : {}}
+              style={{ width: isMobile ? 270 : 240 }}
+              side='bottom'
               align='start'
-              className='flex flex-col gap-4 bg-background'
+              className='flex flex-col gap-1 mt-2 bg-background'
             >
               {versions.map((version) => (
                 <DropdownMenuItem
@@ -94,11 +116,11 @@ const AppSidebarHeader = ({
               <Button
                 variant='ghost'
                 size='lg'
-                className='w-full flex items-center justify-start gap-2 mb-1 mt-[-8px]'
+                className='w-full flex items-center justify-start gap-2'
               >
                 <div className='w-0' />
-                <Plus className='size-4' />
-                <span className='text-sm ml-1'>New Project</span>
+                <Plus size={16} />
+                <span className='text-xs ml-1'>New Project</span>
               </Button>
             </DropdownMenuContent>
           </DropdownMenu>

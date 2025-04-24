@@ -10,93 +10,132 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import {
   Bell,
   ChevronsUpDown,
   CreditCard,
   GalleryVerticalEnd,
+  LifeBuoy,
   LogOut,
   Settings,
   Sparkles,
-  User,
 } from 'lucide-react'
-import * as React from 'react'
 
-const USER_EMAIL = 'user@example.com'
+const USER_EMAIL = 'namhq.1989@gmail.com'
 const USER_PLAN = 'Free'
 
-export default function AppSidebarFooter() {
-  const triggerRef = React.useRef<HTMLButtonElement | null>(null)
-  const [dropdownWidth, setDropdownWidth] = React.useState<number | undefined>()
-  const [dropdownOpen, setDropdownOpen] = React.useState(false)
+const AppSidebarFooter = () => {
+  const { open, isMobile } = useSidebar()
 
-  React.useEffect(() => {
-    if (triggerRef.current) {
-      setDropdownWidth(triggerRef.current.offsetWidth)
-    }
-  }, [triggerRef.current, dropdownOpen])
+  // Define the dropdown items as an array, with support for separators and groups
+  type DropdownItemType =
+    | {
+        type: 'item'
+        label: string
+        icon: React.ComponentType<{ className?: string }>
+        iconClass?: string
+      }
+    | { type: 'separator' }
+
+  const dropdownItems: DropdownItemType[] = [
+    {
+      type: 'item',
+      label: 'Upgrade to Pro',
+      icon: Sparkles,
+      iconClass: 'size-4 text-primary',
+    },
+    { type: 'separator' },
+    {
+      type: 'item',
+      label: 'Preference',
+      icon: Settings,
+      iconClass: 'size-4',
+    },
+    {
+      type: 'item',
+      label: 'Billing',
+      icon: CreditCard,
+      iconClass: 'size-4',
+    },
+    {
+      type: 'item',
+      label: 'Notification',
+      icon: Bell,
+      iconClass: 'size-4',
+    },
+    {
+      type: 'item',
+      label: 'Support',
+      icon: LifeBuoy,
+      iconClass: 'size-4',
+    },
+    { type: 'separator' },
+    {
+      type: 'item',
+      label: 'Sign out',
+      icon: LogOut,
+      iconClass: 'size-4',
+    },
+  ]
 
   return (
     <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem>
-          <DropdownMenu onOpenChange={setDropdownOpen}>
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
-                ref={triggerRef}
                 size='lg'
                 className='flex gap-2 items-center justify-center'
               >
-                <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
-                  <GalleryVerticalEnd className='size-4 text-primary-foreground' />
-                </div>
-                <div className='flex flex-col gap-1 leading-none'>
-                  <span className='font-semibold truncate max-w-[120px]'>
-                    {USER_EMAIL}
-                  </span>
-                  <span className='text-xs text-muted-foreground'>
-                    Plan: {USER_PLAN}
-                  </span>
-                </div>
-                <ChevronsUpDown className='ml-auto' />
+                {open ? (
+                  <>
+                    <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                      <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                    </div>
+                    <div className='flex flex-col gap-1 leading-none'>
+                      <span
+                        className='text-sm font-semibold truncate overflow-hidden whitespace-nowrap'
+                        style={{ width: isMobile ? 170 : 150 }}
+                      >
+                        {USER_EMAIL}
+                      </span>
+                      <span className='text-xs text-muted-foreground'>
+                        Plan: {USER_PLAN}
+                      </span>
+                    </div>
+                    <ChevronsUpDown className='ml-auto' />
+                  </>
+                ) : (
+                  <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                    <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                  </div>
+                )}
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              style={dropdownWidth ? { width: dropdownWidth } : {}}
+              style={{ width: isMobile ? 270 : 240 }}
               side='top'
               align='start'
               className='flex flex-col gap-1 mt-2 bg-background'
             >
-              {/* Group 1 */}
-              <DropdownMenuItem className='gap-2'>
-                <Sparkles className='size-4 text-primary' />
-                <span>Upgrade to Pro</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              {/* Group 2 */}
-              <DropdownMenuItem className='gap-2'>
-                <User className='size-4' />
-                <span>Account</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className='gap-2'>
-                <CreditCard className='size-4' />
-                <span>Billing</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className='gap-2'>
-                <Bell className='size-4' />
-                <span>Notification</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className='gap-2'>
-                <Settings className='size-4' />
-                <span>Preference</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              {/* Group 3 */}
-              <DropdownMenuItem className='gap-2'>
-                <LogOut className='size-4' />
-                <span>Sign out</span>
-              </DropdownMenuItem>
+              {dropdownItems.map((item, idx) => {
+                if (item.type === 'separator') {
+                  return <DropdownMenuSeparator key={`sep-${idx}`} />
+                }
+                const Icon = item.icon
+                return (
+                  <DropdownMenuItem
+                    className='gap-2 cursor-pointer'
+                    key={item.label}
+                  >
+                    <Icon className={item.iconClass} />
+                    <span>{item.label}</span>
+                  </DropdownMenuItem>
+                )
+              })}
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>
@@ -104,3 +143,5 @@ export default function AppSidebarFooter() {
     </SidebarFooter>
   )
 }
+
+export default AppSidebarFooter

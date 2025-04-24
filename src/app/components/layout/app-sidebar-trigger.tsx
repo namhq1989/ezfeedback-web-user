@@ -7,7 +7,7 @@ const AppSidebarTrigger = () => {
   return (
     <PanelLeft
       size={24}
-      className='mt-2 ml-2 stroke-muted-foreground'
+      className='mt-2 ml-2 stroke-muted-foreground cursor-pointer'
       onClick={toggleSidebar}
     />
   )

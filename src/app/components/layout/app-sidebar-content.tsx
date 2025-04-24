@@ -5,10 +5,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import {
   LayoutDashboard,
-  MessageSquareText,
+  Send,
   Settings,
   SquareLibrary,
   UserRound,
@@ -24,7 +25,7 @@ const items = [
   {
     title: 'Feedback',
     url: '/feedback',
-    icon: MessageSquareText,
+    icon: Send,
   },
   {
     title: 'Category',
@@ -45,6 +46,7 @@ const items = [
 
 const AppSidebarContent = () => {
   const location = useLocation()
+  const { open } = useSidebar()
 
   return (
     <SidebarContent>
@@ -61,14 +63,16 @@ const AppSidebarContent = () => {
                   <SidebarMenuButton
                     asChild
                     isActive={isActive}
-                    className={`px-4 gap-4 [&>svg]:size-6 [&>svg]:stroke-2 hover:bg-muted ${isActive ? 'bg-muted [&>svg]:text-primary' : '[&>svg]:stroke-muted-foreground'}`}
+                    className={`px-4 gap-4 ${!open ? 'items-center justify-center' : ''} [&>svg]:size-5 [&>svg]:stroke-2 hover:bg-muted ${isActive ? 'bg-muted [&>svg]:text-primary' : '[&>svg]:stroke-muted-foreground'}`}
                     size='lg'
                   >
                     <Link to={item.url}>
                       <item.icon />
-                      <span className={`${isActive ? 'text-primary' : ''}`}>
-                        {item.title}
-                      </span>
+                      {open && (
+                        <span className={`${isActive ? 'text-primary' : ''}`}>
+                          {item.title}
+                        </span>
+                      )}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
