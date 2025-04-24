@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -36,72 +37,74 @@ const AppSidebarHeader = ({
   }, [triggerRef.current])
 
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              ref={triggerRef}
-              size='lg'
-              className='flex gap-4 items-center justify-center'
-            >
-              <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-                <GalleryVerticalEnd className='size-4' />
-              </div>
-              <div className='flex flex-col gap-1 leading-none'>
-                <span className='font-semibold'>BapBi</span>
-                <span className='text-xs text-muted-foreground'>
-                  2,395 feedback
-                </span>
-              </div>
-              <ChevronsUpDown className='ml-auto' />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            style={dropdownWidth ? { width: dropdownWidth } : {}}
-            align='start'
-            className='flex flex-col gap-4 mt-2 bg-background'
-          >
-            {versions.map((version) => (
-              <DropdownMenuItem
-                key={version}
-                onSelect={() => setSelectedVersion(version)}
-                className='p-0'
+    <SidebarHeader className='flex items-center px-4 py-6'>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+                ref={triggerRef}
+                size='lg'
+                className='flex gap-4 items-center justify-center'
               >
-                <button
-                  type='button'
-                  className='flex w-full gap-4 items-center px-4 py-2 gap-2'
-                >
-                  <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-                    <GalleryVerticalEnd className='size-4' />
-                  </div>
-                  <div className='flex flex-col gap-1 leading-none text-left'>
-                    <span className='font-semibold'>BapBi</span>
-                    <span className='text-xs text-muted-foreground'>
-                      2,395 feedback
-                    </span>
-                  </div>
-                  {version === selectedVersion ? (
-                    <Check className='ml-auto' />
-                  ) : null}
-                </button>
-              </DropdownMenuItem>
-            ))}
-
-            <Separator />
-            <Button
-              variant='ghost'
-              size='lg'
-              className='w-full flex items-center justify-start gap-2 mb-2 mt-[-2px]'
+                <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                  <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                </div>
+                <div className='flex flex-col gap-1 leading-none'>
+                  <span className='font-semibold'>BapBi</span>
+                  <span className='text-xs text-muted-foreground'>
+                    2,395 feedback
+                  </span>
+                </div>
+                <ChevronsUpDown className='ml-auto' />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              style={dropdownWidth ? { width: dropdownWidth } : {}}
+              align='start'
+              className='flex flex-col gap-4 bg-background'
             >
-              <div className='w-0' />
-              <Plus className='size-4' />
-              <span className='text-sm ml-1'>New Project</span>
-            </Button>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+              {versions.map((version) => (
+                <DropdownMenuItem
+                  key={version}
+                  onSelect={() => setSelectedVersion(version)}
+                  className='p-0'
+                >
+                  <button
+                    type='button'
+                    className='flex w-full gap-4 items-center px-4 py-2 gap-2'
+                  >
+                    <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                      <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                    </div>
+                    <div className='flex flex-col gap-1 leading-none text-left'>
+                      <span className='font-semibold'>BapBi</span>
+                      <span className='text-xs text-muted-foreground'>
+                        2,395 feedback
+                      </span>
+                    </div>
+                    {version === selectedVersion ? (
+                      <Check className='ml-auto' />
+                    ) : null}
+                  </button>
+                </DropdownMenuItem>
+              ))}
+
+              <Separator />
+              <Button
+                variant='ghost'
+                size='lg'
+                className='w-full flex items-center justify-start gap-2 mb-1 mt-[-8px]'
+              >
+                <div className='w-0' />
+                <Plus className='size-4' />
+                <span className='text-sm ml-1'>New Project</span>
+              </Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarHeader>
   )
 }
 
