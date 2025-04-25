@@ -180,5 +180,51 @@
       "prev": "Trước",
       "next": "Tiếp"
     }
+  },
+  "support": {
+    "contact": {
+      "title": "Liên hệ hỗ trợ",
+      "description": "Cần giúp đỡ? Đội ngũ hỗ trợ của chúng tôi sẵn sàng giúp bạn với mọi câu hỏi hoặc vấn đề",
+      "responseTime": "Chúng tôi thường phản hồi trong vòng 24-48 giờ"
+    },
+    "faq": {
+      "title": "Câu hỏi thường gặp",
+      "categories": {
+        "gettingStarted": "Bắt đầu",
+        "account": "Tài khoản",
+        "projects": "Dự án",
+        "feedbackCollection": "Thu thập phản hồi"
+      },
+      "items": {
+        "createAccount": {
+          "question": "Làm thế nào để tạo tài khoản?",
+          "answer": "Đăng ký tài khoản bằng cách nhấp vào nút 'Đăng ký' trên trang chủ của chúng tôi. Bạn có thể đăng ký bằng địa chỉ email và tạo mật khẩu."
+        },
+        "createProject": {
+          "question": "Làm thế nào để tạo dự án đầu tiên của tôi?",
+          "answer": "Sau khi đăng nhập, điều hướng đến bảng điều khiển và nhấp vào nút 'Dự án mới'. Điền thông tin dự án và nhấp vào 'Tạo'."
+        },
+        "changePassword": {
+          "question": "Làm thế nào để thay đổi mật khẩu?",
+          "answer": "Đi đến Cài đặt tài khoản, điều hướng đến tab Bảo mật và nhấp vào 'Thay đổi mật khẩu'. Bạn sẽ cần nhập mật khẩu hiện tại và sau đó là mật khẩu mới."
+        },
+        "deleteAccount": {
+          "question": "Làm thế nào để xóa tài khoản của tôi?",
+          "answer": "Để xóa tài khoản của bạn, hãy đến Cài đặt tài khoản, cuộn xuống cuối và nhấp vào 'Xóa tài khoản'. Lưu ý rằng hành động này không thể hoàn tác."
+        },
+        "projectSettings": {
+          "question": "Tôi có thể tìm cài đặt dự án ở đâu?",
+          "answer": "Cài đặt dự án có thể được truy cập bằng cách chọn dự án của bạn từ bảng điều khiển, sau đó nhấp vào tab 'Cài đặt' trong điều hướng dự án."
+        },
+        "collectFeedback": {
+          "question": "Làm thế nào để bắt đầu thu thập phản hồi?",
+          "answer": "Sau khi tạo dự án, bạn sẽ nhận được một liên kết duy nhất mà bạn có thể chia sẻ với người dùng của mình. Bạn cũng có thể nhúng widget phản hồi trên trang web của mình bằng mã tích hợp của chúng tôi."
+        },
+        "exportData": {
+          "question": "Tôi có thể xuất dữ liệu phản hồi của mình không?",
+          "answer": "Có, bạn có thể xuất dữ liệu phản hồi của mình ở định dạng CSV hoặc JSON. Đi đến dự án của bạn, điều hướng đến tab 'Xuất', chọn định dạng ưa thích của bạn và nhấp vào 'Xuất dữ liệu'."
+        }
+      }
+    }
   }
 }
