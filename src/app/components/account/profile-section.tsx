@@ -34,7 +34,7 @@ const ProfileSection = ({ user }: IProfileSectionProps) => {
   }
 
   return (
-    <div className='w-full border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200'>
+    <div className='w-full border rounded-xl'>
       <div className='h-11 flex items-center px-6 border-b'>
         <h3 className='font-bold text-xs uppercase'>
           {t('account.profile.title')}

@@ -12,7 +12,8 @@
     "submit": "Submit",
     "confirm": "Confirm",
     "back": "Back",
-    "next": "Next"
+    "next": "Next",
+    "prev": "Previous"
   },
   "messages": {
     "loading": "Loading...",
@@ -120,5 +121,24 @@
     "just_now": "Just now",
     "minutes_ago": "{{count}} minute ago",
     "minutes_ago_plural": "{{count}} minutes ago"
+  },
+  "notification": {
+    "list": {
+      "title": "Notifications",
+      "empty": "No notifications to display",
+      "showing": "Showing {{from}}-{{to}} of {{total}} notifications"
+    },
+    "types": {
+      "feedback": "New feedback",
+      "summary": "Summary report",
+      "billing": "Billing update",
+      "other": "Notification"
+    },
+    "actions": {
+      "markAsRead": "Mark as read",
+      "delete": "Delete",
+      "prev": "Previous",
+      "next": "Next"
+    }
   }
 }

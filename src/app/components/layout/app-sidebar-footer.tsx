@@ -36,7 +36,7 @@ const AppSidebarFooter = () => {
               >
                 {open ? (
                   <>
-                    <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                    <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
                       <GalleryVerticalEnd className='size-4 text-primary-foreground' />
                     </div>
                     <div className='flex flex-col gap-1 leading-none'>
@@ -53,7 +53,7 @@ const AppSidebarFooter = () => {
                     <ChevronsUpDown className='ml-auto' />
                   </>
                 ) : (
-                  <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                  <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
                     <GalleryVerticalEnd className='size-4 text-primary-foreground' />
                   </div>
                 )}
