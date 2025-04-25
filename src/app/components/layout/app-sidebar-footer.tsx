@@ -22,7 +22,15 @@ const USER_PLAN = 'Free'
 
 const AppSidebarFooter = () => {
   const { t } = useTranslation()
-  const { open, isMobile } = useSidebar()
+  const { open, isMobile, setOpen, setOpenMobile } = useSidebar()
+
+  const handleMenuItemClick = () => {
+    if (isMobile) {
+      setOpenMobile(false)
+    } else {
+      setOpen(false)
+    }
+  }
 
   return (
     <SidebarFooter>
@@ -70,7 +78,11 @@ const AppSidebarFooter = () => {
                   return <DropdownMenuSeparator key={`sep-${idx}`} />
                 }
                 return (
-                  <Link key={item.label} to={item.path}>
+                  <Link
+                    key={item.label}
+                    to={item.path}
+                    onClick={handleMenuItemClick}
+                  >
                     <DropdownMenuItem className='items-center gap-2 cursor-pointer'>
                       <item.icon className={item.iconClass} />
                       <span>{t(item.label)}</span>
