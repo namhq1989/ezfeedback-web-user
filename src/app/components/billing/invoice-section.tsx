@@ -17,13 +17,13 @@ import { Download } from 'lucide-react'
 const getStatusColor = (status: InvoiceStatus) => {
   switch (status) {
     case 'paid':
-      return 'bg-green-300 text-black'
+      return 'bg-green-300 text-black/70'
     case 'pending':
-      return 'bg-yellow-300 text-black'
+      return 'bg-yellow-300 text-black/70'
     case 'failed':
-      return 'bg-red-300 text-black'
+      return 'bg-red-300 text-black/70'
     default:
-      return 'bg-gray-300 text-black'
+      return 'bg-gray-300 text-black/70'
   }
 }
 
@@ -110,7 +110,7 @@ const InvoiceSection = () => {
 
           {/* Mobile view - List with separators */}
           <div className='md:hidden flex flex-col gap-4'>
-            {mockInvoices.map((invoice, index) => (
+            {mockInvoices.map((invoice) => (
               <div key={invoice.id}>
                 <div className='py-4 space-y-6'>
                   <div className='flex justify-between items-center'>
