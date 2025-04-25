@@ -1,37 +1,61 @@
 import { appRoutes } from '@/app/router/routes'
 import { projects } from '@/mock/projects'
-import { matchPath, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 
 export function useBreadcrumb(): string[] {
   const location = useLocation()
   const path = location.pathname
 
-  // Match /project/:slug/:section? pattern
-  const projectMatch = matchPath('/project/:slug/:section?', path)
+  // --- Project Pages: /project/:slug/... ---
+  const projectPattern = /^\/project\/([^/]+)(.*)$/
+  const match = path.match(projectPattern)
+  if (match) {
+    const slug = match[1]
+    const rest = match[2] // e.g. /feedback/detail
+    const project = projects.find((p) => p.slug === slug)
+    if (!project) return []
 
-  if (!projectMatch || !projectMatch.params || !projectMatch.params.slug) {
-    return []
+    // Split rest of the path
+    const segments = rest.split('/').filter(Boolean) // e.g. ['feedback', 'detail']
+    // Find corresponding route for each segment
+    let routeChildren =
+      appRoutes.find((r) => r.path === '/project/:slug')?.children || []
+    const breadcrumbs = [project.name]
+    segments.forEach((seg) => {
+      const found = routeChildren.find((r) => r.path === seg)
+      breadcrumbs.push(found ? found.breadcrumb : seg)
+      // Prepare for next level if nested children exist
+      routeChildren = found && found.children ? found.children : []
+    })
+    return breadcrumbs
   }
 
-  const { slug, section } = projectMatch.params as {
-    slug: string
-    section?: string
-  }
-  const project = projects.find((p) => p.slug === slug)
-  if (!project) {
-    return []
+  // --- Single Pages: /{page-name} ---
+  // These are now children of the root AuthenticatedLayout
+  const root = appRoutes.find((r) => !r.path && r.children)
+  if (root && root.children) {
+    // First check direct children
+    const childRoute = root.children.find(
+      (child) => child.path && `/${child.path}` === path,
+    )
+    if (childRoute) {
+      return [childRoute.breadcrumb]
+    }
+
+    // Check for nested routes in UserMenuLayout
+    const userMenuLayout = root.children.find(
+      (child) => !child.path && child.children,
+    )
+    if (userMenuLayout && userMenuLayout.children) {
+      const nestedRoute = userMenuLayout.children.find(
+        (child) => `/${child.path}` === path,
+      )
+      if (nestedRoute) {
+        return [nestedRoute.breadcrumb]
+      }
+    }
   }
 
-  // Find the route for the section to get the i18n key
-  let sectionLabel = ''
-  if (section) {
-    // Find the /project/:slug route
-    const projectRoute = appRoutes.find((r) => r.path === '/project/:slug')
-    const children =
-      projectRoute && projectRoute.children ? projectRoute.children : []
-    const sectionRoute = children.find((r) => r.path === section)
-    sectionLabel = sectionRoute ? sectionRoute.breadcrumb : section
-  }
-
-  return section ? [project.name, sectionLabel] : [project.name]
+  // --- Fallback (could be extended for future patterns) ---
+  return []
 }

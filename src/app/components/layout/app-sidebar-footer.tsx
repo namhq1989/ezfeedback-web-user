@@ -1,3 +1,4 @@
+import { sidebarFooterMenuItems } from '@/app/router/user-menu-items'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,73 +13,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import {
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  GalleryVerticalEnd,
-  LifeBuoy,
-  LogOut,
-  Settings,
-  Sparkles,
-} from 'lucide-react'
+import { ChevronsUpDown, GalleryVerticalEnd } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 
 const USER_EMAIL = 'namhq.1989@gmail.com'
 const USER_PLAN = 'Free'
 
 const AppSidebarFooter = () => {
+  const { t } = useTranslation()
   const { open, isMobile } = useSidebar()
-
-  // Define the dropdown items as an array, with support for separators and groups
-  type DropdownItemType =
-    | {
-        type: 'item'
-        label: string
-        icon: React.ComponentType<{ className?: string }>
-        iconClass?: string
-      }
-    | { type: 'separator' }
-
-  const dropdownItems: DropdownItemType[] = [
-    {
-      type: 'item',
-      label: 'Upgrade to Pro',
-      icon: Sparkles,
-      iconClass: 'size-4 text-primary',
-    },
-    { type: 'separator' },
-    {
-      type: 'item',
-      label: 'Preference',
-      icon: Settings,
-      iconClass: 'size-4',
-    },
-    {
-      type: 'item',
-      label: 'Billing',
-      icon: CreditCard,
-      iconClass: 'size-4',
-    },
-    {
-      type: 'item',
-      label: 'Notification',
-      icon: Bell,
-      iconClass: 'size-4',
-    },
-    {
-      type: 'item',
-      label: 'Support',
-      icon: LifeBuoy,
-      iconClass: 'size-4',
-    },
-    { type: 'separator' },
-    {
-      type: 'item',
-      label: 'Sign out',
-      icon: LogOut,
-      iconClass: 'size-4',
-    },
-  ]
 
   return (
     <SidebarFooter>
@@ -121,19 +65,17 @@ const AppSidebarFooter = () => {
               align='start'
               className='flex flex-col gap-1 mt-2 bg-background'
             >
-              {dropdownItems.map((item, idx) => {
+              {sidebarFooterMenuItems.map((item, idx) => {
                 if (item.type === 'separator') {
                   return <DropdownMenuSeparator key={`sep-${idx}`} />
                 }
-                const Icon = item.icon
                 return (
-                  <DropdownMenuItem
-                    className='gap-2 cursor-pointer'
-                    key={item.label}
-                  >
-                    <Icon className={item.iconClass} />
-                    <span>{item.label}</span>
-                  </DropdownMenuItem>
+                  <Link key={item.label} to={item.path}>
+                    <DropdownMenuItem className='items-center gap-2 cursor-pointer'>
+                      <item.icon className={item.iconClass} />
+                      <span>{t(item.label)}</span>
+                    </DropdownMenuItem>
+                  </Link>
                 )
               })}
             </DropdownMenuContent>
