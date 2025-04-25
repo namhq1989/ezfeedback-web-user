@@ -180,5 +180,51 @@
       "prev": "Previous",
       "next": "Next"
     }
+  },
+  "support": {
+    "contact": {
+      "title": "Contact Support",
+      "description": "Need help with something specific? Reach out directly",
+      "responseTime": "We typically respond within 24-48 hours"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "categories": {
+        "gettingStarted": "Getting Started",
+        "account": "Account",
+        "projects": "Projects",
+        "feedbackCollection": "Feedback Collection"
+      },
+      "items": {
+        "createAccount": {
+          "question": "How do I create an account?",
+          "answer": "Sign up for an account by clicking the 'Sign Up' button on our homepage. You can register using your email address and create a password."
+        },
+        "createProject": {
+          "question": "How do I create my first project?",
+          "answer": "After logging in, navigate to the dashboard and click the 'New Project' button. Fill in the project details and click 'Create'."
+        },
+        "changePassword": {
+          "question": "How can I change my password?",
+          "answer": "Go to your Account Settings, navigate to the Security tab, and click on 'Change Password'. You'll need to enter your current password and then your new password."
+        },
+        "deleteAccount": {
+          "question": "How do I delete my account?",
+          "answer": "To delete your account, go to Account Settings, scroll to the bottom, and click on 'Delete Account'. Please note that this action is irreversible."
+        },
+        "projectSettings": {
+          "question": "Where can I find project settings?",
+          "answer": "Project settings can be accessed by selecting your project from the dashboard, then clicking on the 'Settings' tab in the project navigation."
+        },
+        "collectFeedback": {
+          "question": "How do I start collecting feedback?",
+          "answer": "After creating a project, you'll receive a unique link that you can share with your users. You can also embed the feedback widget on your website using our integration code."
+        },
+        "exportData": {
+          "question": "Can I export my feedback data?",
+          "answer": "Yes, you can export your feedback data in CSV or JSON format. Go to your project, navigate to the 'Export' tab, select your preferred format, and click 'Export Data'."
+        }
+      }
+    }
   }
 }

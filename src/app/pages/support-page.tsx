@@ -1,7 +1,11 @@
+import SupportContactCard from '@/app/components/support/support-contact-card'
+import SupportFaqAccordion from '@/app/components/support/support-faq-accordion'
+
 const SupportPage = () => {
   return (
-    <div className='flex items-center justify-center h-screen text-foreground'>
-      <h1 className='text-6xl'>Support</h1>
+    <div className='space-y-4'>
+      <SupportContactCard />
+      <SupportFaqAccordion />
     </div>
   )
 }
