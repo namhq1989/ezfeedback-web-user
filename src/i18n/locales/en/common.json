@@ -113,6 +113,46 @@
       }
     }
   },
+  "billing": {
+    "subscription": {
+      "title": "Subscription Plan",
+      "currentPlan": "Current Plan",
+      "changePlan": "Change Plan",
+      "projects": "Projects",
+      "projectsDescription": "Number of projects you can create in your account",
+      "feedbacks": "Feedbacks",
+      "feedbacksDescription": "Number of feedback items you can collect across all projects",
+      "plans": {
+        "free": "Free",
+        "growth": "Growth",
+        "pro": "Pro"
+      }
+    },
+    "paymentMethod": {
+      "title": "Payment Method",
+      "expires": "Expires",
+      "default": "Default",
+      "edit": "Edit",
+      "addNew": "Add New Payment Method",
+      "noPaymentMethods": "No Payment Methods",
+      "addPaymentMethod": "Add Payment Method",
+      "addPaymentMethodDescription": "Add a payment method to manage your subscription"
+    },
+    "invoices": {
+      "title": "Invoices",
+      "invoiceId": "Invoice ID",
+      "date": "Date",
+      "plan": "Plan",
+      "amount": "Amount",
+      "status": "Status",
+      "download": "Download",
+      "statuses": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "failed": "Failed"
+      }
+    }
+  },
   "dateTime": {
     "today": "Today",
     "yesterday": "Yesterday",

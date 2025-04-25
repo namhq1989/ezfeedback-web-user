@@ -16,4 +16,12 @@ const formatTime = (dateString: string): string => {
   return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) === 1 ? '' : 's'} ago`
 }
 
-export { formatTime }
+const formatDate = (date: Date): string => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date)
+}
+
+export { formatTime, formatDate }

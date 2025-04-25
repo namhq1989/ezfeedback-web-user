@@ -113,6 +113,46 @@
       }
     }
   },
+  "billing": {
+    "subscription": {
+      "title": "Gói dịch vụ",
+      "currentPlan": "Gói hiện tại",
+      "changePlan": "Thay đổi gói",
+      "projects": "Dự án",
+      "projectsDescription": "Số lượng dự án bạn có thể tạo trong tài khoản",
+      "feedbacks": "Phản hồi",
+      "feedbacksDescription": "Số lượng phản hồi bạn có thể thu thập trên tất cả các dự án",
+      "plans": {
+        "free": "Free",
+        "growth": "Growth",
+        "pro": "Pro"
+      }
+    },
+    "paymentMethod": {
+      "title": "Phương thức thanh toán",
+      "expires": "Hết hạn",
+      "default": "Mặc định",
+      "edit": "Chỉnh sửa",
+      "addNew": "Thêm phương thức thanh toán mới",
+      "noPaymentMethods": "Không có phương thức thanh toán",
+      "addPaymentMethod": "Thêm phương thức thanh toán",
+      "addPaymentMethodDescription": "Thêm phương thức thanh toán để quản lý gói dịch vụ của bạn"
+    },
+    "invoices": {
+      "title": "Hóa đơn",
+      "invoiceId": "Mã hóa đơn",
+      "date": "Ngày",
+      "plan": "Gói",
+      "amount": "Số tiền",
+      "status": "Trạng thái",
+      "download": "Tải xuống",
+      "statuses": {
+        "paid": "Đã thanh toán",
+        "pending": "Đang xử lý",
+        "failed": "Thất bại"
+      }
+    }
+  },
   "dateTime": {
     "today": "Hôm nay",
     "yesterday": "Hôm qua",

@@ -1,7 +1,12 @@
+import InvoiceSection from '@/app/components/billing/invoice-section'
+import SubscriptionSection from '@/app/components/billing/subscription-section'
+import { mockUser } from '@/mock/mock-user'
+
 const BillingPage = () => {
   return (
-    <div className='flex items-center justify-center h-screen text-foreground'>
-      <h1 className='text-6xl'>Billing</h1>
+    <div className='space-y-4'>
+      <SubscriptionSection user={mockUser} />
+      <InvoiceSection />
     </div>
   )
 }
