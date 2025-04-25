@@ -16,6 +16,9 @@
   },
   "messages": {
     "loading": "Đang tải...",
+    "saving": "Đang lưu...",
+    "updating": "Đang cập nhật...",
+    "deleting": "Đang xóa...",
     "error": "Đã xảy ra lỗi",
     "success": "Thành công!",
     "confirm": "Bạn có chắc không?",
@@ -30,7 +33,84 @@
     "setting": "Cài đặt",
     "signin": "Đăng nhập",
     "project": "Dự án",
-    "help": "Trợ giúp"
+    "help": "Trợ giúp",
+    "account": "Tài khoản",
+    "billing": "Thanh toán",
+    "notification": "Thông báo",
+    "support": "Hỗ trợ",
+    "pricing": "Bảng giá",
+    "upgrade": "Nâng cấp Pro",
+    "signout": "Đăng xuất"
+  },
+  "account": {
+    "profile": {
+      "title": "Thông tin cá nhân",
+      "name": "Tên",
+      "email": "Email",
+      "namePlaceholder": "Tên đầy đủ của bạn",
+      "nameRequired": "Tên không được để trống",
+      "nameMinLength": "Tên phải có ít nhất 2 ký tự",
+      "save": "Lưu thay đổi"
+    },
+    "preferences": {
+      "title": "Tùy chỉnh hiển thị",
+      "language": "Ngôn ngữ",
+      "theme": "Chế độ giao diện",
+      "languages": {
+        "en": "Tiếng Anh",
+        "vi": "Tiếng Việt"
+      },
+      "themes": {
+        "dark": "Tối",
+        "light": "Sáng",
+        "system": "Hệ thống"
+      }
+    },
+    "subscription": {
+      "title": "Gói dịch vụ",
+      "currentPlan": "Gói hiện tại",
+      "changePlan": "Thay đổi gói",
+      "usage": "Sử dụng trong tháng",
+      "projects": "Dự án",
+      "projectsDescription": "Số lượng dự án bạn có thể tạo trong tài khoản",
+      "feedbacks": "Phản hồi",
+      "feedbacksDescription": "Số lượng phản hồi bạn có thể thu thập trên tất cả các dự án",
+      "plans": {
+        "free": "Free",
+        "growth": "Growth",
+        "pro": "Pro"
+      }
+    },
+    "notification": {
+      "title": "Thông báo",
+      "newFeedback": {
+        "title": "Thông báo phản hồi mới",
+        "description": "Nhận thông báo khi có phản hồi mới trên dự án của bạn"
+      },
+      "dailySummary": {
+        "title": "Tổng kết hàng ngày",
+        "description": "Nhận bản tổng kết hoạt động phản hồi hàng ngày"
+      },
+      "weeklySummary": {
+        "title": "Tổng kết hàng tuần",
+        "description": "Nhận bản tổng kết hoạt động phản hồi hàng tuần"
+      }
+    },
+    "defaultProject": {
+      "title": "Dự án cài đặt mặc định",
+      "publicFeedback": {
+        "title": "Bật phản hồi công khai",
+        "description": "Hiển thị phản hồi cho tất cả mọi người theo mặc định"
+      },
+      "anonymousFeedback": {
+        "title": "Cho phép phản hồi ẩn danh",
+        "description": "Cho phép người dùng gửi phản hồi mà không cần xác định danh tính"
+      },
+      "votingEnabled": {
+        "title": "Bật bình chọn cho phản hồi",
+        "description": "Cho phép người dùng bình chọn cho các mục phản hồi để hiển thị mức độ phổ biến"
+      }
+    }
   },
   "dateTime": {
     "today": "Hôm nay",

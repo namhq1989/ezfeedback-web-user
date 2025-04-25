@@ -16,6 +16,9 @@
   },
   "messages": {
     "loading": "Loading...",
+    "saving": "Saving...",
+    "updating": "Updating...",
+    "deleting": "Deleting...",
     "error": "An error occurred",
     "success": "Success!",
     "confirm": "Are you sure?",
@@ -30,7 +33,84 @@
     "setting": "Setting",
     "signin": "Sign In",
     "project": "Project",
-    "help": "Help"
+    "account": "Account",
+    "billing": "Billing",
+    "notification": "Notification",
+    "support": "Support",
+    "pricing": "Pricing",
+    "help": "Help",
+    "upgrade": "Upgrade to Pro",
+    "signout": "Sign out"
+  },
+  "account": {
+    "profile": {
+      "title": "Profile Information",
+      "name": "Name",
+      "email": "Email Address",
+      "namePlaceholder": "Your full name",
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 2 characters",
+      "save": "Save Changes"
+    },
+    "preferences": {
+      "title": "Display Preference",
+      "language": "Language",
+      "theme": "Theme Mode",
+      "languages": {
+        "en": "English",
+        "vi": "Vietnamese"
+      },
+      "themes": {
+        "dark": "Dark",
+        "light": "Light",
+        "system": "System"
+      }
+    },
+    "subscription": {
+      "title": "Subscription Plan",
+      "currentPlan": "Current Plan",
+      "changePlan": "Change Plan",
+      "usage": "This Month Usage",
+      "projects": "Projects",
+      "projectsDescription": "Number of projects you can create in your account",
+      "feedbacks": "Feedbacks",
+      "feedbacksDescription": "Number of feedback items you can collect across all projects",
+      "plans": {
+        "free": "Free",
+        "growth": "Growth",
+        "pro": "Pro"
+      }
+    },
+    "notification": {
+      "title": "Notification",
+      "newFeedback": {
+        "title": "New feedback alert",
+        "description": "Get notified when you receive new feedback on your projects"
+      },
+      "dailySummary": {
+        "title": "Daily summary",
+        "description": "Receive a daily summary of your feedback activity"
+      },
+      "weeklySummary": {
+        "title": "Weekly summary",
+        "description": "Receive a weekly summary of your feedback activity"
+      }
+    },
+    "defaultProject": {
+      "title": "Default Project Setting",
+      "publicFeedback": {
+        "title": "Public feedback enabled",
+        "description": "Make feedback visible to everyone by default"
+      },
+      "anonymousFeedback": {
+        "title": "Allow anonymous feedback",
+        "description": "Allow users to submit feedback without identifying themselves"
+      },
+      "votingEnabled": {
+        "title": "Enable voting on feedback",
+        "description": "Allow users to vote on feedback items to show popularity"
+      }
+    }
   },
   "dateTime": {
     "today": "Today",

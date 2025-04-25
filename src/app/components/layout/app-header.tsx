@@ -19,19 +19,29 @@ const AppHeader: FC = () => {
   const projectName = breadcrumbTrail[0] || ''
   const pageLabel = breadcrumbTrail[1] ? t(breadcrumbTrail[1]) : ''
 
+  const isSinglePath = breadcrumbTrail.length === 1
+
   return (
     <header className='w-full flex items-center h-[50px] px-6 py-2 border-b border-muted gap-6'>
       <AppSidebarTrigger />
       <Separator orientation='vertical' />
       <Breadcrumb>
         <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbPage>{projectName}</BreadcrumbPage>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{pageLabel}</BreadcrumbPage>
-          </BreadcrumbItem>
+          {isSinglePath ? (
+            <BreadcrumbItem>
+              <BreadcrumbPage>{t(breadcrumbTrail[0])}</BreadcrumbPage>
+            </BreadcrumbItem>
+          ) : (
+            <>
+              <BreadcrumbItem>
+                <BreadcrumbPage>{projectName}</BreadcrumbPage>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{pageLabel}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </>
+          )}
         </BreadcrumbList>
       </Breadcrumb>
     </header>
