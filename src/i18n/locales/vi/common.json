@@ -12,7 +12,8 @@
     "submit": "Gửi",
     "confirm": "Xác nhận",
     "back": "Quay lại",
-    "next": "Tiếp theo"
+    "next": "Tiếp theo",
+    "prev": "Trước đó"
   },
   "messages": {
     "loading": "Đang tải...",
@@ -120,5 +121,24 @@
     "just_now": "Vừa xong",
     "minutes_ago": "{{count}} phút trước",
     "minutes_ago_plural": "{{count}} phút trước"
+  },
+  "notification": {
+    "list": {
+      "title": "Thông báo",
+      "empty": "Không có thông báo nào",
+      "showing": "Hiển thị {{from}}-{{to}} của {{total}} thông báo"
+    },
+    "types": {
+      "feedback": "Phản hồi mới",
+      "summary": "Báo cáo tổng kết",
+      "billing": "Cập nhật thanh toán",
+      "other": "Thông báo"
+    },
+    "actions": {
+      "markAsRead": "Đánh dấu đã đọc",
+      "delete": "Xóa",
+      "prev": "Trước",
+      "next": "Tiếp"
+    }
   }
 }

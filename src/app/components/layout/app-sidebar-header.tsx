@@ -52,7 +52,7 @@ const AppSidebarHeader = () => {
               >
                 {open ? (
                   <>
-                    <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                    <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
                       <GalleryVerticalEnd className='size-4 text-primary-foreground' />
                     </div>
                     <div
@@ -75,7 +75,7 @@ const AppSidebarHeader = () => {
                     <ChevronsUpDown className='ml-auto' />
                   </>
                 ) : (
-                  <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                  <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
                     <GalleryVerticalEnd className='size-4 text-primary-foreground' />
                   </div>
                 )}
@@ -97,7 +97,7 @@ const AppSidebarHeader = () => {
                     type='button'
                     className='flex w-full gap-4 items-center px-4 py-2 gap-2'
                   >
-                    <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary'>
+                    <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
                       <GalleryVerticalEnd className='size-4 text-primary-foreground' />
                     </div>
                     <div className='flex flex-col gap-1 leading-none text-left'>
