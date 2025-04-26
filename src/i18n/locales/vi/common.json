@@ -15,6 +15,13 @@
     "next": "Tiếp theo",
     "prev": "Trước đó"
   },
+  "common": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo mới"
+  },
   "messages": {
     "loading": "Đang tải...",
     "saving": "Đang lưu...",
@@ -29,9 +36,7 @@
   "navigation": {
     "dashboard": "Tổng quan",
     "feedback": "Phản hồi",
-    "category": "Danh mục",
-    "member": "Thành viên",
-    "setting": "Cài đặt",
+    "admin": "Quản trị",
     "signin": "Đăng nhập",
     "project": "Dự án",
     "help": "Trợ giúp",

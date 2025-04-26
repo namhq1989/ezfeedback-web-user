@@ -1,0 +1,74 @@
+{
+  "title": "Admin Dashboard",
+  "categories": {
+    "title": "Category",
+    "addCategory": "Add Category",
+    "toggleStatus": "Toggle status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "delete": "Delete",
+    "deleteConfirmTitle": "Delete Category",
+    "deleteConfirmDescription": "Are you sure you want to delete the category '{{name}}'? This action cannot be undone",
+    "form": {
+      "namePlaceholder": "Enter category name"
+    },
+    "errors": {
+      "nameRequired": "Category name is required"
+    },
+    "empty": {
+      "title": "No categories yet",
+      "description": "Create your first category to organize feedback"
+    }
+  },
+  "settings": {
+    "title": "Project Setting",
+    "anonymousFeedback": {
+      "title": "Allow Anonymous Feedback",
+      "description": "Let users submit feedback without providing their email address"
+    },
+    "emailVerification": {
+      "title": "Require Email Verification",
+      "description": "Users must verify their email before submitting feedback"
+    },
+    "autoPublish": {
+      "title": "Auto-Publish Feedback",
+      "description": "Automatically publish new feedback without manual review"
+    }
+  },
+  "common": {
+    "cancel": "Cancel"
+  },
+  "team": {
+    "title": "Team Member",
+    "inviteMember": "Invite Member",
+    "pendingInvitations": "Pending Invitations",
+    "selectRole": "Select role",
+    "roles": {
+      "owner": "Owner",
+      "editor": "Editor",
+      "viewer": "Viewer"
+    },
+    "invitedOn": "Invited on {{date}}",
+    "resend": "Resend",
+    "cancel": "Cancel",
+    "invite": "Invite",
+    "confirmCancel": "Cancel Invitation",
+    "cancelInvitationTitle": "Cancel Invitation",
+    "cancelInvitationDescription": "Are you sure you want to cancel the invitation sent to {{email}}? This action cannot be undone",
+    "removeMember": "Remove",
+    "remove": "Remove",
+    "removeConfirmTitle": "Remove Team Member",
+    "removeConfirmDescription": "Are you sure you want to remove {{name}} from the team? This action cannot be undone",
+    "form": {
+      "emailPlaceholder": "Enter email address"
+    },
+    "errors": {
+      "emailRequired": "Email is required",
+      "invalidEmail": "Please enter a valid email address"
+    },
+    "empty": {
+      "title": "No team members yet",
+      "description": "Invite team members to collaborate on your project"
+    }
+  }
+}

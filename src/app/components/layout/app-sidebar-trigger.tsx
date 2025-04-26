@@ -1,12 +1,14 @@
 import { useSidebar } from '@/components/ui/sidebar'
-import { PanelLeft } from 'lucide-react'
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 
 const AppSidebarTrigger = () => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, open } = useSidebar()
+
+  const Icon = open ? PanelLeftClose : PanelLeftOpen
 
   return (
-    <PanelLeft
-      size={24}
+    <Icon
+      size={20}
       className='stroke-muted-foreground cursor-pointer'
       onClick={toggleSidebar}
     />

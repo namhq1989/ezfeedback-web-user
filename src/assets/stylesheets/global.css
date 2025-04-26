@@ -191,10 +191,6 @@
   button {
     @apply cursor-pointer;
   }
-
-  input {
-    @apply h-10!;
-  }
 }
 
 @layer utilities {
