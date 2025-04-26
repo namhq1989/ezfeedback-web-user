@@ -1,0 +1,74 @@
+{
+  "title": "Quản trị viên",
+  "categories": {
+    "title": "Danh mục",
+    "addCategory": "Thêm danh mục",
+    "toggleStatus": "Thay đổi trạng thái",
+    "active": "Hoạt động",
+    "inactive": "Không hoạt động",
+    "delete": "Xóa",
+    "deleteConfirmTitle": "Xóa danh mục",
+    "deleteConfirmDescription": "Bạn có chắc chắn muốn xóa danh mục '{{name}}' không? Hành động này không thể hoàn tác",
+    "form": {
+      "namePlaceholder": "Nhập tên danh mục"
+    },
+    "errors": {
+      "nameRequired": "Tên danh mục là bắt buộc"
+    },
+    "empty": {
+      "title": "Chưa có danh mục nào",
+      "description": "Tạo danh mục đầu tiên của bạn để tổ chức phản hồi"
+    }
+  },
+  "settings": {
+    "title": "Cài đặt dự án",
+    "anonymousFeedback": {
+      "title": "Cho phép phản hồi ẩn danh",
+      "description": "Cho phép người dùng gửi phản hồi mà không cần cung cấp địa chỉ email"
+    },
+    "emailVerification": {
+      "title": "Yêu cầu xác minh email",
+      "description": "Người dùng phải xác minh email trước khi gửi phản hồi"
+    },
+    "autoPublish": {
+      "title": "Tự động xuất bản phản hồi",
+      "description": "Tự động xuất bản phản hồi mới mà không cần xem xét thủ công"
+    }
+  },
+  "common": {
+    "cancel": "Hủy"
+  },
+  "team": {
+    "title": "Thành viên nhóm",
+    "inviteMember": "Mời thành viên",
+    "pendingInvitations": "Lời mời đang chờ xử lý",
+    "selectRole": "Chọn vai trò",
+    "roles": {
+      "owner": "Chủ sở hữu",
+      "editor": "Biên tập viên",
+      "viewer": "Người xem"
+    },
+    "invitedOn": "Đã mời vào {{date}}",
+    "resend": "Gửi lại",
+    "cancel": "Hủy",
+    "invite": "Mời",
+    "confirmCancel": "Xác nhận",
+    "cancelInvitationTitle": "Hủy lời mời",
+    "cancelInvitationDescription": "Bạn có chắc chắn muốn hủy lời mời {{email}}? Hành động này không thể hoàn tác",
+    "removeMember": "Xóa thành viên",
+    "remove": "Xóa",
+    "removeConfirmTitle": "Xóa thành viên",
+    "removeConfirmDescription": "Bạn có chắc chắn muốn xóa {{name}} từ nhóm? Hành động này không thể hoàn tác",
+    "form": {
+      "emailPlaceholder": "Nhập địa chỉ email"
+    },
+    "errors": {
+      "emailRequired": "Email là bắt buộc",
+      "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ"
+    },
+    "empty": {
+      "title": "Chưa có thành viên nhóm nào",
+      "description": "Mời thành viên nhóm để cộng tác trong dự án của bạn"
+    }
+  }
+}

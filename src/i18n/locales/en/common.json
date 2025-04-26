@@ -15,6 +15,13 @@
     "next": "Next",
     "prev": "Previous"
   },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create"
+  },
   "messages": {
     "loading": "Loading...",
     "saving": "Saving...",
@@ -29,9 +36,7 @@
   "navigation": {
     "dashboard": "Dashboard",
     "feedback": "Feedback",
-    "category": "Category",
-    "member": "Member",
-    "setting": "Setting",
+    "admin": "Admin",
     "signin": "Sign In",
     "project": "Project",
     "account": "Account",

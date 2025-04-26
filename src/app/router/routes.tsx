@@ -1,26 +1,17 @@
 import AuthenticatedLayout from '@/app/components/layout/authenticated-layout'
+import AccountPage from '@/app/pages/account-page'
+import AdminPage from '@/app/pages/admin-page'
 import BillingPage from '@/app/pages/billing-page'
-import CategoryPage from '@/app/pages/category-page'
 import DashboardPage from '@/app/pages/dashboard-page'
 import FeedbackPage from '@/app/pages/feedback-page'
-import MemberPage from '@/app/pages/member-page'
 import NotificationPage from '@/app/pages/notification-page'
 import PricingPage from '@/app/pages/pricing-page'
-import SettingPage from '@/app/pages/setting-page'
 import SignInPage from '@/app/pages/sign-in-page'
 import SupportPage from '@/app/pages/support-page'
 import UserMenuLayout from '@/app/router/user-menu-layout'
+import { Braces, LayoutDashboard, Send } from 'lucide-react'
 import { JSX } from 'react'
 import { Navigate } from 'react-router'
-
-import AccountPage from '@/app/pages/account-page'
-import {
-  LayoutDashboard,
-  Send,
-  Settings,
-  SquareLibrary,
-  UserRound,
-} from 'lucide-react'
 
 export interface AppRoute {
   path?: string
@@ -114,22 +105,10 @@ export const appRoutes: AppRoute[] = [
         navigation: { label: 'navigation.feedback', icon: Send },
       },
       {
-        path: 'category',
-        element: <CategoryPage />,
-        breadcrumb: 'navigation.category',
-        navigation: { label: 'navigation.category', icon: SquareLibrary },
-      },
-      {
-        path: 'member',
-        element: <MemberPage />,
-        breadcrumb: 'navigation.member',
-        navigation: { label: 'navigation.member', icon: UserRound },
-      },
-      {
-        path: 'setting',
-        element: <SettingPage />,
-        breadcrumb: 'navigation.setting',
-        navigation: { label: 'navigation.setting', icon: Settings },
+        path: 'admin',
+        element: <AdminPage />,
+        breadcrumb: 'navigation.admin',
+        navigation: { label: 'navigation.admin', icon: Braces },
       },
     ],
   },

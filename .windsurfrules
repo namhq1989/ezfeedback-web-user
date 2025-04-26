@@ -1,0 +1,31 @@
+1. Use this format when creating a new UI component:
+
+```
+interface IProfileSectionProps {
+  user: IUser
+}
+
+const ProfileSection = ({ user }: IProfileSectionProps) => {}) => {
+    return (
+        // ...
+    )
+}
+
+export default ProfileSection
+```
+
+Try to declare the props interface with the prefix `I`, if the component does not require props, you can skip this step. The file name is reflecting the component name with this format 'a-b-c.tsx'. Same for the '.ts' file
+
+2. Try to split the big components into smaller components and put them into src/app/components/{feature}. Use index.ts for exporting
+
+3. When generating the UI, follow these rules:
+
+- No background
+- No shadow
+- Border radius 12px (rounded-xl in Tailwind)
+- No outline (if capable)
+
+4. Always define the model (interface) for the data structure at src/app/models. If working with the enum, declare a dedicated type for them too
+5. For the mock data, declare them at src/mock
+6. Always use i18n and declare them at src/i18n/locales
+7. Always use '@' for importing instead of relative path './'
