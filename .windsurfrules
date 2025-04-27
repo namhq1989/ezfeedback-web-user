@@ -27,5 +27,6 @@ Try to declare the props interface with the prefix `I`, if the component does no
 
 4. Always define the model (interface) for the data structure at src/app/models. If working with the enum, declare a dedicated type for them too
 5. For the mock data, declare them at src/mock
-6. Always use i18n and declare them at src/i18n/locales
+6. Always use i18n and declare them at src/i18n/locales (both "en" and "vi"). The correct format is `key: value` in the JSON file
 7. Always use '@' for importing instead of relative path './'
+8. If you need to manipulate with string, number, date, ... add the function to the appropriate file in src/lib

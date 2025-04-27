@@ -20,8 +20,55 @@ const formatDate = (date: Date): string => {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   }).format(date)
 }
 
-export { formatTime, formatDate }
+/**
+ * Format a date string to a more readable format
+ * @param dateString ISO date string
+ * @returns Formatted date string
+ */
+const formatDateString = (dateString: string): string => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date)
+}
+
+/**
+ * Format a date string to 24-hour time (HH:mm)
+ * @param dateString ISO date string
+ * @returns HH:mm string
+ */
+export const formatTime24h = (dateString: string): string => {
+  const date = new Date(dateString)
+  return date.toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+}
+
+/**
+ * Format a date string to 'dd MMM yyyy, HH:mm' (24-hour format)
+ * @param dateString ISO date string
+ * @returns formatted string
+ */
+export const formatDateTime24h = (dateString: string): string => {
+  const date = new Date(dateString)
+  return date.toLocaleString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+}
+
+export { formatDate, formatDateString, formatTime }

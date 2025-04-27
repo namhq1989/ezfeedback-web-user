@@ -91,11 +91,11 @@ const NotificationItem = ({ notification }: INotificationItemProps) => {
       </div>
       <div className='flex-1 hover:text-primary'>
         <h4
-          className={`text-sm font-medium ${notification.isRead ? 'text-muted-foreground' : ''}`}
+          className={`text-xs font-medium ${notification.isRead ? 'text-muted-foreground' : ''}`}
         >
           {t(getTranslationKey(notification.type))}
         </h4>
-        <p className='text-xs text-muted-foreground mt-1'>
+        <p className='text-sm text-muted-foreground mt-1'>
           {notification.content}
         </p>
       </div>
