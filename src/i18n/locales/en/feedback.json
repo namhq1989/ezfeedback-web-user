@@ -1,0 +1,39 @@
+{
+  "title": "Feedbacks",
+  "anonymous": "Anonymous",
+  "filters": {
+    "title": "Filters",
+    "search": "Search",
+    "searchPlaceholder": "Search feedbacks...",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "state": "State",
+    "allStates": "All States",
+    "rating": "Rating",
+    "clearFilters": "Clear Filters",
+    "activeFilters": "Active Filters"
+  },
+  "table": {
+    "content": "Content",
+    "category": "Category",
+    "state": "State",
+    "date": "Date",
+    "noFeedbacks": "No feedbacks found"
+  },
+  "state": {
+    "": "Unknown",
+    "new": "New",
+    "in_review": "In Review",
+    "planned": "Planned",
+    "in_progress": "In Progress",
+    "completed": "Completed",
+    "declined": "Declined"
+  },
+  "pagination": {
+    "showing": "Showing {{from}} to {{to}} of {{total}} feedbacks",
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "replies": "replies",
+  "reply": "Reply"
+}

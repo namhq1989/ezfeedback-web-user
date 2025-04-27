@@ -1,0 +1,39 @@
+{
+  "title": "Phản hồi",
+  "anonymous": "Ẩn danh",
+  "filters": {
+    "title": "Bộ lọc",
+    "search": "Tìm kiếm",
+    "searchPlaceholder": "Tìm kiếm phản hồi...",
+    "category": "Danh mục",
+    "allCategories": "Tất cả danh mục",
+    "state": "Trạng thái",
+    "allStates": "Tất cả trạng thái",
+    "rating": "Đánh giá",
+    "clearFilters": "Xóa bộ lọc",
+    "activeFilters": "Bộ lọc đang dùng"
+  },
+  "table": {
+    "content": "Nội dung",
+    "category": "Danh mục",
+    "state": "Trạng thái",
+    "date": "Ngày",
+    "noFeedbacks": "Không tìm thấy phản hồi nào"
+  },
+  "state": {
+    "": "Không xác định",
+    "new": "Mới",
+    "in_review": "Đang xem xét",
+    "planned": "Đã lên kế hoạch",
+    "in_progress": "Đang thực hiện",
+    "completed": "Hoàn thành",
+    "declined": "Từ chối"
+  },
+  "pagination": {
+    "showing": "Hiển thị {{from}} đến {{to}} của {{total}} phản hồi",
+    "prev": "Trước",
+    "next": "Tiếp"
+  },
+  "replies": "trả lời",
+  "reply": "Trả lời"
+}

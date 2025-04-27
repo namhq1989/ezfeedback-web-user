@@ -48,6 +48,7 @@ const NotificationPagination = ({
           size='sm'
           onClick={handlePrevPage}
           disabled={currentPage === 1}
+          className='rounded-xl text-xs'
         >
           {t('notification.actions.prev')}
         </Button>
@@ -56,6 +57,7 @@ const NotificationPagination = ({
           size='sm'
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
+          className='rounded-xl text-xs'
         >
           {t('notification.actions.next')}
         </Button>
