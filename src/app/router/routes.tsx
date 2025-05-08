@@ -1,16 +1,18 @@
+import AuthGuard from '@/app/components/auth/auth-guard'
 import AuthenticatedLayout from '@/app/components/layout/authenticated-layout'
-import AccountPage from '@/app/pages/account-page'
-import AdminPage from '@/app/pages/admin-page'
-import BillingPage from '@/app/pages/billing-page'
-import DashboardPage from '@/app/pages/dashboard-page'
-import FeedbackPage from '@/app/pages/feedback-page'
-import NotificationPage from '@/app/pages/notification-page'
-import PricingPage from '@/app/pages/pricing-page'
-import SignInPage from '@/app/pages/sign-in-page'
-import SupportPage from '@/app/pages/support-page'
+import AccountPage from '@/app/pages/account'
+import AdminPage from '@/app/pages/admin'
+import BillingPage from '@/app/pages/billing'
+import DashboardPage from '@/app/pages/dashboard'
+import FeedbackPage from '@/app/pages/feedback'
+import NotificationPage from '@/app/pages/notification'
+import PricingPage from '@/app/pages/pricing'
+import SignInPage from '@/app/pages/sign-in'
+import SupportPage from '@/app/pages/support'
+import { ROUTES, getDefaultDashboardRoute } from '@/app/router/route-constants'
 import UserMenuLayout from '@/app/router/user-menu-layout'
 import { Braces, LayoutDashboard, Send } from 'lucide-react'
-import { JSX } from 'react'
+import { ElementType, JSX } from 'react'
 import { Navigate } from 'react-router'
 
 export interface AppRoute {
@@ -20,7 +22,7 @@ export interface AppRoute {
   breadcrumb: string
   navigation?: {
     label: string
-    icon?: React.ElementType
+    icon?: ElementType
   }
   children?: AppRoute[]
   isPublic?: boolean
@@ -28,7 +30,11 @@ export interface AppRoute {
 
 export const appRoutes: AppRoute[] = [
   {
-    element: <AuthenticatedLayout />,
+    element: (
+      <AuthGuard>
+        <AuthenticatedLayout />
+      </AuthGuard>
+    ),
     breadcrumb: '',
     navigation: undefined,
     isPublic: false,
@@ -39,25 +45,25 @@ export const appRoutes: AppRoute[] = [
         navigation: undefined,
         children: [
           {
-            path: 'account',
+            path: ROUTES.ACCOUNT.substring(1), // Remove leading slash
             element: <AccountPage />,
             breadcrumb: 'navigation.account',
             navigation: undefined,
           },
           {
-            path: 'billing',
+            path: ROUTES.BILLING.substring(1), // Remove leading slash
             element: <BillingPage />,
             breadcrumb: 'navigation.billing',
             navigation: undefined,
           },
           {
-            path: 'notification',
+            path: ROUTES.NOTIFICATION.substring(1), // Remove leading slash
             element: <NotificationPage />,
             breadcrumb: 'navigation.notification',
             navigation: undefined,
           },
           {
-            path: 'support',
+            path: ROUTES.SUPPORT.substring(1), // Remove leading slash
             element: <SupportPage />,
             breadcrumb: 'navigation.support',
             navigation: undefined,
@@ -65,7 +71,7 @@ export const appRoutes: AppRoute[] = [
         ],
       },
       {
-        path: 'pricing',
+        path: ROUTES.PRICING.substring(1), // Remove leading slash
         element: <PricingPage />,
         breadcrumb: 'navigation.pricing',
         navigation: undefined,
@@ -73,22 +79,34 @@ export const appRoutes: AppRoute[] = [
     ],
   },
   {
-    path: '/',
-    element: <Navigate to='/project/project-a' replace />, // TODO: fix for the real slug value
+    path: ROUTES.ROOT,
+    element: (
+      <AuthGuard>
+        <Navigate to={getDefaultDashboardRoute()} replace />
+      </AuthGuard>
+    ),
     breadcrumb: '',
     navigation: undefined,
-    isPublic: true,
+    isPublic: false,
   },
   {
-    path: '/signin',
-    element: <SignInPage />,
+    path: ROUTES.SIGN_IN,
+    element: (
+      <AuthGuard requireAuth={false}>
+        <SignInPage />
+      </AuthGuard>
+    ),
     breadcrumb: 'navigation.signin',
     isPublic: true,
     navigation: undefined,
   },
   {
-    path: '/project/:slug',
-    element: <AuthenticatedLayout />,
+    path: `${ROUTES.PROJECT}/:slug`,
+    element: (
+      <AuthGuard>
+        <AuthenticatedLayout />
+      </AuthGuard>
+    ),
     breadcrumb: 'navigation.dashboard',
     navigation: { label: 'navigation.dashboard', icon: LayoutDashboard },
     children: [

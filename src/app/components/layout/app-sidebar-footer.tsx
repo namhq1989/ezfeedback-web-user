@@ -1,4 +1,6 @@
+import { ROUTES } from '@/app/router/route-constants'
 import { sidebarFooterMenuItems } from '@/app/router/user-menu-items'
+import useAuthStore from '@/app/stores/auth'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +15,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { ChevronsUpDown, GalleryVerticalEnd } from 'lucide-react'
+import { ChevronsUpDown, GalleryVerticalEnd, LogOut } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 const USER_EMAIL = 'namhq.1989@gmail.com'
 const USER_PLAN = 'Free'
@@ -23,6 +25,8 @@ const USER_PLAN = 'Free'
 const AppSidebarFooter = () => {
   const { t } = useTranslation()
   const { open, isMobile, setOpen, setOpenMobile } = useSidebar()
+  const { signOut } = useAuthStore()
+  const navigate = useNavigate()
 
   const handleMenuItemClick = () => {
     if (isMobile) {
@@ -90,6 +94,17 @@ const AppSidebarFooter = () => {
                   </Link>
                 )
               })}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className='items-center gap-2 cursor-pointer'
+                onClick={() => {
+                  signOut()
+                  navigate(ROUTES.SIGN_IN)
+                }}
+              >
+                <LogOut className='size-4' />
+                <span>{t('auth:signOut.button')}</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>
