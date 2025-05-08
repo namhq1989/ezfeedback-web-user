@@ -1,3 +1,4 @@
+import useAuthStore from '@/app/stores/auth'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -15,15 +16,19 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-interface VerificationFormProps {
+interface IVerificationFormProps {
   email: string
   onSuccess: () => void
   onBack: () => void
 }
 
-const RESEND_COUNTDOWN = 5
+const RESEND_COUNTDOWN = 60
 
-const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
+const VerificationForm = ({
+  email,
+  onSuccess,
+  onBack,
+}: IVerificationFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [resendLoading, setResendLoading] = useState(false)
   const [resendCountdown, setResendCountdown] = useState(RESEND_COUNTDOWN)
@@ -46,20 +51,17 @@ const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
     },
   })
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values: VerificationFormValues) => {
     setIsLoading(true)
 
     try {
-      // Here you would make the API call to verify the code
-      // For now, we'll simulate the API call with a timeout
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await useAuthStore.getState().verifyVerificationCode(values.code, email)
 
-      // Simulate successful verification
-      toast.success(t('verificationForm.success'))
+      // toast.success(t('verificationForm.success'))
       onSuccess()
-    } catch (error) {
-      toast.error(t('verificationForm.invalidCode'))
-      console.error('Error verifying code:', error)
+    } catch (error: any) {
+      const errorMessage = error?.message || t('verificationForm.invalidCode')
+      toast.error(errorMessage)
       setIsLoading(false)
     }
   }
@@ -68,15 +70,13 @@ const VerificationForm = ({ onSuccess, onBack }: VerificationFormProps) => {
     setResendLoading(true)
 
     try {
-      // Here you would make the API call to resend the verification code
-      // For now, we'll simulate the API call with a timeout
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await useAuthStore.getState().requestVerificationCode(email)
 
       toast.success(t('verificationForm.resendSuccess'))
       setResendCountdown(RESEND_COUNTDOWN)
-    } catch (error) {
-      toast.error(t('verificationForm.resendError'))
-      console.error('Error resending verification code:', error)
+    } catch (error: any) {
+      const errorMessage = error?.message || t('verificationForm.resendError')
+      toast.error(errorMessage)
     } finally {
       setResendLoading(false)
     }

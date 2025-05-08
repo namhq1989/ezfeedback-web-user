@@ -1,16 +1,10 @@
-import {
-  Bell,
-  CreditCard,
-  LifeBuoy,
-  LogOut,
-  Sparkles,
-  User,
-} from 'lucide-react'
+import { Bell, CreditCard, LifeBuoy, Sparkles, User } from 'lucide-react'
+import { ComponentType } from 'react'
 
 export interface IMenuItem {
   path: string
   label: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: ComponentType<{ className?: string }>
   iconClass?: string
   type?: 'item' | 'separator'
 }
@@ -58,16 +52,4 @@ export const sidebarFooterMenuItems: IMenuItem[] = [
     icon: () => null,
   },
   ...userMenuItems,
-  {
-    type: 'separator',
-    path: '',
-    label: '',
-    icon: () => null,
-  },
-  {
-    path: '/logout',
-    label: 'navigation.signout',
-    icon: LogOut,
-    iconClass: 'size-4',
-  },
 ]

@@ -1,6 +1,5 @@
 import EmailForm from '@/app/components/auth/email-form'
 import VerificationForm from '@/app/components/auth/verification-form'
-import useAuthStore from '@/app/stores/auth-store'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { LanguageSwitcher } from '@/i18n'
@@ -15,7 +14,6 @@ const SignInPage = () => {
   const [step, setStep] = useState<'email' | 'verification'>('email')
   const [email, setEmail] = useState('')
   const { t } = useTranslation('auth')
-  const { setAuth } = useAuthStore()
   const navigate = useNavigate()
 
   const handleEmailSubmit = (submittedEmail: string) => {
@@ -24,7 +22,6 @@ const SignInPage = () => {
   }
 
   const handleVerificationSuccess = () => {
-    setAuth(true)
     navigate('/')
   }
 

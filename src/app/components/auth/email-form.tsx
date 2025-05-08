@@ -1,3 +1,4 @@
+import useAuthStore from '@/app/stores/auth'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -15,11 +16,11 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-interface EmailFormProps {
+interface IEmailFormProps {
   onSubmit: (email: string) => void
 }
 
-const EmailForm = ({ onSubmit }: EmailFormProps) => {
+const EmailForm = ({ onSubmit }: IEmailFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const { t } = useTranslation('auth')
 
@@ -44,10 +45,7 @@ const EmailForm = ({ onSubmit }: EmailFormProps) => {
     setIsLoading(true)
 
     try {
-      // Here you would make the API call to send the verification code
-      // For now, we'll simulate the API call with a timeout
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
+      await useAuthStore.getState().requestVerificationCode(values.email)
       toast.success(t('emailForm.codeSent'))
       onSubmit(values.email)
     } catch (error) {

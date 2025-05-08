@@ -1,5 +1,5 @@
+import useAuthStore from '@/app/stores/auth'
 import ky, { KyInstance } from 'ky'
-import useAuthStore from '@/app/stores/auth-store.ts'
 import { create } from 'zustand/react'
 
 interface IHttp {

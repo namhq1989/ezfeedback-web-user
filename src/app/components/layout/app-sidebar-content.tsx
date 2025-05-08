@@ -28,7 +28,7 @@ const AppSidebarContent = () => {
     <SidebarContent>
       <SidebarGroup>
         <SidebarGroupContent>
-          <SidebarMenu className='gap-2'>
+          <SidebarMenu className='gap-2 mt-4'>
             {sidebarItems.map((item) => {
               const slug = params.slug
               const url = `/project/${slug}/${item.path}`
