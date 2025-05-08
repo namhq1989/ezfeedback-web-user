@@ -1,5 +1,7 @@
+import AuthDataProvider from '@/app/components/auth/auth-data-provider'
 import AuthGuard from '@/app/components/auth/auth-guard'
 import AuthenticatedLayout from '@/app/components/layout/authenticated-layout'
+import RootHandler from '@/app/components/root/root-handler'
 import AccountPage from '@/app/pages/account'
 import AdminPage from '@/app/pages/admin'
 import BillingPage from '@/app/pages/billing'
@@ -9,11 +11,10 @@ import NotificationPage from '@/app/pages/notification'
 import PricingPage from '@/app/pages/pricing'
 import SignInPage from '@/app/pages/sign-in'
 import SupportPage from '@/app/pages/support'
-import { ROUTES, getDefaultDashboardRoute } from '@/app/router/route-constants'
+import { ROUTES } from '@/app/router/route-constants'
 import UserMenuLayout from '@/app/router/user-menu-layout'
 import { Braces, LayoutDashboard, Send } from 'lucide-react'
 import { ElementType, JSX } from 'react'
-import { Navigate } from 'react-router'
 
 export interface AppRoute {
   path?: string
@@ -32,7 +33,9 @@ export const appRoutes: AppRoute[] = [
   {
     element: (
       <AuthGuard>
-        <AuthenticatedLayout />
+        <AuthDataProvider>
+          <AuthenticatedLayout />
+        </AuthDataProvider>
       </AuthGuard>
     ),
     breadcrumb: '',
@@ -82,7 +85,9 @@ export const appRoutes: AppRoute[] = [
     path: ROUTES.ROOT,
     element: (
       <AuthGuard>
-        <Navigate to={getDefaultDashboardRoute()} replace />
+        <AuthDataProvider>
+          <RootHandler />
+        </AuthDataProvider>
       </AuthGuard>
     ),
     breadcrumb: '',
@@ -101,10 +106,12 @@ export const appRoutes: AppRoute[] = [
     navigation: undefined,
   },
   {
-    path: `${ROUTES.PROJECT}/:slug`,
+    path: `${ROUTES.PROJECT}/:id`,
     element: (
       <AuthGuard>
-        <AuthenticatedLayout />
+        <AuthDataProvider>
+          <AuthenticatedLayout />
+        </AuthDataProvider>
       </AuthGuard>
     ),
     breadcrumb: 'navigation.dashboard',

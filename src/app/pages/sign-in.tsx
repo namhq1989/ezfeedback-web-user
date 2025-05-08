@@ -9,6 +9,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 
 import Logo from '@/assets/images/logo.png'
+import { ROUTES } from '../router/route-constants'
 
 const SignInPage = () => {
   const [step, setStep] = useState<'email' | 'verification'>('email')
@@ -22,7 +23,7 @@ const SignInPage = () => {
   }
 
   const handleVerificationSuccess = () => {
-    navigate('/')
+    navigate(ROUTES.ROOT)
   }
 
   const handleBackToEmail = () => {

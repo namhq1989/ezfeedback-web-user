@@ -186,6 +186,11 @@
       "next": "Tiếp"
     }
   },
+  "root": {
+    "welcome": "Chào mừng đến với Easy Feedback",
+    "noProjects": "Bạn chưa có dự án nào. Hãy tạo dự án đầu tiên để bắt đầu.",
+    "createProject": "Tạo dự án mới"
+  },
   "support": {
     "contact": {
       "title": "Liên hệ hỗ trợ",
