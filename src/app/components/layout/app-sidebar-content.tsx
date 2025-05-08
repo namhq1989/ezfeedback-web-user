@@ -10,15 +10,26 @@ import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useParams } from 'react-router'
 
 import { appRoutes } from '@/app/router/routes'
+import useProjectStore from '@/app/stores/project'
+import { useEffect } from 'react'
 
 const AppSidebarContent = () => {
   const location = useLocation()
   const { open } = useSidebar()
   const params = useParams()
   const { t } = useTranslation()
+  const { projects, selectedProjectId, setSelectedProjectId } =
+    useProjectStore()
 
-  // Find the /project/:slug route
-  const projectRoute = appRoutes.find((r) => r.path === '/project/:slug')
+  // Update the selected project ID when the URL param changes
+  useEffect(() => {
+    if (params.id && params.id !== selectedProjectId) {
+      setSelectedProjectId(params.id)
+    }
+  }, [params.id, selectedProjectId, setSelectedProjectId])
+
+  // Find the /project/:id route
+  const projectRoute = appRoutes.find((r) => r.path === '/project/:id')
   const sidebarItems =
     projectRoute && projectRoute.children
       ? projectRoute.children.filter((child) => child.navigation)
@@ -30,8 +41,12 @@ const AppSidebarContent = () => {
         <SidebarGroupContent>
           <SidebarMenu className='gap-2 mt-4'>
             {sidebarItems.map((item) => {
-              const slug = params.slug
-              const url = `/project/${slug}/${item.path}`
+              // Use the selected project ID from the store, or fall back to the URL param
+              const id =
+                selectedProjectId ||
+                params.id ||
+                (projects.length > 0 ? projects[0].id : '')
+              const url = `/project/${id}/${item.path}`
               const isActive =
                 location.pathname === url ||
                 location.pathname.startsWith(url + '/')

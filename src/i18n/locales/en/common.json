@@ -186,6 +186,11 @@
       "next": "Next"
     }
   },
+  "root": {
+    "welcome": "Welcome to Easy Feedback",
+    "noProjects": "You don't have any projects yet. Create your first project to get started.",
+    "createProject": "Create New Project"
+  },
   "support": {
     "contact": {
       "title": "Contact Support",

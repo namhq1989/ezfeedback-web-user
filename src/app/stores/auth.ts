@@ -1,8 +1,9 @@
-import authApi from '@/app/api/auth/auth-api'
-import {
+import iamApi, {
+  IGetMeRequest,
   IRequestVerificationCodeRequest,
   IVerifyVerificationCodeRequest,
-} from '@/app/api/auth/auth-types'
+} from '@/app/api/iam'
+import { IMe } from '@/app/models/user'
 import { create } from 'zustand/react'
 
 export interface IAuthStore {
@@ -15,6 +16,7 @@ export interface IAuthStore {
     code: string,
     email: string,
   ) => Promise<{ isNewUser: boolean }>
+  getMe: () => Promise<IMe>
 }
 
 const useAuthStore = create<IAuthStore>((_, get) => ({
@@ -33,7 +35,7 @@ const useAuthStore = create<IAuthStore>((_, get) => ({
   requestVerificationCode: async (email: string) => {
     try {
       const request: IRequestVerificationCodeRequest = { email }
-      await authApi.requestVerificationCode(request)
+      await iamApi.requestVerificationCode(request)
     } catch (error) {
       throw error
     }
@@ -41,10 +43,19 @@ const useAuthStore = create<IAuthStore>((_, get) => ({
   verifyVerificationCode: async (code: string, email: string) => {
     try {
       const request: IVerifyVerificationCodeRequest = { code, email }
-      const response = await authApi.verifyVerificationCode(request)
+      const response = await iamApi.verifyVerificationCode(request)
 
       get().setToken(response.token)
       return { isNewUser: response.isNewUser }
+    } catch (error) {
+      throw error
+    }
+  },
+  getMe: async () => {
+    try {
+      const request: IGetMeRequest = {}
+      const response = await iamApi.getMe(request)
+      return response.me
     } catch (error) {
       throw error
     }

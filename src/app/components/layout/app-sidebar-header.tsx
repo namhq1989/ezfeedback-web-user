@@ -1,3 +1,5 @@
+import { getProjectDashboardRoute } from '@/app/router/route-constants'
+import useProjectStore from '@/app/stores/project'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -13,21 +15,22 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { projects } from '@/mock/projects'
 import { Check, ChevronsUpDown, GalleryVerticalEnd, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const TRANSITION_DURATION = 300
 const SHOW_TEXT_DELAY = 150
 
 const AppSidebarHeader = () => {
   const { open, isMobile } = useSidebar()
-  const [selectedProjectSlug, setSelectedProjectSlug] = useState(
-    projects[0]?.slug,
-  )
+  const { projects, selectedProjectId, setSelectedProjectId } =
+    useProjectStore()
+  const navigate = useNavigate()
 
   const selectedProject =
-    projects.find((p) => p.slug === selectedProjectSlug) || projects[0]
+    projects.find((p) => p.id === selectedProjectId) ||
+    (projects.length > 0 ? projects[0] : null)
 
   const [showText, setShowText] = useState(open)
   useEffect(() => {
@@ -60,13 +63,13 @@ const AppSidebarHeader = () => {
                       ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
                       style={{ width: isMobile ? 170 : 150 }}
                     >
-                      {showText && (
+                      {showText && selectedProject && (
                         <>
                           <span className='font-semibold truncate overflow-hidden whitespace-nowrap'>
-                            {selectedProject.name}
+                            {selectedProject.title}
                           </span>
                           <span className='text-xs text-muted-foreground'>
-                            {selectedProject.stats.totalFeedback.toLocaleString()}{' '}
+                            {selectedProject.stats.totalFeedbacks.toLocaleString()}{' '}
                             feedback
                           </span>
                         </>
@@ -89,8 +92,13 @@ const AppSidebarHeader = () => {
             >
               {projects.map((project) => (
                 <DropdownMenuItem
-                  key={project.slug}
-                  onSelect={() => setSelectedProjectSlug(project.slug)}
+                  key={project.id}
+                  onSelect={() => {
+                    // Update the selected project ID in the store
+                    setSelectedProjectId(project.id)
+                    // Navigate to the project dashboard
+                    navigate(getProjectDashboardRoute(project.id))
+                  }}
                   className='p-0'
                 >
                   <button
@@ -101,12 +109,12 @@ const AppSidebarHeader = () => {
                       <GalleryVerticalEnd className='size-4 text-primary-foreground' />
                     </div>
                     <div className='flex flex-col gap-1 leading-none text-left'>
-                      <span className='font-semibold'>{project.name}</span>
+                      <span className='font-semibold'>{project.title}</span>
                       <span className='text-xs text-muted-foreground'>
-                        {project.stats.totalFeedback.toLocaleString()} feedback
+                        {project.stats.totalFeedbacks.toLocaleString()} feedback
                       </span>
                     </div>
-                    {project.slug === selectedProjectSlug ? (
+                    {project.id === selectedProjectId ? (
                       <Check className='ml-auto' />
                     ) : null}
                   </button>

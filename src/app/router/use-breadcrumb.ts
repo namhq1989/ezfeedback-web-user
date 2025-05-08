@@ -1,26 +1,27 @@
 import { appRoutes } from '@/app/router/routes'
-import { projects } from '@/mock/projects'
+import useProjectStore from '@/app/stores/project'
 import { useLocation } from 'react-router'
 
 export function useBreadcrumb(): string[] {
   const location = useLocation()
   const path = location.pathname
+  const { projects } = useProjectStore()
 
-  // --- Project Pages: /project/:slug/... ---
+  // --- Project Pages: /project/:id/... ---
   const projectPattern = /^\/project\/([^/]+)(.*)$/
   const match = path.match(projectPattern)
   if (match) {
-    const slug = match[1]
+    const id = match[1]
     const rest = match[2] // e.g. /feedback/detail
-    const project = projects.find((p) => p.slug === slug)
+    const project = projects?.find((p) => p.id === id)
     if (!project) return []
 
     // Split rest of the path
     const segments = rest.split('/').filter(Boolean) // e.g. ['feedback', 'detail']
     // Find corresponding route for each segment
     let routeChildren =
-      appRoutes.find((r) => r.path === '/project/:slug')?.children || []
-    const breadcrumbs = [project.name]
+      appRoutes.find((r) => r.path === '/project/:id')?.children || []
+    const breadcrumbs = [project.title]
     segments.forEach((seg) => {
       const found = routeChildren.find((r) => r.path === seg)
       breadcrumbs.push(found ? found.breadcrumb : seg)

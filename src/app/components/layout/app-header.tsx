@@ -15,6 +15,16 @@ import { useTranslation } from 'react-i18next'
 const AppHeader: FC = () => {
   const breadcrumbTrail = useBreadcrumb()
   const { t } = useTranslation()
+
+  // If breadcrumb trail is empty, don't render breadcrumbs
+  if (!breadcrumbTrail || breadcrumbTrail.length === 0) {
+    return (
+      <header className='w-full flex items-center h-[50px] px-6 py-2 border-b border-muted gap-6'>
+        <AppSidebarTrigger />
+      </header>
+    )
+  }
+
   // useBreadcrumb returns [projectName, pageLabel?]
   const projectName = breadcrumbTrail[0] || ''
   const pageLabel = breadcrumbTrail[1] ? t(breadcrumbTrail[1]) : ''

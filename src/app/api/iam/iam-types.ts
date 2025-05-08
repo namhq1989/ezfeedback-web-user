@@ -1,3 +1,5 @@
+import { IMe } from '@/app/models/user'
+
 //
 // REQUEST VERIFICATION CODE
 //
@@ -20,4 +22,14 @@ export interface IVerifyVerificationCodeRequest {
 export interface IVerifyVerificationCodeResponse {
   isNewUser: boolean
   token: string
+}
+
+//
+// GET ME
+//
+
+export interface IGetMeRequest {}
+
+export interface IGetMeResponse {
+  me: IMe
 }

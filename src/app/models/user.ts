@@ -1,3 +1,9 @@
+export interface IMe {
+  id: string
+  email: string
+  name: string
+}
+
 export interface IUser {
   id: string
   name: string

@@ -12,23 +12,20 @@ export const ROUTES = {
 
   // Project routes
   PROJECT: '/project',
-  PROJECT_WITH_SLUG: (slug: string) => `/project/${slug}`,
-  PROJECT_DASHBOARD: (slug: string) => `/project/${slug}/dashboard`,
-  PROJECT_FEEDBACK: (slug: string) => `/project/${slug}/feedback`,
-  PROJECT_ADMIN: (slug: string) => `/project/${slug}/admin`,
+  PROJECT_WITH_ID: (id: string) => `/project/${id}`,
+  PROJECT_DASHBOARD: (id: string) => `/project/${id}/dashboard`,
+  PROJECT_FEEDBACK: (id: string) => `/project/${id}/feedback`,
+  PROJECT_ADMIN: (id: string) => `/project/${id}/admin`,
 
   // User menu routes
   ACCOUNT: '/account',
   BILLING: '/billing',
   NOTIFICATION: '/notification',
   SUPPORT: '/support',
-  PRICING: '/pricing',
-
-  // Default project for redirection (TODO: replace with dynamic project selection)
-  DEFAULT_PROJECT_SLUG: 'project-a',
+  PRICING: '/pricing'
 }
 
-// Helper to get default dashboard route
-export const getDefaultDashboardRoute = (): string => {
-  return ROUTES.PROJECT_DASHBOARD(ROUTES.DEFAULT_PROJECT_SLUG)
+// Helper to get dashboard route for a specific project
+export const getProjectDashboardRoute = (projectId: string): string => {
+  return ROUTES.PROJECT_DASHBOARD(projectId)
 }
