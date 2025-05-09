@@ -85,7 +85,7 @@ const useHttpStore = create<IHttp>((_, get) => ({
     })
 
     const queryParams = new URLSearchParams(processedPayload).toString()
-    const fullPath = `${path}?${queryParams}`
+    const fullPath = queryParams ? `${path}?${queryParams}` : path
 
     const response = await get().http.get(fullPath)
     return handleApiResponse<T>(response)

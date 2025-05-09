@@ -1,3 +1,4 @@
+import { Spinner } from '@/app/components/root'
 import { getProjectDashboardRoute } from '@/app/router/route-constants'
 import useProjectStore from '@/app/stores/project'
 import { Button } from '@/components/ui/button'
@@ -24,13 +25,9 @@ const SHOW_TEXT_DELAY = 150
 
 const AppSidebarHeader = () => {
   const { open, isMobile } = useSidebar()
-  const { projects, selectedProjectId, setSelectedProjectId } =
+  const { projects, selectedProject, isLoadingProject, getProjectById } =
     useProjectStore()
   const navigate = useNavigate()
-
-  const selectedProject =
-    projects.find((p) => p.id === selectedProjectId) ||
-    (projects.length > 0 ? projects[0] : null)
 
   const [showText, setShowText] = useState(open)
   useEffect(() => {
@@ -53,34 +50,40 @@ const AppSidebarHeader = () => {
                 size='lg'
                 className='flex gap-4 items-center justify-center'
               >
-                {open ? (
-                  <>
-                    <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
-                      <GalleryVerticalEnd className='size-4 text-primary-foreground' />
-                    </div>
-                    <div
-                      className={`flex flex-col gap-1 leading-none transition-all duration-${TRANSITION_DURATION} overflow-hidden
-                      ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
-                      style={{ width: isMobile ? 170 : 150 }}
-                    >
-                      {showText && selectedProject && (
-                        <>
-                          <span className='font-semibold truncate overflow-hidden whitespace-nowrap'>
-                            {selectedProject.title}
-                          </span>
-                          <span className='text-xs text-muted-foreground'>
-                            {selectedProject.stats.totalFeedbacks.toLocaleString()}{' '}
-                            feedback
-                          </span>
-                        </>
-                      )}
-                    </div>
-                    <ChevronsUpDown className='ml-auto' />
-                  </>
+                {isLoadingProject ? (
+                  <Spinner size='sm' />
                 ) : (
-                  <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
-                    <GalleryVerticalEnd className='size-4 text-primary-foreground' />
-                  </div>
+                  <>
+                    {open ? (
+                      <>
+                        <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
+                          <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                        </div>
+                        <div
+                          className={`flex flex-col gap-1 leading-none transition-all duration-${TRANSITION_DURATION} overflow-hidden
+                      ${open ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}`}
+                          style={{ width: isMobile ? 170 : 150 }}
+                        >
+                          {showText && selectedProject && (
+                            <>
+                              <span className='font-semibold truncate overflow-hidden whitespace-nowrap'>
+                                {selectedProject.title}
+                              </span>
+                              <span className='text-xs text-muted-foreground'>
+                                {selectedProject.stats.totalFeedbacks.toLocaleString()}{' '}
+                                feedback
+                              </span>
+                            </>
+                          )}
+                        </div>
+                        <ChevronsUpDown className='ml-auto' />
+                      </>
+                    ) : (
+                      <div className='flex aspect-square size-8 items-center justify-center rounded-xl bg-primary'>
+                        <GalleryVerticalEnd className='size-4 text-primary-foreground' />
+                      </div>
+                    )}
+                  </>
                 )}
               </SidebarMenuButton>
             </DropdownMenuTrigger>
@@ -94,8 +97,12 @@ const AppSidebarHeader = () => {
                 <DropdownMenuItem
                   key={project.id}
                   onSelect={() => {
-                    // Update the selected project ID in the store
-                    setSelectedProjectId(project.id)
+                    // If the selected project is already the current one, do nothing
+                    if (selectedProject && project.id === selectedProject.id) {
+                      return
+                    }
+                    // Fetch the full project details and update the store
+                    getProjectById(project.id)
                     // Navigate to the project dashboard
                     navigate(getProjectDashboardRoute(project.id))
                   }}
@@ -114,7 +121,7 @@ const AppSidebarHeader = () => {
                         {project.stats.totalFeedbacks.toLocaleString()} feedback
                       </span>
                     </div>
-                    {project.id === selectedProjectId ? (
+                    {selectedProject && project.id === selectedProject.id ? (
                       <Check className='ml-auto' />
                     ) : null}
                   </button>
