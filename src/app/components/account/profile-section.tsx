@@ -74,8 +74,12 @@ const ProfileSection = ({ user }: IProfileSectionProps) => {
 
           {/* Save button */}
           <div className='flex justify-end'>
-            <Button onClick={handleSave} disabled={!!nameError || isSaving}>
-              {isSaving ? t('messages.saving') : t('account.profile.save')}
+            <Button
+              size='sm'
+              onClick={handleSave}
+              disabled={!!nameError || isSaving}
+            >
+              {isSaving ? t('common:messages.saving') : t('common:common.save')}
             </Button>
           </div>
         </div>

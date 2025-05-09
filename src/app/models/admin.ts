@@ -7,7 +7,7 @@ export interface ICategory {
 export enum TeamMemberRole {
   OWNER = 'owner',
   EDITOR = 'editor',
-  VIEWER = 'viewer'
+  VIEWER = 'viewer',
 }
 
 export type TeamMemberRoleType = keyof typeof TeamMemberRole
@@ -25,10 +25,4 @@ export interface ITeamInvitation {
   email: string
   role: TeamMemberRoleType
   createdAt: Date
-}
-
-export interface IProjectSettings {
-  allowAnonymousFeedback: boolean
-  requireEmailVerification: boolean
-  autoPublishFeedback: boolean
 }

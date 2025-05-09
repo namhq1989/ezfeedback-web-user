@@ -1,6 +1,8 @@
 import {
   IChangeProjectCategoryStatusRequest,
   IChangeProjectCategoryStatusResponse,
+  IChangeProjectStatusRequest,
+  IChangeProjectStatusResponse,
   ICreateProjectCategoryRequest,
   ICreateProjectCategoryResponse,
   IGetProjectByIdRequest,
@@ -9,6 +11,8 @@ import {
   IGetProjectsResponse,
   IUpdateProjectCategoryRequest,
   IUpdateProjectCategoryResponse,
+  IUpdateProjectRequest,
+  IUpdateProjectResponse,
 } from '@/app/api/project/project-types'
 import useHttpStore from '@/core/http'
 
@@ -23,6 +27,8 @@ const API_PATHS = {
     `${API_PREFIX}/${projectId}/category/${categoryId}`,
   CHANGE_PROJECT_CATEGORY_STATUS: (projectId: string, categoryId: string) =>
     `${API_PREFIX}/${projectId}/category/${categoryId}/status`,
+  UPDATE_PROJECT: (id: string) => `${API_PREFIX}/${id}`,
+  CHANGE_PROJECT_STATUS: (id: string) => `${API_PREFIX}/${id}/status`,
 }
 
 const getProjects = async (params?: IGetProjectsRequest) => {
@@ -90,10 +96,36 @@ const changeProjectCategoryStatus = async (
   }
 }
 
+const updateProject = async (id: string, data: IUpdateProjectRequest) => {
+  try {
+    const { put } = useHttpStore.getState()
+    return put<IUpdateProjectResponse>(API_PATHS.UPDATE_PROJECT(id), data)
+  } catch (error) {
+    throw error
+  }
+}
+
+const changeProjectStatus = async (
+  id: string,
+  data: IChangeProjectStatusRequest,
+) => {
+  try {
+    const { patch } = useHttpStore.getState()
+    return patch<IChangeProjectStatusResponse>(
+      API_PATHS.CHANGE_PROJECT_STATUS(id),
+      data,
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
 export default {
   getProjects,
   getProjectById,
   createProjectCategory,
   updateProjectCategory,
   changeProjectCategoryStatus,
+  updateProject,
+  changeProjectStatus,
 }

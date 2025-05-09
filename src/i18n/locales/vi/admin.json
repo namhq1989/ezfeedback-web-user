@@ -27,7 +27,33 @@
     "statusUpdateError": "Không thể cập nhật trạng thái danh mục"
   },
   "settings": {
-    "title": "Cài đặt dự án",
+    "title": "Cài Đặt Dự Án",
+    "edit": "Chỉnh Sửa",
+    "updateSuccess": "Dự án đã được cập nhật thành công",
+    "updateError": "Không thể cập nhật dự án",
+    "statusUpdateSuccess": "Trạng thái dự án đã được cập nhật thành công",
+    "statusUpdateError": "Không thể cập nhật trạng thái dự án",
+    "projectTitle": {
+      "title": "Tiêu Đề Dự Án",
+      "placeholder": "Nhập tiêu đề dự án"
+    },
+    "description": {
+      "title": "Mô Tả",
+      "placeholder": "Nhập mô tả dự án"
+    },
+    "status": {
+      "title": "Trạng Thái",
+      "active": "Hoạt Động",
+      "inactive": "Không Hoạt Động"
+    },
+    "domain": {
+      "title": "Domain",
+      "description": "Domain cho dự án này"
+    },
+    "primaryColor": {
+      "title": "Màu Chính",
+      "description": "Màu chính cho dự án này"
+    },
     "anonymousFeedback": {
       "title": "Cho phép phản hồi ẩn danh",
       "description": "Cho phép người dùng gửi phản hồi mà không cần cung cấp địa chỉ email"

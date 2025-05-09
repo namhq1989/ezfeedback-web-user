@@ -1,4 +1,8 @@
-import projectApi, { IGetProjectsRequest } from '@/app/api/project'
+import projectApi, {
+  IGetProjectsRequest,
+  IProjectStatus,
+  IUpdateProjectRequest,
+} from '@/app/api/project'
 import { IProject, IProjectBrief } from '@/app/models/project'
 import { create } from 'zustand/react'
 
@@ -7,20 +11,24 @@ export interface IProjectStore {
   selectedProject: IProject | null
   isLoadingProjects: boolean
   isLoadingProject: boolean
+  isUpdatingProject: boolean
   error: string | null
   getProjects: () => Promise<IProjectBrief[]>
   getProjectById: (id: string) => Promise<IProject | null>
   setProjects: (projects: IProjectBrief[]) => void
   setSelectedProject: (project: IProject) => void
+  updateProject: (data: IUpdateProjectRequest) => Promise<void>
+  changeProjectStatus: (status: IProjectStatus['status']) => Promise<void>
   setError: (error: string | null) => void
   reset: () => void
 }
 
-const useProjectStore = create<IProjectStore>((set) => ({
+const useProjectStore = create<IProjectStore>((set, get) => ({
   projects: [],
   selectedProject: null,
   isLoadingProjects: false,
   isLoadingProject: false,
+  isUpdatingProject: false,
   error: null,
   getProjects: async () => {
     try {
@@ -63,6 +71,43 @@ const useProjectStore = create<IProjectStore>((set) => ({
   },
   setSelectedProject: (project: IProject) => {
     set({ selectedProject: project })
+  },
+
+  updateProject: async (data: IUpdateProjectRequest) => {
+    const { selectedProject } = get()
+    if (!selectedProject) return
+
+    try {
+      set({ isUpdatingProject: true, error: null })
+      await projectApi.updateProject(selectedProject.id, data)
+
+      set({
+        selectedProject: { ...selectedProject, ...data },
+        isUpdatingProject: false,
+      })
+    } catch (error) {
+      throw error
+    } finally {
+      set({ isUpdatingProject: false })
+    }
+  },
+
+  changeProjectStatus: async (status: IProjectStatus['status']) => {
+    const { selectedProject } = get()
+    if (!selectedProject) return
+
+    try {
+      set({ isUpdatingProject: true, error: null })
+      await projectApi.changeProjectStatus(selectedProject.id, { status })
+      set({
+        selectedProject: { ...selectedProject, status },
+        isUpdatingProject: false,
+      })
+    } catch (error) {
+      throw error
+    } finally {
+      set({ isUpdatingProject: false })
+    }
   },
 
   setError: (error: string | null) => {
