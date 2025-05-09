@@ -14,7 +14,7 @@ const ProfileSection = ({ user }: IProfileSectionProps) => {}) => {
 export default ProfileSection
 ```
 
-Try to declare the props interface with the prefix `I`, if the component does not require props, you can skip this step. The file name is reflecting the component name with this format 'a-b-c.tsx'. Same for the '.ts' file
+All interfaces must have prefix `I`. If a component does not require props, you can skip interface declaration. The file name is reflecting the component name with this format 'a-b-c.tsx'. Same for the '.ts' file
 
 2. Try to split the big components into smaller components and put them into src/app/components/{feature}. Use index.ts for exporting
 

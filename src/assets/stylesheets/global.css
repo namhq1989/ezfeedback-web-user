@@ -192,6 +192,10 @@
   button {
     @apply cursor-pointer;
   }
+
+  ::placeholder {
+    font-size: 0.75rem;
+  }
 }
 
 @layer utilities {

@@ -1,18 +1,21 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTranslation } from '@/i18n'
+import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 
 interface ICategoryFormProps {
   initialValue?: string
   onSave: (name: string) => void
   onCancel: () => void
+  isLoading?: boolean
 }
 
 const CategoryForm = ({
   initialValue = '',
   onSave,
   onCancel,
+  isLoading = false,
 }: ICategoryFormProps) => {
   const { t } = useTranslation()
   const [name, setName] = useState(initialValue)
@@ -46,10 +49,18 @@ const CategoryForm = ({
       </div>
 
       <div className='flex justify-end space-x-2'>
-        <Button type='button' variant='ghost' onClick={onCancel}>
+        <Button
+          type='button'
+          variant='ghost'
+          onClick={onCancel}
+          disabled={isLoading}
+        >
           {t('common.cancel')}
         </Button>
-        <Button type='submit'>{t('common.save')}</Button>
+        <Button type='submit' disabled={isLoading}>
+          {isLoading && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
+          {t('common.save')}
+        </Button>
       </div>
     </form>
   )

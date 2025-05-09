@@ -3,7 +3,7 @@
   "categories": {
     "title": "Category",
     "addCategory": "Add Category",
-    "toggleStatus": "Toggle status",
+    "toggleStatus": "Toggle category status",
     "active": "Active",
     "inactive": "Inactive",
     "delete": "Delete",
@@ -18,7 +18,13 @@
     "empty": {
       "title": "No categories yet",
       "description": "Create your first category to organize feedback"
-    }
+    },
+    "addSuccess": "Category added successfully",
+    "addError": "Failed to add category",
+    "updateSuccess": "Category updated successfully",
+    "updateError": "Failed to update category",
+    "statusUpdateSuccess": "Category status updated successfully",
+    "statusUpdateError": "Failed to update category status"
   },
   "settings": {
     "title": "Project Setting",
