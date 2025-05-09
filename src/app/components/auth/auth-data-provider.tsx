@@ -1,3 +1,4 @@
+import { Spinner } from '@/app/components/root'
 import { ROUTES } from '@/app/router/route-constants'
 import useAuthStore from '@/app/stores/auth'
 import useProjectStore from '@/app/stores/project'
@@ -38,7 +39,7 @@ const AuthDataProvider = ({ children }: IAuthDataProviderProps) => {
   if (isLoading) {
     return (
       <div className='flex items-center justify-center min-h-screen'>
-        <div className='animate-spin rounded-xl h-12 w-12 border-t-2 border-b-2 border-primary'></div>
+        <Spinner size='lg' />
       </div>
     )
   }
