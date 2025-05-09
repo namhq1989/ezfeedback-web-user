@@ -3,7 +3,7 @@
   "categories": {
     "title": "Danh mục",
     "addCategory": "Thêm danh mục",
-    "toggleStatus": "Thay đổi trạng thái",
+    "toggleStatus": "Thay đổi trạng thái danh mục",
     "active": "Hoạt động",
     "inactive": "Không hoạt động",
     "delete": "Xóa",
@@ -18,7 +18,13 @@
     "empty": {
       "title": "Chưa có danh mục nào",
       "description": "Tạo danh mục đầu tiên của bạn để tổ chức phản hồi"
-    }
+    },
+    "addSuccess": "Thêm danh mục thành công",
+    "addError": "Không thể thêm danh mục",
+    "updateSuccess": "Cập nhật danh mục thành công",
+    "updateError": "Không thể cập nhật danh mục",
+    "statusUpdateSuccess": "Cập nhật trạng thái danh mục thành công",
+    "statusUpdateError": "Không thể cập nhật trạng thái danh mục"
   },
   "settings": {
     "title": "Cài đặt dự án",

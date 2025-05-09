@@ -1,62 +1,163 @@
+import projectApi from '@/app/api/project'
 import CategoryForm from '@/app/components/admin/category-form'
 import EmptyCategoriesState from '@/app/components/admin/empty-categories-state'
-import { ICategory } from '@/app/models/admin'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
+import { IProjectCategory } from '@/app/models/project'
+import useProjectStore from '@/app/stores/project'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { useTranslation } from '@/i18n'
-import { Plus, SquarePen, Trash2 } from 'lucide-react'
+import { Plus, SquarePen } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
-interface ICategoriesSectionProps {
-  initialCategories: ICategory[]
-}
-
-const CategoriesSection = ({ initialCategories }: ICategoriesSectionProps) => {
+const CategoriesSection = () => {
   const { t } = useTranslation()
-  const [categories, setCategories] = useState<ICategory[]>(initialCategories)
+  const { selectedProject, setSelectedProject } = useProjectStore()
   const [isAddingCategory, setIsAddingCategory] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<ICategory | null>(null)
+  const [editingCategory, setEditingCategory] =
+    useState<IProjectCategory | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleAddCategory = (name: string) => {
-    const newCategory = {
-      id: `category-${Date.now()}`,
-      name,
-      isActive: true,
-    }
-    setCategories([...categories, newCategory])
-    setIsAddingCategory(false)
-  }
+  const categories = selectedProject?.categories || []
 
-  const handleUpdateCategory = (_id: string, name: string) => {
-    if (editingCategory) {
-      const updatedCategory = { ...editingCategory, name }
-      setCategories(
-        categories.map((cat) =>
-          cat.id === updatedCategory.id ? updatedCategory : cat,
-        ),
+  const handleAddCategory = async (name: string) => {
+    if (!selectedProject) return
+
+    try {
+      setIsLoading(true)
+
+      const response = await projectApi.createProjectCategory(
+        selectedProject.id,
+        { name },
       )
-      setEditingCategory(null)
+
+      // Force a re-render by creating a completely new project object
+      if (selectedProject && response.category) {
+        // Create a new array with all categories plus the new one
+        const updatedCategories = [
+          ...(selectedProject.categories || []),
+          response.category,
+        ]
+
+        // Create a completely new project object
+        const updatedProject = JSON.parse(
+          JSON.stringify({
+            ...selectedProject,
+            categories: updatedCategories,
+          }),
+        )
+
+        // Update the project in the store
+        setSelectedProject(updatedProject)
+      }
+
+      setIsAddingCategory(false)
+      toast.success(t('admin:categories.addSuccess'))
+    } catch (error) {
+      toast.error(t('admin:categories.addError'))
+      console.error('Failed to add category:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const handleToggleStatus = (category: ICategory) => {
-    const isActive = !category.isActive
-    setCategories(
-      categories.map((cat) =>
-        cat.id === category.id ? { ...cat, isActive } : cat,
-      ),
-    )
+  const handleUpdateCategory = async (categoryId: string, name: string) => {
+    if (!selectedProject || !editingCategory) return
+
+    try {
+      setIsLoading(true)
+
+      // Make the API call to update the name
+      await projectApi.updateProjectCategory(selectedProject.id, categoryId, {
+        name,
+      })
+
+      // Create a new array with all categories
+      const updatedCategories = [...selectedProject.categories]
+
+      // Find the category to update
+      const categoryIndex = updatedCategories.findIndex(
+        (cat) => cat.id === categoryId,
+      )
+
+      // Update the category with the new name
+      if (categoryIndex !== -1) {
+        // Create a new category object with the updated name
+        updatedCategories[categoryIndex] = {
+          ...updatedCategories[categoryIndex],
+          name,
+        }
+      }
+
+      // Create a completely new project object
+      const updatedProject = JSON.parse(
+        JSON.stringify({
+          ...selectedProject,
+          categories: updatedCategories,
+        }),
+      )
+
+      // Update the project in the store
+      setSelectedProject(updatedProject)
+
+      setEditingCategory(null)
+      toast.success(t('admin:categories.updateSuccess'))
+    } catch (error) {
+      toast.error(t('admin:categories.updateError'))
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleToggleStatus = async (category: IProjectCategory) => {
+    if (!selectedProject) return
+
+    try {
+      setIsLoading(true)
+      const newStatus = category.status === 'active' ? 'inactive' : 'active'
+
+      // Make the API call to update the status
+      await projectApi.changeProjectCategoryStatus(
+        selectedProject.id,
+        category.id,
+        { status: newStatus },
+      )
+
+      // Create a new array with all categories
+      const updatedCategories = [...selectedProject.categories]
+
+      // Find the category to update
+      const categoryIndex = updatedCategories.findIndex(
+        (cat) => cat.id === category.id,
+      )
+
+      // Update the category with the new status
+      if (categoryIndex !== -1) {
+        // Create a new category object with the updated status
+        updatedCategories[categoryIndex] = {
+          ...updatedCategories[categoryIndex],
+          status: newStatus,
+        }
+      }
+
+      // Create a completely new project object
+      const updatedProject = JSON.parse(
+        JSON.stringify({
+          ...selectedProject,
+          categories: updatedCategories,
+        }),
+      )
+
+      // Update the project in the store
+      setSelectedProject(updatedProject)
+
+      toast.success(t('admin:categories.statusUpdateSuccess'))
+    } catch (error) {
+      toast.error(t('admin:categories.statusUpdateError'))
+      console.error('Failed to update category status:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -68,19 +169,23 @@ const CategoriesSection = ({ initialCategories }: ICategoriesSectionProps) => {
           </h3>
           <div
             onClick={() =>
-              !isAddingCategory && !editingCategory && setIsAddingCategory(true)
+              !isAddingCategory &&
+              !editingCategory &&
+              !isLoading &&
+              setIsAddingCategory(true)
             }
-            className={`flex items-center cursor-pointer text-xs ${isAddingCategory || !!editingCategory ? 'opacity-50 cursor-not-allowed' : 'hover:text-primary'}`}
+            className={`flex items-center cursor-pointer text-xs ${isAddingCategory || !!editingCategory || isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:text-primary'}`}
           >
             <Plus className='mr-1 h-4 w-4' />
             <span>{t('admin:categories.addCategory')}</span>
           </div>
         </div>
-        <div className='p-6'>
+        <div className='px-6 py-4'>
           {isAddingCategory && (
             <CategoryForm
               onSave={handleAddCategory}
               onCancel={() => setIsAddingCategory(false)}
+              isLoading={isLoading}
             />
           )}
 
@@ -89,8 +194,8 @@ const CategoriesSection = ({ initialCategories }: ICategoriesSectionProps) => {
               onAddCategory={() => setIsAddingCategory(true)}
             />
           ) : (
-            <div className='space-y-4'>
-              {categories.map((category: ICategory) =>
+            <div>
+              {categories.map((category: IProjectCategory) =>
                 editingCategory?.id === category.id ? (
                   <CategoryForm
                     key={category.id}
@@ -99,11 +204,12 @@ const CategoriesSection = ({ initialCategories }: ICategoriesSectionProps) => {
                       handleUpdateCategory(category.id, name)
                     }
                     onCancel={() => setEditingCategory(null)}
+                    isLoading={isLoading}
                   />
                 ) : (
                   <div
                     key={category.id}
-                    className='flex flex-col sm:flex-row items-start py-3 border-b last:border-0'
+                    className='flex flex-col sm:flex-row items-center py-4 border-b last:border-0'
                   >
                     <div className='w-full sm:w-1/2 mb-2 sm:mb-0'>
                       <span
@@ -116,15 +222,16 @@ const CategoriesSection = ({ initialCategories }: ICategoriesSectionProps) => {
                     <div className='w-full sm:w-1/2 flex items-center'>
                       <div className='w-[30%] flex items-center space-x-2'>
                         <Switch
-                          checked={category.isActive}
+                          checked={category.status === 'active'}
                           onCheckedChange={() => handleToggleStatus(category)}
-                          aria-label={t('admin.categories.toggleStatus')}
+                          aria-label={t('admin:categories.toggleStatus')}
+                          disabled={isLoading}
                         />
                         <span
-                          key={`status-${category.id}-${category.isActive}`}
+                          key={`status-${category.id}-${category.status}`}
                           className='text-xs text-muted-foreground'
                         >
-                          {category.isActive
+                          {category.status === 'active'
                             ? t('admin:categories.active')
                             : t('admin:categories.inactive')}
                         </span>
@@ -134,20 +241,12 @@ const CategoriesSection = ({ initialCategories }: ICategoriesSectionProps) => {
                           variant='ghost'
                           size='icon'
                           onClick={() => setEditingCategory(category)}
-                          disabled={!!editingCategory || isAddingCategory}
+                          disabled={
+                            !!editingCategory || isAddingCategory || isLoading
+                          }
                         >
                           <SquarePen className='h-4 w-4' />
                         </Button>
-                        <DeleteConfirmationDialog
-                          category={category}
-                          onDelete={() => {
-                            setCategories(
-                              categories.filter(
-                                (cat) => cat.id !== category.id,
-                              ),
-                            )
-                          }}
-                        />
                       </div>
                     </div>
                   </div>
@@ -158,45 +257,6 @@ const CategoriesSection = ({ initialCategories }: ICategoriesSectionProps) => {
         </div>
       </div>
     </>
-  )
-}
-
-interface IDeleteConfirmationDialogProps {
-  category: ICategory
-  onDelete: () => void
-}
-
-const DeleteConfirmationDialog = ({
-  category,
-  onDelete,
-}: IDeleteConfirmationDialogProps) => {
-  const { t } = useTranslation()
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger>
-        <Button variant='ghost' size='icon'>
-          <Trash2 className='h-4 w-4 text-destructive' />
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t('admin:categories.deleteConfirmTitle')}
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            {t('admin:categories.deleteConfirmDescription', {
-              name: category.name,
-            })}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t('admin:common.cancel')}</AlertDialogCancel>
-          <AlertDialogAction onClick={onDelete}>
-            {t('admin:categories.delete')}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   )
 }
 

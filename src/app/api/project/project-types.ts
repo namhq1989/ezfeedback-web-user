@@ -1,4 +1,4 @@
-import { IProject, IProjectBrief } from '@/app/models/project'
+import { IProject, IProjectBrief, IProjectCategory } from '@/app/models/project'
 
 //
 // GET PROJECTS
@@ -18,4 +18,44 @@ export interface IGetProjectByIdRequest {}
 
 export interface IGetProjectByIdResponse {
   project: IProject
+}
+
+//
+// CREATE PROJECT CATEGORY
+//
+
+export interface ICreateProjectCategoryRequest {
+  name: string
+}
+
+export interface ICreateProjectCategoryResponse {
+  category: IProjectCategory
+}
+
+//
+// UPDATE PROJECT CATEGORY
+//
+
+export interface IUpdateProjectCategoryRequest {
+  name: string
+}
+
+export interface IUpdateProjectCategoryResponse {
+  category: IProjectCategory
+}
+
+//
+// CHANGE PROJECT CATEGORY STATUS
+//
+
+export interface IProjectCategoryStatus {
+  status: 'active' | 'inactive'
+}
+
+export interface IChangeProjectCategoryStatusRequest {
+  status: IProjectCategoryStatus['status']
+}
+
+export interface IChangeProjectCategoryStatusResponse {
+  category: IProjectCategory
 }
