@@ -193,6 +193,10 @@
     @apply cursor-pointer;
   }
 
+  input {
+    @apply text-sm;
+  }
+
   ::placeholder {
     font-size: 0.75rem;
   }

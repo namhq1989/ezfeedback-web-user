@@ -1,7 +1,6 @@
 import { CategoriesSection, SettingsSection } from '@/app/components/admin'
 import { Spinner } from '@/app/components/root'
 import useProjectStore from '@/app/stores/project'
-import { mockProjectSettings } from '@/mock/admin'
 import { useEffect } from 'react'
 
 const AdminPage = () => {
@@ -27,7 +26,7 @@ const AdminPage = () => {
       <div className='max-w-6xl mx-auto'>
         <div className='space-y-4'>
           {/* Settings Section */}
-          <SettingsSection initialSettings={mockProjectSettings} />
+          <SettingsSection />
 
           {/* Categories Section */}
           <CategoriesSection />

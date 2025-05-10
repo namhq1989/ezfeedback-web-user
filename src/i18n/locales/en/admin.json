@@ -27,18 +27,32 @@
     "statusUpdateError": "Failed to update category status"
   },
   "settings": {
-    "title": "Project Setting",
-    "anonymousFeedback": {
-      "title": "Allow Anonymous Feedback",
-      "description": "Let users submit feedback without providing their email address"
+    "title": "Project Settings",
+    "edit": "Edit",
+    "updateSuccess": "Project updated successfully",
+    "updateError": "Failed to update project",
+    "statusUpdateSuccess": "Project status updated successfully",
+    "statusUpdateError": "Failed to update project status",
+    "projectTitle": {
+      "title": "Project Title",
+      "placeholder": "Enter project title"
     },
-    "emailVerification": {
-      "title": "Require Email Verification",
-      "description": "Users must verify their email before submitting feedback"
+    "description": {
+      "title": "Description",
+      "placeholder": "Enter project description"
     },
-    "autoPublish": {
-      "title": "Auto-Publish Feedback",
-      "description": "Automatically publish new feedback without manual review"
+    "status": {
+      "title": "Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "domain": {
+      "title": "Domain",
+      "description": "The domain for this project"
+    },
+    "primaryColor": {
+      "title": "Primary Color",
+      "description": "The primary color for this project"
     }
   },
   "common": {

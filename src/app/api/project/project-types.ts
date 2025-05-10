@@ -59,3 +59,34 @@ export interface IChangeProjectCategoryStatusRequest {
 export interface IChangeProjectCategoryStatusResponse {
   category: IProjectCategory
 }
+
+//
+// UPDATE PROJECT
+//
+
+export interface IUpdateProjectRequest {
+  description: string
+  domain: string
+  primaryColor: string
+  title: string
+}
+
+export interface IUpdateProjectResponse {
+  project: IProject
+}
+
+//
+// CHANGE PROJECT STATUS
+//
+
+export interface IProjectStatus {
+  status: 'active' | 'inactive'
+}
+
+export interface IChangeProjectStatusRequest {
+  status: IProjectStatus['status']
+}
+
+export interface IChangeProjectStatusResponse {
+  project: IProject
+}
