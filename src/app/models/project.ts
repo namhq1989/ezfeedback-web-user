@@ -47,6 +47,22 @@ export interface IProjectBrief {
   stats: IProjectStats
 }
 
+export type CollaboratorRoleType = 'owner' | 'editor' | 'viewer'
+
+export interface IProjectCollaboratorUser {
+  id: string
+  name: string
+  email: string
+  status: string
+}
+
+export interface IProjectCollaborator {
+  id: string
+  user: IProjectCollaboratorUser
+  role: CollaboratorRoleType
+  createdAt: string
+}
+
 export interface IProject {
   id: string
   title: string

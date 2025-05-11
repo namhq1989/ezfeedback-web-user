@@ -1,4 +1,4 @@
-import { IProject, IProjectBrief, IProjectCategory } from '@/app/models/project'
+import { IProject, IProjectBrief, IProjectCategory, IProjectCollaborator } from '@/app/models/project'
 
 //
 // GET PROJECTS
@@ -89,4 +89,14 @@ export interface IChangeProjectStatusRequest {
 
 export interface IChangeProjectStatusResponse {
   project: IProject
+}
+
+//
+// GET PROJECT COLLABORATORS
+//
+
+export interface IGetProjectCollaboratorsRequest {}
+
+export interface IGetProjectCollaboratorsResponse {
+  collaborators: IProjectCollaborator[]
 }

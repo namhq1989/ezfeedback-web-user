@@ -1,4 +1,6 @@
-1. Use this format when creating a new UI component:
+- Always use stores (src/app/stores) for state management. The api calling is also in stores
+- Use spinner (src/app/components/root/spinner) for the loading indicator
+- Use this format when creating a new UI component:
 
 ```
 interface IProfileSectionProps {
@@ -16,19 +18,19 @@ export default ProfileSection
 
 All interfaces must have prefix `I`. If a component does not require props, you can skip interface declaration. The file name is reflecting the component name with this format 'a-b-c.tsx'. Same for the '.ts' file
 
-2. Try to split the big components into smaller components and put them into src/app/components/{feature}. Use index.ts for exporting
+- Try to split the big components into smaller components and put them into src/app/components/{feature}. Use index.ts for exporting
 
-3. When generating the UI, follow these rules:
+- When generating the UI, follow these rules:
 
 - No background
 - No shadow
 - Border radius 12px (rounded-xl in Tailwind)
 - No outline (if capable)
 
-4. Always define the model (interface) for the data structure at src/app/models. If working with the enum, declare a dedicated type for them too
-5. For the mock data, declare them at src/mock
-6. Always use i18n and declare them at src/i18n/locales (both "en" and "vi"). The correct format is `key: value` in the JSON file
-7. Always use '@' for importing instead of relative path './'
-8. If you need to manipulate with string, number, date, ... add the function to the appropriate file in src/lib
-9. No code comments
-10. Use try/catch at appropriate places
+- Always define the model (interface) for the data structure at src/app/models. If working with the enum, declare a dedicated type for them too
+- For the mock data, declare them at src/mock
+- Always use i18n and declare them at src/i18n/locales (both "en" and "vi"). The correct format is `key: value` in the JSON file
+- Always use '@' for importing instead of relative path './'
+- If you need to manipulate with string, number, date, ... add the function to the appropriate file in src/lib
+- No code comments
+- Use try/catch at appropriate places

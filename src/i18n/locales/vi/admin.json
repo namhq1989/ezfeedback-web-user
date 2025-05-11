@@ -70,6 +70,20 @@
   "common": {
     "cancel": "Hủy"
   },
+  "collaborators": {
+    "title": "Cộng tác viên",
+    "roles": {
+      "owner": "Chủ sở hữu",
+      "editor": "Biên tập viên",
+      "viewer": "Người xem"
+    },
+    "selectRole": "Chọn vai trò",
+    "toggleRole": "Chuyển đổi vai trò cộng tác viên",
+    "roleUpdateSuccess": "Cập nhật vai trò thành công",
+    "roleUpdateError": "Không thể cập nhật vai trò",
+    "fetchError": "Không thể tải danh sách cộng tác viên",
+    "noCollaborators": "Không tìm thấy cộng tác viên nào"
+  },
   "team": {
     "title": "Thành viên nhóm",
     "inviteMember": "Mời thành viên",

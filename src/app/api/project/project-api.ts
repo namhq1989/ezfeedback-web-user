@@ -7,6 +7,8 @@ import {
   ICreateProjectCategoryResponse,
   IGetProjectByIdRequest,
   IGetProjectByIdResponse,
+  IGetProjectCollaboratorsRequest,
+  IGetProjectCollaboratorsResponse,
   IGetProjectsRequest,
   IGetProjectsResponse,
   IUpdateProjectCategoryRequest,
@@ -29,6 +31,8 @@ const API_PATHS = {
     `${API_PREFIX}/${projectId}/category/${categoryId}/status`,
   UPDATE_PROJECT: (id: string) => `${API_PREFIX}/${id}`,
   CHANGE_PROJECT_STATUS: (id: string) => `${API_PREFIX}/${id}/status`,
+  GET_PROJECT_COLLABORATORS: (id: string) =>
+    `${API_PREFIX}/${id}/collaborators`,
 }
 
 const getProjects = async (params?: IGetProjectsRequest) => {
@@ -120,6 +124,21 @@ const changeProjectStatus = async (
   }
 }
 
+const getProjectCollaborators = async (
+  id: string,
+  params?: IGetProjectCollaboratorsRequest,
+) => {
+  try {
+    const { get } = useHttpStore.getState()
+    return get<IGetProjectCollaboratorsResponse>(
+      API_PATHS.GET_PROJECT_COLLABORATORS(id),
+      params,
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
 export default {
   getProjects,
   getProjectById,
@@ -128,4 +147,5 @@ export default {
   changeProjectCategoryStatus,
   updateProject,
   changeProjectStatus,
+  getProjectCollaborators,
 }
