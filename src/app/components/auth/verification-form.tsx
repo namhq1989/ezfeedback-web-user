@@ -139,6 +139,7 @@ const VerificationForm = ({
             type='button'
             variant='link'
             size='sm'
+            className='text-xs'
             onClick={handleResendCode}
             disabled={isLoading || resendLoading || resendCountdown > 0}
           >

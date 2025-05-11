@@ -14,21 +14,19 @@ const CollaboratorsSection = () => {
   } = useProjectStore()
 
   useEffect(() => {
-    if (selectedProject) {
+    if (selectedProject?.id) {
       getProjectCollaborators()
     }
-  }, [selectedProject])
-
-  // We'll use isLoadingCollaborators directly
+  }, [selectedProject?.id])
 
   return (
     <div className='w-full border rounded-xl'>
-      <div className='h-11 flex items-center px-6 border-b'>
+      <div className='h-11 flex items-center px-4 sm:px-6 border-b'>
         <h3 className='font-bold text-xs uppercase'>
           {t('admin:collaborators.title')}
         </h3>
       </div>
-      <div className='px-6 py-4'>
+      <div className='px-4 sm:px-6 py-4'>
         {isLoadingCollaborators ? (
           <div className='flex justify-center py-8'>
             <Spinner size='md' />

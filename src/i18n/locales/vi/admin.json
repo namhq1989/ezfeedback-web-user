@@ -44,11 +44,17 @@
     "status": {
       "title": "Trạng Thái",
       "active": "Hoạt Động",
-      "inactive": "Không Hoạt Động"
+      "inactive": "Không Hoạt Động",
+      "confirmTitle": "Thay Đổi Trạng Thái Dự Án",
+      "confirmActivate": "Bạn có chắc chắn muốn kích hoạt dự án này? Widget phản hồi sẽ có thể truy cập được trên domain đã được ủy quyền.",
+      "confirmDeactivate": "Bạn có chắc chắn muốn vô hiệu hóa dự án này? Widget phản hồi sẽ không còn có thể truy cập được nữa.",
+      "confirm": "Xác Nhận"
     },
     "domain": {
       "title": "Domain",
-      "description": "Domain cho dự án này"
+      "description": "Domain cho dự án này",
+      "errorRequired": "Domain là bắt buộc để widget hoạt động đúng",
+      "errorInvalid": "Vui lòng nhập định dạng domain hợp lệ (ví dụ: example.com)"
     },
     "primaryColor": {
       "title": "Màu Chính",
@@ -71,7 +77,7 @@
     "cancel": "Hủy"
   },
   "collaborators": {
-    "title": "Cộng tác viên",
+    "title": "Thành viên nhóm",
     "roles": {
       "owner": "Chủ sở hữu",
       "editor": "Biên tập viên",

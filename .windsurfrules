@@ -1,3 +1,4 @@
+- use pnpm
 - Always use stores (src/app/stores) for state management. The api calling is also in stores
 - Use spinner (src/app/components/root/spinner) for the loading indicator
 - Use this format when creating a new UI component:

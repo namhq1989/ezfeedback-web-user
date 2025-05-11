@@ -1,4 +1,8 @@
-import { CategoriesSection, CollaboratorsSection, SettingsSection } from '@/app/components/admin'
+import {
+  CategoriesSection,
+  CollaboratorsSection,
+  SettingsSection,
+} from '@/app/components/admin'
 import { Spinner } from '@/app/components/root'
 import useProjectStore from '@/app/stores/project'
 import { useEffect } from 'react'
@@ -33,13 +37,6 @@ const AdminPage = () => {
 
           {/* Collaborators Section */}
           <CollaboratorsSection />
-
-          {/* Team Management Section */}
-          {/* <TeamMembersSection
-            initialMembers={mockTeamMembers}
-            initialInvitations={mockTeamInvitations}
-            currentUserId='1' // Assuming the first user is the current user
-          /> */}
         </div>
       </div>
     </div>

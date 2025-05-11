@@ -1,9 +1,7 @@
-import projectApi from '@/app/api/project'
 import CategoryForm from '@/app/components/admin/category-form'
 import EmptyCategoriesState from '@/app/components/admin/empty-categories-state'
 import { IProjectCategory } from '@/app/models/project'
 import useProjectStore from '@/app/stores/project'
-import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { useTranslation } from '@/i18n'
 import { Plus, SquarePen } from 'lucide-react'
@@ -12,11 +10,16 @@ import { toast } from 'sonner'
 
 const CategoriesSection = () => {
   const { t } = useTranslation()
-  const { selectedProject, setSelectedProject } = useProjectStore()
+  const {
+    selectedProject,
+    isLoadingCategories,
+    createCategory,
+    updateCategory,
+    changeCategoryStatus,
+  } = useProjectStore()
   const [isAddingCategory, setIsAddingCategory] = useState(false)
   const [editingCategory, setEditingCategory] =
     useState<IProjectCategory | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
 
   const categories = selectedProject?.categories || []
 
@@ -24,40 +27,18 @@ const CategoriesSection = () => {
     if (!selectedProject) return
 
     try {
-      setIsLoading(true)
+      const result = await createCategory({ name })
 
-      const response = await projectApi.createProjectCategory(
-        selectedProject.id,
-        { name },
-      )
-
-      // Force a re-render by creating a completely new project object
-      if (selectedProject && response.category) {
-        // Create a new array with all categories plus the new one
-        const updatedCategories = [
-          ...(selectedProject.categories || []),
-          response.category,
-        ]
-
-        // Create a completely new project object
-        const updatedProject = JSON.parse(
-          JSON.stringify({
-            ...selectedProject,
-            categories: updatedCategories,
-          }),
-        )
-
-        // Update the project in the store
-        setSelectedProject(updatedProject)
+      if (result) {
+        setIsAddingCategory(false)
+        toast.success(t('admin:categories.addSuccess'))
+      } else {
+        toast.error(t('admin:categories.addError'))
       }
-
-      setIsAddingCategory(false)
-      toast.success(t('admin:categories.addSuccess'))
     } catch (error) {
       toast.error(t('admin:categories.addError'))
       console.error('Failed to add category:', error)
-    } finally {
-      setIsLoading(false)
+      setIsAddingCategory(false)
     }
   }
 
@@ -65,47 +46,19 @@ const CategoriesSection = () => {
     if (!selectedProject || !editingCategory) return
 
     try {
-      setIsLoading(true)
+      const success = await updateCategory(categoryId, { name })
 
-      // Make the API call to update the name
-      await projectApi.updateProjectCategory(selectedProject.id, categoryId, {
-        name,
-      })
-
-      // Create a new array with all categories
-      const updatedCategories = [...selectedProject.categories]
-
-      // Find the category to update
-      const categoryIndex = updatedCategories.findIndex(
-        (cat) => cat.id === categoryId,
-      )
-
-      // Update the category with the new name
-      if (categoryIndex !== -1) {
-        // Create a new category object with the updated name
-        updatedCategories[categoryIndex] = {
-          ...updatedCategories[categoryIndex],
-          name,
-        }
+      if (success) {
+        setEditingCategory(null)
+        toast.success(t('admin:categories.updateSuccess'))
+      } else {
+        toast.error(t('admin:categories.updateError'))
+        setEditingCategory(null)
       }
-
-      // Create a completely new project object
-      const updatedProject = JSON.parse(
-        JSON.stringify({
-          ...selectedProject,
-          categories: updatedCategories,
-        }),
-      )
-
-      // Update the project in the store
-      setSelectedProject(updatedProject)
-
-      setEditingCategory(null)
-      toast.success(t('admin:categories.updateSuccess'))
     } catch (error) {
       toast.error(t('admin:categories.updateError'))
-    } finally {
-      setIsLoading(false)
+      console.error('Failed to update category:', error)
+      setEditingCategory(null)
     }
   }
 
@@ -113,57 +66,24 @@ const CategoriesSection = () => {
     if (!selectedProject) return
 
     try {
-      setIsLoading(true)
       const newStatus = category.status === 'active' ? 'inactive' : 'active'
+      const success = await changeCategoryStatus(category.id, newStatus)
 
-      // Make the API call to update the status
-      await projectApi.changeProjectCategoryStatus(
-        selectedProject.id,
-        category.id,
-        { status: newStatus },
-      )
-
-      // Create a new array with all categories
-      const updatedCategories = [...selectedProject.categories]
-
-      // Find the category to update
-      const categoryIndex = updatedCategories.findIndex(
-        (cat) => cat.id === category.id,
-      )
-
-      // Update the category with the new status
-      if (categoryIndex !== -1) {
-        // Create a new category object with the updated status
-        updatedCategories[categoryIndex] = {
-          ...updatedCategories[categoryIndex],
-          status: newStatus,
-        }
+      if (success) {
+        toast.success(t('admin:categories.statusUpdateSuccess'))
+      } else {
+        toast.error(t('admin:categories.statusUpdateError'))
       }
-
-      // Create a completely new project object
-      const updatedProject = JSON.parse(
-        JSON.stringify({
-          ...selectedProject,
-          categories: updatedCategories,
-        }),
-      )
-
-      // Update the project in the store
-      setSelectedProject(updatedProject)
-
-      toast.success(t('admin:categories.statusUpdateSuccess'))
     } catch (error) {
       toast.error(t('admin:categories.statusUpdateError'))
       console.error('Failed to update category status:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
   return (
     <>
       <div className='w-full border rounded-xl'>
-        <div className='h-11 flex items-center justify-between px-6 border-b'>
+        <div className='h-11 flex items-center justify-between px-4 sm:px-6 border-b'>
           <h3 className='font-bold text-xs uppercase'>
             {t('admin:categories.title')}
           </h3>
@@ -171,21 +91,21 @@ const CategoriesSection = () => {
             onClick={() =>
               !isAddingCategory &&
               !editingCategory &&
-              !isLoading &&
+              !isLoadingCategories &&
               setIsAddingCategory(true)
             }
-            className={`flex items-center cursor-pointer text-xs ${isAddingCategory || !!editingCategory || isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:text-primary'}`}
+            className={`flex items-center cursor-pointer text-xs ${isAddingCategory || !!editingCategory || isLoadingCategories ? 'opacity-50 cursor-not-allowed' : 'hover:text-primary'}`}
           >
             <Plus className='mr-1 h-4 w-4' />
             <span>{t('admin:categories.addCategory')}</span>
           </div>
         </div>
-        <div className='px-6 py-4'>
+        <div className='px-4 sm:px-6 py-4'>
           {isAddingCategory && (
             <CategoryForm
               onSave={handleAddCategory}
               onCancel={() => setIsAddingCategory(false)}
-              isLoading={isLoading}
+              isLoading={isLoadingCategories}
             />
           )}
 
@@ -204,7 +124,7 @@ const CategoriesSection = () => {
                       handleUpdateCategory(category.id, name)
                     }
                     onCancel={() => setEditingCategory(null)}
-                    isLoading={isLoading}
+                    isLoading={isLoadingCategories}
                   />
                 ) : (
                   <div
@@ -225,7 +145,7 @@ const CategoriesSection = () => {
                           checked={category.status === 'active'}
                           onCheckedChange={() => handleToggleStatus(category)}
                           aria-label={t('admin:categories.toggleStatus')}
-                          disabled={isLoading}
+                          disabled={isLoadingCategories}
                         />
                         <span
                           key={`status-${category.id}-${category.status}`}
@@ -237,16 +157,20 @@ const CategoriesSection = () => {
                         </span>
                       </div>
                       <div className='w-[70%] flex items-center justify-end space-x-2'>
-                        <Button
-                          variant='ghost'
-                          size='icon'
-                          onClick={() => setEditingCategory(category)}
-                          disabled={
-                            !!editingCategory || isAddingCategory || isLoading
-                          }
+                        <div
+                          className='flex items-center cursor-pointer text-xs hover:text-primary'
+                          onClick={() => {
+                            if (
+                              !isLoadingCategories &&
+                              !isAddingCategory &&
+                              !editingCategory
+                            ) {
+                              setEditingCategory(category)
+                            }
+                          }}
                         >
                           <SquarePen className='h-4 w-4' />
-                        </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

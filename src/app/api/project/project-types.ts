@@ -1,4 +1,8 @@
-import { IProject, IProjectBrief, IProjectCategory, IProjectCollaborator } from '@/app/models/project'
+import {
+  IProject,
+  IProjectBrief,
+  IProjectCollaborator,
+} from '@/app/models/project'
 
 //
 // GET PROJECTS
@@ -29,7 +33,7 @@ export interface ICreateProjectCategoryRequest {
 }
 
 export interface ICreateProjectCategoryResponse {
-  category: IProjectCategory
+  id: string
 }
 
 //
@@ -40,9 +44,7 @@ export interface IUpdateProjectCategoryRequest {
   name: string
 }
 
-export interface IUpdateProjectCategoryResponse {
-  category: IProjectCategory
-}
+export interface IUpdateProjectCategoryResponse {}
 
 //
 // CHANGE PROJECT CATEGORY STATUS
@@ -56,9 +58,7 @@ export interface IChangeProjectCategoryStatusRequest {
   status: IProjectCategoryStatus['status']
 }
 
-export interface IChangeProjectCategoryStatusResponse {
-  category: IProjectCategory
-}
+export interface IChangeProjectCategoryStatusResponse {}
 
 //
 // UPDATE PROJECT
@@ -71,9 +71,7 @@ export interface IUpdateProjectRequest {
   title: string
 }
 
-export interface IUpdateProjectResponse {
-  project: IProject
-}
+export interface IUpdateProjectResponse {}
 
 //
 // CHANGE PROJECT STATUS
@@ -87,9 +85,7 @@ export interface IChangeProjectStatusRequest {
   status: IProjectStatus['status']
 }
 
-export interface IChangeProjectStatusResponse {
-  project: IProject
-}
+export interface IChangeProjectStatusResponse {}
 
 //
 // GET PROJECT COLLABORATORS

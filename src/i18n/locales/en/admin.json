@@ -44,11 +44,17 @@
     "status": {
       "title": "Status",
       "active": "Active",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "confirmTitle": "Change Project Status",
+      "confirmActivate": "Are you sure you want to activate this project? The feedback widget will be accessible on the authorized domain.",
+      "confirmDeactivate": "Are you sure you want to deactivate this project? The feedback widget will no longer be accessible.",
+      "confirm": "Confirm"
     },
     "domain": {
       "title": "Domain",
-      "description": "The domain for this project"
+      "description": "The domain for this project",
+      "errorRequired": "Domain is required for the widget to work properly",
+      "errorInvalid": "Please enter a valid domain format (e.g., example.com)"
     },
     "primaryColor": {
       "title": "Primary Color",
@@ -59,7 +65,7 @@
     "cancel": "Cancel"
   },
   "collaborators": {
-    "title": "Collaborators",
+    "title": "Team Members",
     "roles": {
       "owner": "Owner",
       "editor": "Editor",
