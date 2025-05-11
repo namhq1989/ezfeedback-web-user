@@ -46,7 +46,7 @@ const CollaboratorItem = ({ collaborator }: ICollaboratorItemProps) => {
       {role !== 'owner' && (
         <div className='flex items-center'>
           <Select value={role} disabled={true}>
-            <SelectTrigger className='h-8 text-xs w-[110px]'>
+            <SelectTrigger className='h-8 text-xs w-[90px] sm:w-[110px]'>
               <SelectValue placeholder={t('admin:collaborators.selectRole')} />
             </SelectTrigger>
             <SelectContent>
@@ -63,7 +63,7 @@ const CollaboratorItem = ({ collaborator }: ICollaboratorItemProps) => {
       {role === 'owner' && (
         <div className='flex items-center'>
           <Select value={role} disabled={true}>
-            <SelectTrigger className='h-8 text-xs w-[110px]'>
+            <SelectTrigger className='h-8 text-xs w-[90px] sm:w-[110px]'>
               <SelectValue placeholder={t('admin:collaborators.selectRole')} />
             </SelectTrigger>
             <SelectContent>

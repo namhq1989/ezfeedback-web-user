@@ -1,9 +1,7 @@
 import { Spinner } from '@/app/components/root'
-import { ROUTES } from '@/app/router/route-constants'
 import useAuthStore from '@/app/stores/auth'
 import useProjectStore from '@/app/stores/project'
 import { ReactNode, useEffect, useState } from 'react'
-import { Navigate } from 'react-router'
 
 interface IAuthDataProviderProps {
   children: ReactNode
@@ -11,7 +9,6 @@ interface IAuthDataProviderProps {
 
 const AuthDataProvider = ({ children }: IAuthDataProviderProps) => {
   const [isLoading, setIsLoading] = useState(true)
-  const [authError, setAuthError] = useState(false)
   const { getMe, signOut } = useAuthStore()
   const { getProjects } = useProjectStore()
 
@@ -27,8 +24,8 @@ const AuthDataProvider = ({ children }: IAuthDataProviderProps) => {
         setIsLoading(false)
       } catch (error) {
         // If getMe fails, sign out
-        signOut()
-        setAuthError(true)
+        // signOut()
+        // setAuthError(true)
         setIsLoading(false)
       }
     }
@@ -42,10 +39,6 @@ const AuthDataProvider = ({ children }: IAuthDataProviderProps) => {
         <Spinner size='lg' />
       </div>
     )
-  }
-
-  if (authError) {
-    return <Navigate to={ROUTES.SIGN_IN} replace />
   }
 
   return <>{children}</>

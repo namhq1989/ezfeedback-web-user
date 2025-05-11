@@ -40,7 +40,7 @@ const SignInPage = () => {
           </div>
 
           <Card className='flex flex-col gap-8 border-border/40 py-12 px-2'>
-            <CardHeader className='text-center'>
+            <CardHeader className='text-center px-4 sm:px-6'>
               <h1 className='text-2xl font-bold tracking-tight'>
                 {t(
                   `${step === 'email' ? 'emailForm' : 'verificationForm'}.title`,
@@ -53,7 +53,7 @@ const SignInPage = () => {
               </p>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className='px-4 sm:px-6'>
               <AnimatePresence mode='wait'>
                 {step === 'email' ? (
                   <motion.div

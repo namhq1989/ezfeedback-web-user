@@ -1,11 +1,15 @@
 import projectApi, {
+  ICreateProjectCategoryRequest,
   IGetProjectsRequest,
+  IProjectCategoryStatus,
   IProjectStatus,
+  IUpdateProjectCategoryRequest,
   IUpdateProjectRequest,
 } from '@/app/api/project'
 import {
   IProject,
   IProjectBrief,
+  IProjectCategory,
   IProjectCollaborator,
 } from '@/app/models/project'
 import { create } from 'zustand/react'
@@ -17,6 +21,7 @@ export interface IProjectStore {
   isLoadingProjects: boolean
   isLoadingProject: boolean
   isUpdatingProject: boolean
+  isLoadingCategories: boolean
   isLoadingCollaborators: boolean
   error: string | null
   getProjects: () => Promise<IProjectBrief[]>
@@ -26,6 +31,17 @@ export interface IProjectStore {
   setSelectedProject: (project: IProject) => void
   updateProject: (data: IUpdateProjectRequest) => Promise<void>
   changeProjectStatus: (status: IProjectStatus['status']) => Promise<void>
+  createCategory: (
+    data: ICreateProjectCategoryRequest,
+  ) => Promise<IProjectCategory | null>
+  updateCategory: (
+    categoryId: string,
+    data: IUpdateProjectCategoryRequest,
+  ) => Promise<boolean>
+  changeCategoryStatus: (
+    categoryId: string,
+    status: IProjectCategoryStatus['status'],
+  ) => Promise<boolean>
 }
 
 const useProjectStore = create<IProjectStore>((set, get) => ({
@@ -35,6 +51,7 @@ const useProjectStore = create<IProjectStore>((set, get) => ({
   isLoadingProjects: false,
   isLoadingProject: false,
   isUpdatingProject: false,
+  isLoadingCategories: false,
   isLoadingCollaborators: false,
   error: null,
   getProjects: async () => {
@@ -132,6 +149,156 @@ const useProjectStore = create<IProjectStore>((set, get) => ({
     } catch (error) {
       set({ error: (error as Error).message, isLoadingCollaborators: false })
       return []
+    }
+  },
+
+  createCategory: async (data: ICreateProjectCategoryRequest) => {
+    const { selectedProject } = get()
+    if (!selectedProject) return null
+
+    try {
+      set({ isLoadingCategories: true, error: null })
+
+      // Make API call to create category
+      const response = await projectApi.createProjectCategory(
+        selectedProject.id,
+        data,
+      )
+
+      // Create a new category object with the returned ID
+      const newCategory: IProjectCategory = {
+        id: response.id,
+        name: data.name,
+        slug: data.name.toLowerCase().replace(/\s+/g, '-'),
+        status: 'active',
+      }
+
+      // Update the categories in the selected project
+      const updatedCategories = [
+        ...(selectedProject.categories || []),
+        newCategory,
+      ]
+
+      // Create a new reference for the selected project to trigger UI updates
+      const updatedProject = {
+        ...selectedProject,
+        categories: updatedCategories,
+      }
+
+      // Update the store
+      set({
+        selectedProject: updatedProject,
+        isLoadingCategories: false,
+      })
+
+      return newCategory
+    } catch (error) {
+      set({ error: (error as Error).message, isLoadingCategories: false })
+      return null
+    }
+  },
+
+  updateCategory: async (
+    categoryId: string,
+    data: IUpdateProjectCategoryRequest,
+  ) => {
+    const { selectedProject } = get()
+    if (!selectedProject) return false
+
+    try {
+      set({ isLoadingCategories: true, error: null })
+
+      // Make API call to update category
+      await projectApi.updateProjectCategory(
+        selectedProject.id,
+        categoryId,
+        data,
+      )
+
+      // Find and update the category in the local state
+      const updatedCategories = [...selectedProject.categories]
+      const categoryIndex = updatedCategories.findIndex(
+        (cat) => cat.id === categoryId,
+      )
+
+      if (categoryIndex !== -1) {
+        updatedCategories[categoryIndex] = {
+          ...updatedCategories[categoryIndex],
+          name: data.name,
+        }
+
+        // Create a new reference for the selected project
+        const updatedProject = {
+          ...selectedProject,
+          categories: updatedCategories,
+        }
+
+        // Update the store
+        set({
+          selectedProject: updatedProject,
+          isLoadingCategories: false,
+        })
+
+        return true
+      }
+
+      set({ isLoadingCategories: false })
+      return false
+    } catch (error) {
+      set({ error: (error as Error).message, isLoadingCategories: false })
+      return false
+    }
+  },
+
+  changeCategoryStatus: async (
+    categoryId: string,
+    status: IProjectCategoryStatus['status'],
+  ) => {
+    const { selectedProject } = get()
+    if (!selectedProject) return false
+
+    try {
+      set({ isLoadingCategories: true, error: null })
+
+      // Make API call to change category status
+      await projectApi.changeProjectCategoryStatus(
+        selectedProject.id,
+        categoryId,
+        { status },
+      )
+
+      // Find and update the category in the local state
+      const updatedCategories = [...selectedProject.categories]
+      const categoryIndex = updatedCategories.findIndex(
+        (cat) => cat.id === categoryId,
+      )
+
+      if (categoryIndex !== -1) {
+        updatedCategories[categoryIndex] = {
+          ...updatedCategories[categoryIndex],
+          status,
+        }
+
+        // Create a new reference for the selected project
+        const updatedProject = {
+          ...selectedProject,
+          categories: updatedCategories,
+        }
+
+        // Update the store
+        set({
+          selectedProject: updatedProject,
+          isLoadingCategories: false,
+        })
+
+        return true
+      }
+
+      set({ isLoadingCategories: false })
+      return false
+    } catch (error) {
+      set({ error: (error as Error).message, isLoadingCategories: false })
+      return false
     }
   },
 }))
