@@ -3,32 +3,39 @@ import projectApi, {
   IProjectStatus,
   IUpdateProjectRequest,
 } from '@/app/api/project'
-import { IProject, IProjectBrief } from '@/app/models/project'
+import {
+  IProject,
+  IProjectBrief,
+  IProjectCollaborator,
+} from '@/app/models/project'
 import { create } from 'zustand/react'
 
 export interface IProjectStore {
   projects: IProjectBrief[]
   selectedProject: IProject | null
+  collaborators: IProjectCollaborator[]
   isLoadingProjects: boolean
   isLoadingProject: boolean
   isUpdatingProject: boolean
+  isLoadingCollaborators: boolean
   error: string | null
   getProjects: () => Promise<IProjectBrief[]>
   getProjectById: (id: string) => Promise<IProject | null>
+  getProjectCollaborators: () => Promise<IProjectCollaborator[]>
   setProjects: (projects: IProjectBrief[]) => void
   setSelectedProject: (project: IProject) => void
   updateProject: (data: IUpdateProjectRequest) => Promise<void>
   changeProjectStatus: (status: IProjectStatus['status']) => Promise<void>
-  setError: (error: string | null) => void
-  reset: () => void
 }
 
 const useProjectStore = create<IProjectStore>((set, get) => ({
   projects: [],
   selectedProject: null,
+  collaborators: [],
   isLoadingProjects: false,
   isLoadingProject: false,
   isUpdatingProject: false,
+  isLoadingCollaborators: false,
   error: null,
   getProjects: async () => {
     try {
@@ -110,17 +117,22 @@ const useProjectStore = create<IProjectStore>((set, get) => ({
     }
   },
 
-  setError: (error: string | null) => {
-    set({ error })
-  },
-  reset: () => {
-    set({
-      projects: [],
-      selectedProject: null,
-      isLoadingProjects: false,
-      isLoadingProject: false,
-      error: null,
-    })
+  getProjectCollaborators: async () => {
+    const { selectedProject } = get()
+    if (!selectedProject) return []
+
+    try {
+      set({ isLoadingCollaborators: true, error: null })
+      const response = await projectApi.getProjectCollaborators(
+        selectedProject.id,
+      )
+      const collaborators = response.collaborators || []
+      set({ collaborators, isLoadingCollaborators: false })
+      return collaborators
+    } catch (error) {
+      set({ error: (error as Error).message, isLoadingCollaborators: false })
+      return []
+    }
   },
 }))
 

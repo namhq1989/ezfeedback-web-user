@@ -58,6 +58,20 @@
   "common": {
     "cancel": "Cancel"
   },
+  "collaborators": {
+    "title": "Collaborators",
+    "roles": {
+      "owner": "Owner",
+      "editor": "Editor",
+      "viewer": "Viewer"
+    },
+    "selectRole": "Select role",
+    "toggleRole": "Toggle collaborator role",
+    "roleUpdateSuccess": "Role updated successfully",
+    "roleUpdateError": "Failed to update role",
+    "fetchError": "Failed to fetch collaborators",
+    "noCollaborators": "No collaborators found"
+  },
   "team": {
     "title": "Team Member",
     "inviteMember": "Invite Member",

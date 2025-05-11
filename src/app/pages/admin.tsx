@@ -1,4 +1,4 @@
-import { CategoriesSection, SettingsSection } from '@/app/components/admin'
+import { CategoriesSection, CollaboratorsSection, SettingsSection } from '@/app/components/admin'
 import { Spinner } from '@/app/components/root'
 import useProjectStore from '@/app/stores/project'
 import { useEffect } from 'react'
@@ -30,6 +30,9 @@ const AdminPage = () => {
 
           {/* Categories Section */}
           <CategoriesSection />
+
+          {/* Collaborators Section */}
+          <CollaboratorsSection />
 
           {/* Team Management Section */}
           {/* <TeamMembersSection
