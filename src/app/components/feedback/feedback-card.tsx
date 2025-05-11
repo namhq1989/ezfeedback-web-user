@@ -69,12 +69,12 @@ const FeedbackCard = ({ feedback }: IFeedbackCardProps) => {
       <div className='flex-1 flex flex-col gap-2'>
         {/* User & Time */}
         <div className='flex items-center gap-2 text-xs text-muted-foreground my-1'>
-          <span>{feedback.categoryName || '-'}</span>
+          <span>{feedback.category.name || '-'}</span>
           <span>•</span>
           <span>
             {feedback.isAnonymous
               ? t('feedback:anonymous')
-              : feedback.userId || '-'}
+              : feedback.appUserId || '-'}
           </span>
           <span>•</span>
           <span>{formatDateTime24h(feedback.createdAt)}</span>

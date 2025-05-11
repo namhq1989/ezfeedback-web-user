@@ -11,7 +11,16 @@
     "allStates": "Tất cả trạng thái",
     "rating": "Đánh giá",
     "clearFilters": "Xóa bộ lọc",
-    "activeFilters": "Bộ lọc đang dùng"
+    "activeFilters": "Bộ lọc đang dùng",
+    "campaignType": "Loại chiến dịch",
+    "selectCampaignType": "Chọn loại chiến dịch",
+    "keyword": "Từ khóa",
+    "keywordPlaceholder": "Tìm kiếm theo từ khóa..."
+  },
+  "campaignType": {
+    "feedback": "Phản hồi",
+    "survey": "Khảo sát",
+    "nps": "NPS"
   },
   "table": {
     "content": "Nội dung",
