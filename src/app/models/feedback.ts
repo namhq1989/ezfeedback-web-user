@@ -37,7 +37,7 @@ export type FeedbackStateType = keyof typeof FeedbackState
 
 export enum CampaignType {
   Feedback = 'feedback',
-  Survey = 'survey',
+  CSAT = 'csat',
   NPS = 'nps',
 }
 

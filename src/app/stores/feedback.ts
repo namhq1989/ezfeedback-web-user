@@ -129,6 +129,8 @@ const useFeedbackStore = create<IFeedbackStore>((set, get) => ({
       const response = await feedbackApi.countFeedbacks(countParams)
       const total = response.total || 0
 
+      // Mock data has been removed
+
       set({
         totalCount: total,
         isCountingFeedbacks: false,

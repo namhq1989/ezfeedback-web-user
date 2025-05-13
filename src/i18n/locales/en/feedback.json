@@ -12,14 +12,14 @@
     "rating": "Rating",
     "clearFilters": "Clear Filters",
     "activeFilters": "Active Filters",
-    "campaignType": "Campaign Type",
+    "campaignType": "Type",
     "selectCampaignType": "Select campaign type",
     "keyword": "Keyword",
     "keywordPlaceholder": "Search by keyword..."
   },
   "campaignType": {
     "feedback": "Feedback",
-    "survey": "Survey",
+    "csat": "CSAT",
     "nps": "NPS"
   },
   "table": {
@@ -29,6 +29,14 @@
     "date": "Date",
     "noFeedbacks": "No feedbacks found"
   },
+  "emptyState": {
+    "noFeedbacks": "No feedbacks found",
+    "noFeedbacksFiltered": "No feedbacks match your filters",
+    "noFeedbacksYet": "No feedbacks yet. Your first feedback will appear here.",
+    "waitingForFeedback": "Waiting for feedback from your users",
+    "emptyInbox": "Your feedback inbox is empty",
+    "tryDifferentFilters": "Try adjusting your filters to see more results"
+  },
   "state": {
     "": "Unknown",
     "new": "New",
@@ -36,7 +44,12 @@
     "planned": "Planned",
     "in_progress": "In Progress",
     "completed": "Completed",
-    "declined": "Declined"
+    "declined": "Declined",
+    "select": "Select state",
+    "change_success": "State changed",
+    "change_success_description": "Feedback state changed to {{state}}",
+    "change_error": "Failed to change state",
+    "change_error_description": "There was an error changing the feedback state. Please try again."
   },
   "pagination": {
     "showing": "Showing {{from}} to {{to}} of {{total}} feedbacks",

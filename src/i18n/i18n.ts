@@ -8,12 +8,14 @@ import { LANG_EN } from './languages'
 import enAdmin from './locales/en/admin.json'
 import enAuth from './locales/en/auth.json'
 import enCommon from './locales/en/common.json'
+import enCountries from './locales/en/countries.json'
 import enFeedback from './locales/en/feedback.json'
 
 // vi
 import viAdmin from './locales/vi/admin.json'
 import viAuth from './locales/vi/auth.json'
 import viCommon from './locales/vi/common.json'
+import viCountries from './locales/vi/countries.json'
 import viFeedback from './locales/vi/feedback.json'
 
 i18next
@@ -24,19 +26,21 @@ i18next
     fallbackLng: LANG_EN,
     debug: process.env.NODE_ENV === 'development',
     defaultNS: 'common',
-    ns: ['common', 'auth', 'admin', 'feedback'],
+    ns: ['common', 'auth', 'admin', 'feedback', 'countries'],
     resources: {
       en: {
         common: enCommon,
         auth: enAuth,
         admin: enAdmin,
         feedback: enFeedback,
+        countries: enCountries,
       },
       vi: {
         common: viCommon,
         auth: viAuth,
         admin: viAdmin,
         feedback: viFeedback,
+        countries: viCountries,
       },
     },
     interpolation: {

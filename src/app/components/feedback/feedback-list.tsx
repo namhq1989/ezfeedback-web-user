@@ -1,4 +1,5 @@
 import FeedbackCard from '@/app/components/feedback/feedback-card'
+import EmptyState from '@/app/components/root/empty-state'
 import Spinner from '@/app/components/root/spinner'
 import useFeedbackStore from '@/app/stores/feedback'
 import { useTranslation } from '@/i18n'
@@ -22,9 +23,10 @@ const FeedbackList = () => {
       ) : (
         <div className={listClass}>
           {feedbacks.length === 0 ? (
-            <div className='text-center text-muted-foreground py-8'>
-              {t('feedback:table.noFeedbacks')}
-            </div>
+            <EmptyState
+              text={t('feedback:emptyState.waitingForFeedback')}
+              size='sm'
+            />
           ) : (
             feedbacks.map((feedback) => (
               <FeedbackCard key={feedback.id} feedback={feedback} />

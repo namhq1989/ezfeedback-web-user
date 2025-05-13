@@ -94,6 +94,16 @@ const FeedbackFilters = ({ onFilterChange }: IFeedbackFiltersProps) => {
   return (
     <div className='w-full space-y-6'>
       <div className='space-y-6'>
+        {/* Keyword filter */}
+        <div className='space-y-2'>
+          <Label>{t('feedback:filters.keyword')}</Label>
+          <Input
+            value={filters.keyword || ''}
+            onChange={handleKeywordChange}
+            placeholder={t('feedback:filters.keywordPlaceholder')}
+            className='w-full rounded-xl'
+          />
+        </div>
         {/* Campaign Type filter */}
         <div className='space-y-2'>
           <Label>{t('feedback:filters.campaignType')}</Label>
@@ -117,17 +127,6 @@ const FeedbackFilters = ({ onFilterChange }: IFeedbackFiltersProps) => {
               </Toggle>
             ))}
           </div>
-        </div>
-
-        {/* Keyword filter */}
-        <div className='space-y-2'>
-          <Label>{t('feedback:filters.keyword')}</Label>
-          <Input
-            value={filters.keyword || ''}
-            onChange={handleKeywordChange}
-            placeholder={t('feedback:filters.keywordPlaceholder')}
-            className='w-full rounded-xl'
-          />
         </div>
         {/* Category filter */}
         <div className='space-y-2'>

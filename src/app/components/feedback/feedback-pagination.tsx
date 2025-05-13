@@ -1,11 +1,14 @@
 import useFeedbackStore from '@/app/stores/feedback'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/i18n'
+import { formatNumber } from '@/lib/number'
 
 const FeedbackPagination = () => {
   const { t } = useTranslation()
   const { totalCount, limit, filters, setFilters } = useFeedbackStore()
   const totalPages = Math.ceil(totalCount / limit)
+
+  // Always show pagination as requested
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -31,13 +34,22 @@ const FeedbackPagination = () => {
     }
   }
 
+  // Even if there's only one page, maintain the same layout
+  // but disable the pagination buttons
+  const isOnlyOnePage = totalPages <= 1
+
   return (
     <div className='flex justify-between items-center'>
       <div className='ml-4 text-xs text-muted-foreground'>
         {t('feedback:pagination.showing', {
-          from: (filters.page || 0) * limit + 1,
-          to: Math.min(((filters.page || 0) + 1) * limit, totalCount),
-          total: totalCount,
+          from: formatNumber((filters.page || 0) * limit + 1, {
+            compact: false,
+          }),
+          to: formatNumber(
+            Math.min(((filters.page || 0) + 1) * limit, totalCount),
+            { compact: false },
+          ),
+          total: formatNumber(totalCount),
         })}
       </div>
       <div className='flex gap-2'>
@@ -45,7 +57,7 @@ const FeedbackPagination = () => {
           variant='outline'
           size='sm'
           onClick={handlePrevPage}
-          disabled={filters.page === 0}
+          disabled={filters.page === 0 || isOnlyOnePage}
           className='rounded-xl text-xs'
         >
           {t('feedback:pagination.prev')}
@@ -54,7 +66,7 @@ const FeedbackPagination = () => {
           variant='outline'
           size='sm'
           onClick={handleNextPage}
-          disabled={filters.page === totalPages - 1}
+          disabled={filters.page === totalPages - 1 || isOnlyOnePage}
           className='rounded-xl text-xs'
         >
           {t('feedback:pagination.next')}

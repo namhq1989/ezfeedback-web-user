@@ -4,7 +4,6 @@ import {
   FeedbackPagination,
   IFeedbackFilters,
 } from '@/app/components/feedback'
-import Spinner from '@/app/components/root/spinner'
 import useFeedbackStore from '@/app/stores/feedback'
 import useProjectStore from '@/app/stores/project'
 
@@ -16,18 +15,11 @@ import { useEffect, useState } from 'react'
 const FeedbackPage = () => {
   const { t } = useTranslation()
   const [isFilterVisible, setIsFilterVisible] = useState(false)
-  const { filters, isLoadingFeedbacks, feedbacks, totalCount } =
-    useFeedbackStore()
+  const { filters, feedbacks } = useFeedbackStore()
   const { selectedProject } = useProjectStore()
 
   // Get store actions
   const { getFeedbacks, countFeedbacks, setFilters } = useFeedbackStore()
-
-  // State to track API results
-  const [apiResults, setApiResults] = useState({
-    findCount: 0,
-    countTotal: 0,
-  })
 
   // Load data when project changes
   useEffect(() => {
@@ -39,25 +31,11 @@ const FeedbackPage = () => {
       const loadData = async () => {
         await getFeedbacks()
         await countFeedbacks()
-
-        // Update our local state with the results
-        setApiResults({
-          findCount: useFeedbackStore.getState().feedbacks.length,
-          countTotal: useFeedbackStore.getState().totalCount,
-        })
       }
 
       loadData()
     }
   }, [selectedProject?.id])
-
-  // Update our local state whenever the store changes
-  useEffect(() => {
-    setApiResults({
-      findCount: feedbacks.length,
-      countTotal: totalCount,
-    })
-  }, [feedbacks, totalCount])
 
   const handleFilterChange = (newFilters: IFeedbackFilters) => {
     // Update filters and fetch data
@@ -78,8 +56,6 @@ const FeedbackPage = () => {
 
   return (
     <div className='container mx-auto py-6 px-4 md:py-8 md:px-6'>
-      {isLoadingFeedbacks && <Spinner />}
-
       <div className='max-w-6xl mx-auto'>
         {/* Mobile filter toggle button - only visible on small screens */}
         <div className='md:hidden mb-4'>
@@ -114,8 +90,8 @@ const FeedbackPage = () => {
             {/* Feedback list */}
             <FeedbackList />
 
-            {/* Pagination */}
-            <FeedbackPagination />
+            {/* Pagination - only show when there are feedbacks */}
+            {feedbacks.length > 0 && <FeedbackPagination />}
           </div>
         </div>
       </div>

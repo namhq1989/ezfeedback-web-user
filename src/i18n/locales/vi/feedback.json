@@ -12,14 +12,14 @@
     "rating": "Đánh giá",
     "clearFilters": "Xóa bộ lọc",
     "activeFilters": "Bộ lọc đang dùng",
-    "campaignType": "Loại chiến dịch",
+    "campaignType": "Loại",
     "selectCampaignType": "Chọn loại chiến dịch",
     "keyword": "Từ khóa",
     "keywordPlaceholder": "Tìm kiếm theo từ khóa..."
   },
   "campaignType": {
     "feedback": "Phản hồi",
-    "survey": "Khảo sát",
+    "csat": "CSAT",
     "nps": "NPS"
   },
   "table": {
@@ -29,6 +29,14 @@
     "date": "Ngày",
     "noFeedbacks": "Không tìm thấy phản hồi nào"
   },
+  "emptyState": {
+    "noFeedbacks": "Không tìm thấy phản hồi nào",
+    "noFeedbacksFiltered": "Không có phản hồi nào phù hợp với bộ lọc của bạn",
+    "noFeedbacksYet": "Chưa có phản hồi nào. Phản hồi đầu tiên của bạn sẽ xuất hiện ở đây.",
+    "waitingForFeedback": "Đang chờ phản hồi từ người dùng của bạn",
+    "emptyInbox": "Hộp thư phản hồi của bạn đang trống",
+    "tryDifferentFilters": "Hãy điều chỉnh bộ lọc để xem thêm kết quả"
+  },
   "state": {
     "": "Không xác định",
     "new": "Mới",
@@ -36,7 +44,12 @@
     "planned": "Đã lên kế hoạch",
     "in_progress": "Đang thực hiện",
     "completed": "Hoàn thành",
-    "declined": "Từ chối"
+    "declined": "Từ chối",
+    "select": "Chọn trạng thái",
+    "change_success": "Đã thay đổi trạng thái",
+    "change_success_description": "Trạng thái phản hồi đã được thay đổi thành {{state}}",
+    "change_error": "Không thể thay đổi trạng thái",
+    "change_error_description": "Đã xảy ra lỗi khi thay đổi trạng thái phản hồi. Vui lòng thử lại."
   },
   "pagination": {
     "showing": "Hiển thị {{from}} đến {{to}} của {{total}} phản hồi",
