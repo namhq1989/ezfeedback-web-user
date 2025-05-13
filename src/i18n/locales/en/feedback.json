@@ -10,12 +10,14 @@
     "state": "State",
     "allStates": "All States",
     "rating": "Rating",
-    "clearFilters": "Clear Filters",
+    "clearFilters": "Clear filters",
     "activeFilters": "Active Filters",
     "campaignType": "Type",
     "selectCampaignType": "Select campaign type",
     "keyword": "Keyword",
-    "keywordPlaceholder": "Search by keyword..."
+    "keywordPlaceholder": "Search by keyword...",
+    "apply": "Apply",
+    "selectedFilters": "Selected Filters:"
   },
   "campaignType": {
     "feedback": "Feedback",
@@ -46,6 +48,7 @@
     "completed": "Completed",
     "declined": "Declined",
     "select": "Select state",
+    "title": "State",
     "change_success": "State changed",
     "change_success_description": "Feedback state changed to {{state}}",
     "change_error": "Failed to change state",
@@ -57,5 +60,18 @@
     "next": "Next"
   },
   "replies": "replies",
-  "reply": "Reply"
+  "reply": "Reply",
+  "add_reply": "Add Reply",
+  "no_replies_yet": "No replies yet",
+  "replies_coming_soon": "Replies will be shown here",
+  "detail": {
+    "title": "Feedback Details",
+    "close": "Close"
+  },
+  "category": "Category",
+  "no_category": "No Category",
+  "user": "User",
+  "date": "Date",
+  "country": "Country",
+  "content": "Content"
 }

@@ -187,17 +187,46 @@ const FeedbackCard = ({ feedback }: IFeedbackCardProps) => {
         'rounded-xl border border-border p-4 flex flex-col md:flex-row gap-4',
       )}
     >
-      {/* Left Column: Feedback/NPS/CSAT tag + Rating */}
+      {/* Left Column: Feedback/NPS/CSAT tag + Rating + (Mobile: Date & Country) */}
       <div className='flex flex-col gap-3 md:w-1/5'>
-        {/* Feedback type as plain text */}
-        <div className='text-xs'>
+        {/* Mobile view: Feedback type and country */}
+        <div className='flex justify-between items-center md:hidden'>
+          <div className='text-xs'>
+            {feedback.campaignType
+              ? t(
+                  `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
+                )
+              : t('feedback:campaignType.general')}
+          </div>
+
+          {/* Country - Mobile only */}
+          <div className='text-xs text-muted-foreground'>
+            {t(`countries:${feedback.countryCode}`)}
+          </div>
+        </div>
+
+        {/* Desktop view: Feedback type */}
+        <div className='hidden md:block text-xs'>
           {feedback.campaignType
             ? t(`feedback:campaignType.${feedback.campaignType.toLowerCase()}`)
             : t('feedback:campaignType.general')}
         </div>
 
-        {/* Rating UI based on feedback type */}
-        <div className='mt-1'>
+        {/* Mobile view: Rating and date */}
+        <div className='flex justify-between items-center md:hidden'>
+          <FeedbackRating
+            type={feedback.campaignType}
+            rating={feedback.rating}
+          />
+
+          {/* Date - Mobile only */}
+          <div className='text-xs text-muted-foreground'>
+            {formatDateTime24h(feedback.createdAt)}
+          </div>
+        </div>
+
+        {/* Desktop view: Rating */}
+        <div className='hidden md:block mt-1'>
           <FeedbackRating
             type={feedback.campaignType}
             rating={feedback.rating}
@@ -207,8 +236,8 @@ const FeedbackCard = ({ feedback }: IFeedbackCardProps) => {
 
       {/* Right Column: Category-User-Date, Content, Stats-State */}
       <div className='flex-1 flex flex-col gap-3'>
-        {/* Category - User - Date */}
-        <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+        {/* Category - User - Date (Desktop only for Date and Country) */}
+        <div className='flex items-center gap-2 text-xs text-muted-foreground mt-2 md:mt-0'>
           {/* Category */}
           <span>{feedback.category.name || t('feedback:no_category')}</span>
           <span>•</span>
@@ -219,10 +248,16 @@ const FeedbackCard = ({ feedback }: IFeedbackCardProps) => {
               ? t('feedback:anonymous')
               : feedback.email || feedback.appUserId}
           </span>
-          <span>•</span>
 
-          {/* Date */}
-          <span>{formatDateTime24h(feedback.createdAt)}</span>
+          {/* Date & Country - Desktop only */}
+          <div className='hidden md:contents'>
+            <span>•</span>
+            {/* Date */}
+            <span>{formatDateTime24h(feedback.createdAt)}</span>
+            <span>•</span>
+            {/* Country */}
+            <span>{t(`countries:${feedback.countryCode}`)}</span>
+          </div>
         </div>
 
         {/* Feedback content */}

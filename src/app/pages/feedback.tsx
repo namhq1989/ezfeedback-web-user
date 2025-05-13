@@ -1,5 +1,6 @@
 import {
   FeedbackFilters,
+  FeedbackFilterSheet,
   FeedbackList,
   FeedbackPagination,
   IFeedbackFilters,
@@ -7,14 +8,9 @@ import {
 import useFeedbackStore from '@/app/stores/feedback'
 import useProjectStore from '@/app/stores/project'
 
-import { Button } from '@/components/ui/button'
-import { useTranslation } from '@/i18n'
-import { ChevronDown, ChevronUp, Filter } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 const FeedbackPage = () => {
-  const { t } = useTranslation()
-  const [isFilterVisible, setIsFilterVisible] = useState(false)
   const { filters, feedbacks } = useFeedbackStore()
   const { selectedProject } = useProjectStore()
 
@@ -50,38 +46,18 @@ const FeedbackPage = () => {
     updateData()
   }
 
-  const toggleFilter = () => {
-    setIsFilterVisible(!isFilterVisible)
-  }
-
   return (
     <div className='container mx-auto py-6 px-4 md:py-8 md:px-6'>
       <div className='max-w-6xl mx-auto'>
-        {/* Mobile filter toggle button - only visible on small screens */}
+        {/* Mobile filter sheet - only visible on small screens */}
         <div className='md:hidden mb-4'>
-          <Button
-            onClick={toggleFilter}
-            variant='outline'
-            className='w-full rounded-xl flex items-center justify-between'
-          >
-            <span className='flex items-center gap-2'>
-              <Filter size={16} />
-              {t('feedback:filters.title')}
-            </span>
-            {isFilterVisible ? (
-              <ChevronUp size={16} />
-            ) : (
-              <ChevronDown size={16} />
-            )}
-          </Button>
+          <FeedbackFilterSheet onFilterChange={handleFilterChange} />
         </div>
 
         {/* Responsive layout */}
         <div className='flex flex-col md:flex-row gap-6'>
-          {/* Filter section - collapsible on mobile, always visible on desktop */}
-          <div
-            className={`${isFilterVisible ? 'block' : 'hidden'} md:block md:w-64`}
-          >
+          {/* Filter section - hidden on mobile, always visible on desktop */}
+          <div className='hidden md:block md:w-64'>
             <FeedbackFilters onFilterChange={handleFilterChange} />
           </div>
 
