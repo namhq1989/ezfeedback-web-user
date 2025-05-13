@@ -1,12 +1,7 @@
+import EmptyState from '@/app/components/root/empty-state'
 import { CampaignType, FeedbackState, IFeedback } from '@/app/models/feedback'
 import useFeedbackStore from '@/app/stores/feedback'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
 import {
   Select,
   SelectContent,
@@ -14,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { useTranslation } from '@/i18n'
 import { formatDateTime24h } from '@/lib/date'
-import { formatNumber } from '@/lib/number'
 import { cn } from '@/lib/utils'
 import { mockReplies } from '@/mock/mock-replies'
 import {
@@ -25,15 +20,12 @@ import {
   CheckCheck,
   CircleDotDashed,
   Frown,
-  Globe,
   Meh,
-  MessageCircle,
   ScanSearch,
+  Send,
   SmilePlus,
   Sparkles,
   Star,
-  Tag,
-  User,
 } from 'lucide-react'
 import { ReactElement, useState } from 'react'
 import { toast } from 'sonner'
@@ -143,25 +135,6 @@ const StateSelectItem = ({ state, icon }: IStateSelectItemProps) => {
   )
 }
 
-// Info item component for metadata
-interface IInfoItemProps {
-  icon: ReactElement
-  label: string
-  value: string
-}
-
-const InfoItem = ({ icon, label, value }: IInfoItemProps) => {
-  return (
-    <div className='flex items-center gap-2'>
-      <div className='text-muted-foreground'>{icon}</div>
-      <div className='flex flex-col'>
-        <span className='text-xs text-muted-foreground'>{label}</span>
-        <span className='text-sm font-medium'>{value}</span>
-      </div>
-    </div>
-  )
-}
-
 const FeedbackDetailDialog = ({
   feedback,
   isOpen,
@@ -219,132 +192,121 @@ const FeedbackDetailDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className='max-w-2xl overflow-y-auto max-h-[90vh]'>
-        <DialogHeader className='space-y-2'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-2'>
-              <div className='text-xs px-2 py-1 bg-muted rounded-xl'>
-                {feedback.campaignType
-                  ? t(
-                      `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
-                    )
-                  : t('feedback:campaignType.general')}
-              </div>
-              <FeedbackRating
-                type={feedback.campaignType}
-                rating={feedback.rating}
-              />
+      <DialogContent className='w-full md:max-w-1xl overflow-y-auto max-h-[70vh] p-4 [&>button]:hidden'>
+        <DialogHeader className='mt-2 text-left'>
+          {/* Feedback type and country */}
+          <div className='flex justify-between items-center'>
+            <div className='text-xs'>
+              {feedback.campaignType
+                ? t(
+                    `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
+                  )
+                : t('feedback:campaignType.general')}
             </div>
+
+            {/* Country */}
+            <div className='text-xs text-muted-foreground'>
+              {t(`countries:${feedback.countryCode}`)}
+            </div>
+          </div>
+
+          {/* Rating and date */}
+          <div className='flex justify-between items-center mt-1'>
+            <FeedbackRating
+              type={feedback.campaignType}
+              rating={feedback.rating}
+            />
+
+            {/* Date */}
             <div className='text-xs text-muted-foreground'>
               {formatDateTime24h(feedback.createdAt)}
             </div>
           </div>
-          <DialogTitle className='text-xl'>
-            {t('feedback:detail.title')}
-          </DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-6 mt-2'>
-          {/* Feedback content */}
-          <div className='p-4 bg-muted/30 rounded-xl'>
-            <p className='text-base'>{feedback.content}</p>
+        <div className='mt-8 space-y-2'>
+          {/* Category - User info */}
+          <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+            {/* Category */}
+            <span>{feedback.category.name || t('feedback:no_category')}</span>
+            <span>•</span>
+
+            {/* User info */}
+            <span className='underline underline-offset-1'>
+              {feedback.isAnonymous || (!feedback.email && !feedback.appUserId)
+                ? t('feedback:anonymous')
+                : feedback.email || feedback.appUserId}
+            </span>
           </div>
 
-          {/* Metadata grid */}
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <InfoItem
-              icon={<Tag size={16} />}
-              label={t('feedback:category')}
-              value={feedback.category.name || t('feedback:no_category')}
-            />
-            <InfoItem
-              icon={<User size={16} />}
-              label={t('feedback:user')}
-              value={
-                feedback.isAnonymous || (!feedback.email && !feedback.appUserId)
-                  ? t('feedback:anonymous')
-                  : feedback.email || feedback.appUserId
-              }
-            />
-            <InfoItem
-              icon={<Globe size={16} />}
-              label={t('feedback:country')}
-              value={t(`countries:${feedback.countryCode}`)}
-            />
-            <InfoItem
-              icon={<MessageCircle size={16} />}
-              label={t('feedback:replies')}
-              value={`${formatNumber(replyCount)} ${t('feedback:replies')}`}
-            />
+          {/* Feedback content */}
+          <div className='text-sm'>{feedback.content}</div>
+
+          {/* State management */}
+          <div className='flex items-center justify-end mt-4 w-full'>
+            {/* State as select box */}
+            <Select
+              defaultValue={feedback.state}
+              onValueChange={handleStateChange}
+              disabled={isChangingState}
+            >
+              <SelectTrigger className='text-xs rounded-xl h-7 px-3'>
+                <SelectValue placeholder={t('feedback:state.select')} />
+              </SelectTrigger>
+              <SelectContent className='rounded-xl'>
+                <StateSelectItem
+                  state={FeedbackState.New}
+                  icon={<Sparkles />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.InReview}
+                  icon={<ScanSearch />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.Planned}
+                  icon={<Calendar />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.InProgress}
+                  icon={<CircleDotDashed />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.Completed}
+                  icon={<CheckCheck />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.Declined}
+                  icon={<Ban />}
+                />
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Replies section */}
-          <div className='space-y-3'>
-            <div className='flex items-center justify-between'>
-              <h3 className='text-sm font-medium'>
-                {t('feedback:replies')} ({formatNumber(replyCount)})
-              </h3>
-              <Button
-                variant='outline'
-                size='sm'
-                className='rounded-xl px-3 py-1 h-auto text-xs'
-              >
-                {t('feedback:add_reply')}
-              </Button>
+          <div className='space-y-3 mt-8'>
+            {/* <div className='flex items-center justify-between'>
+              <span className='text-xs text-muted-foreground'>
+                {formatNumber(replyCount)} {t('feedback:replies')}
+              </span>
+            </div> */}
+
+            <div className='mt-2 relative w-full'>
+              <Textarea
+                placeholder={t('feedback:write_reply')}
+                className='resize-none text-xs pr-10'
+                rows={3}
+              />
+              <Send className='text-primary absolute right-3 bottom-3 rounded-xl h-4 w-4 p-0 flex items-center justify-center cursor-pointer' />
             </div>
 
             {/* Reply list would go here */}
-            <div className='text-sm text-muted-foreground italic text-center py-6 border border-dashed border-muted rounded-xl'>
-              {replyCount === 0
-                ? t('feedback:no_replies_yet')
-                : t('feedback:replies_coming_soon')}
-            </div>
-          </div>
-
-          {/* State management */}
-          <div className='pt-2 border-t'>
-            <div className='flex items-center justify-between'>
-              <div className='text-sm font-medium'>
-                {t('feedback:state.title')}
+            {replyCount === 0 ? (
+              <EmptyState text={t('feedback:no_replies_yet')} size='xs' />
+            ) : (
+              <div className='text-sm text-muted-foreground italic text-center py-6 border border-dashed border-muted rounded-xl'>
+                {t('feedback:replies_coming_soon')}
               </div>
-              <div className='w-48'>
-                <Select
-                  defaultValue={feedback.state}
-                  onValueChange={handleStateChange}
-                  disabled={isChangingState}
-                >
-                  <SelectTrigger className='text-sm rounded-xl'>
-                    <SelectValue placeholder={t('feedback:state.select')} />
-                  </SelectTrigger>
-                  <SelectContent className='rounded-xl'>
-                    <StateSelectItem
-                      state={FeedbackState.New}
-                      icon={<Sparkles />}
-                    />
-                    <StateSelectItem
-                      state={FeedbackState.InReview}
-                      icon={<ScanSearch />}
-                    />
-                    <StateSelectItem
-                      state={FeedbackState.Planned}
-                      icon={<Calendar />}
-                    />
-                    <StateSelectItem
-                      state={FeedbackState.InProgress}
-                      icon={<CircleDotDashed />}
-                    />
-                    <StateSelectItem
-                      state={FeedbackState.Completed}
-                      icon={<CheckCheck />}
-                    />
-                    <StateSelectItem
-                      state={FeedbackState.Declined}
-                      icon={<Ban />}
-                    />
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </DialogContent>
