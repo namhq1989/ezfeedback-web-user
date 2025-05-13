@@ -1,72 +1,55 @@
+import useFeedbackStore from '@/app/stores/feedback'
 import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/i18n'
-import { useEffect, useState } from 'react'
+import { formatNumber } from '@/lib/number'
 
 const FeedbackPagination = () => {
   const { t } = useTranslation()
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalCount, setTotalCount] = useState(0)
-  const pageSize = 10
-  const totalPages = Math.ceil(totalCount / pageSize)
+  const { totalCount, limit, filters, setFilters } = useFeedbackStore()
+  const totalPages = Math.ceil(totalCount / limit)
 
-  // Listen for pagination data changes
-  useEffect(() => {
-    const handlePaginationData = (event: CustomEvent) => {
-      const { totalCount } = event.detail
-      setTotalCount(totalCount)
-    }
+  // Always show pagination as requested
 
-    document.addEventListener(
-      'feedbackPaginationData',
-      handlePaginationData as EventListener,
-    )
-    return () => {
-      document.removeEventListener(
-        'feedbackPaginationData',
-        handlePaginationData as EventListener,
-      )
-    }
-  }, [])
-
-  // Dispatch page change event
-  const dispatchPageChange = (page: number) => {
-    const pageChangeEvent = new CustomEvent('feedbackPageChange', {
-      detail: { page },
-      bubbles: true,
-    })
-    document.dispatchEvent(pageChangeEvent)
-  }
-
-  // Update local state and dispatch event
+  // Handle page change
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    dispatchPageChange(page)
+    // Create a new filters object with the updated page
+    const newFilters = { ...filters, page }
+    // Update the filters in the store
+    setFilters(newFilters)
+    // Manually fetch data with the new page
+    const { getFeedbacks } = useFeedbackStore.getState()
+    getFeedbacks(newFilters)
   }
 
   const handlePrevPage = () => {
-    if (currentPage > 1) {
-      handlePageChange(currentPage - 1)
+    // Page is now 0-indexed
+    if (filters.page !== undefined && filters.page > 0) {
+      handlePageChange(filters.page - 1)
     }
   }
 
   const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      handlePageChange(currentPage + 1)
+    if (filters.page !== undefined && filters.page < totalPages - 1) {
+      handlePageChange(filters.page + 1)
     }
   }
 
-  // Always show pagination controls
-  // if (totalCount <= pageSize) {
-  //   return null
-  // }
+  // Even if there's only one page, maintain the same layout
+  // but disable the pagination buttons
+  const isOnlyOnePage = totalPages <= 1
 
   return (
     <div className='flex justify-between items-center'>
       <div className='ml-4 text-xs text-muted-foreground'>
         {t('feedback:pagination.showing', {
-          from: (currentPage - 1) * pageSize + 1,
-          to: Math.min(currentPage * pageSize, totalCount),
-          total: totalCount,
+          from: formatNumber((filters.page || 0) * limit + 1, {
+            compact: false,
+          }),
+          to: formatNumber(
+            Math.min(((filters.page || 0) + 1) * limit, totalCount),
+            { compact: false },
+          ),
+          total: formatNumber(totalCount),
         })}
       </div>
       <div className='flex gap-2'>
@@ -74,7 +57,7 @@ const FeedbackPagination = () => {
           variant='outline'
           size='sm'
           onClick={handlePrevPage}
-          disabled={currentPage === 1}
+          disabled={filters.page === 0 || isOnlyOnePage}
           className='rounded-xl text-xs'
         >
           {t('feedback:pagination.prev')}
@@ -83,7 +66,7 @@ const FeedbackPagination = () => {
           variant='outline'
           size='sm'
           onClick={handleNextPage}
-          disabled={currentPage === totalPages}
+          disabled={filters.page === totalPages - 1 || isOnlyOnePage}
           className='rounded-xl text-xs'
         >
           {t('feedback:pagination.next')}
