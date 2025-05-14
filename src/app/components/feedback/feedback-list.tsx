@@ -58,7 +58,7 @@ const FeedbackList = () => {
       )}
 
       <FeedbackDetailDialog
-        feedback={selectedFeedback}
+        feedbackId={selectedFeedback?.id || ''}
         isOpen={isDetailDialogOpen}
         onClose={handleCloseDetailDialog}
       />

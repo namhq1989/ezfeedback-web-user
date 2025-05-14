@@ -18,6 +18,7 @@ export interface IFeedbackStore {
   setFeedbacks: (feedbacks: IFeedback[]) => void
   setFilters: (filters: IGetFeedbacksRequest) => void
   changeFeedbackState: (id: string, state: FeedbackState) => Promise<boolean>
+  incrementReplyCount: (feedbackId: string) => void
 }
 
 const useFeedbackStore = create<IFeedbackStore>((set, get) => ({
@@ -185,6 +186,29 @@ const useFeedbackStore = create<IFeedbackStore>((set, get) => ({
       })
       return false
     }
+  },
+
+  incrementReplyCount: (feedbackId: string) => {
+    // Get current feedbacks
+    const { feedbacks } = get()
+
+    // Create a new array with the updated feedback
+    const updatedFeedbacks = feedbacks.map((feedback) => {
+      if (feedback.id === feedbackId) {
+        // Create a new feedback object with incremented reply count
+        return {
+          ...feedback,
+          stats: {
+            ...feedback.stats,
+            totalReplies: (feedback.stats?.totalReplies || 0) + 1,
+          },
+        }
+      }
+      return feedback
+    })
+
+    // Update the store
+    set({ feedbacks: updatedFeedbacks })
   },
 }))
 

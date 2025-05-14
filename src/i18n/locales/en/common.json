@@ -1,4 +1,5 @@
 {
+  "locale": "en",
   "app": {
     "name": "Easy Feedback",
     "tagline": "Collect feedback effortlessly"
@@ -13,7 +14,8 @@
     "confirm": "Confirm",
     "back": "Back",
     "next": "Next",
-    "prev": "Previous"
+    "prev": "Previous",
+    "ctrlEnterToSend": "Ctrl + Enter to send"
   },
   "common": {
     "save": "Save",

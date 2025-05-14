@@ -7,6 +7,7 @@ import { IMe } from '@/app/models/user'
 import { create } from 'zustand/react'
 
 export interface IAuthStore {
+  me: IMe | null
   isAuthenticated: () => boolean
   setToken: (token: string) => void
   getToken: () => string
@@ -19,7 +20,8 @@ export interface IAuthStore {
   getMe: () => Promise<IMe>
 }
 
-const useAuthStore = create<IAuthStore>((_, get) => ({
+const useAuthStore = create<IAuthStore>((set, get) => ({
+  me: null,
   isAuthenticated: () => {
     return !!localStorage.getItem('token')
   },
@@ -55,6 +57,7 @@ const useAuthStore = create<IAuthStore>((_, get) => ({
     try {
       const request: IGetMeRequest = {}
       const response = await iamApi.getMe(request)
+      set({ me: response.me })
       return response.me
     } catch (error) {
       throw error

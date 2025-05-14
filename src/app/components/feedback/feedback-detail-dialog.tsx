@@ -1,7 +1,11 @@
 import EmptyState from '@/app/components/root/empty-state'
-import { CampaignType, FeedbackState, IFeedback } from '@/app/models/feedback'
+import Spinner from '@/app/components/root/spinner'
+import { CampaignType, FeedbackState } from '@/app/models/feedback'
+import { IFeedbackReply } from '@/app/models/feedback-reply'
 import useFeedbackStore from '@/app/stores/feedback'
+import useFeedbackReplyStore from '@/app/stores/feedback-reply'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import {
   Select,
@@ -12,9 +16,8 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { useTranslation } from '@/i18n'
-import { formatDateTime24h } from '@/lib/date'
+import { formatDateTime24h, timeAgo } from '@/lib/date'
 import { cn } from '@/lib/utils'
-import { mockReplies } from '@/mock/mock-replies'
 import {
   Ban,
   Calendar,
@@ -28,11 +31,11 @@ import {
   Sparkles,
   Star,
 } from 'lucide-react'
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 interface IFeedbackDetailDialogProps {
-  feedback: IFeedback | null
+  feedbackId: string
   isOpen: boolean
   onClose: () => void
 }
@@ -136,21 +139,143 @@ const StateSelectItem = ({ state, icon }: IStateSelectItemProps) => {
   )
 }
 
+// Reply item component
+interface IReplyItemProps {
+  reply: IFeedbackReply
+}
+
+const ReplyItem = ({ reply }: IReplyItemProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <div className='py-2'>
+      <div className='border-l-2 pl-4'>
+        <div className='flex gap-2 items-center mb-2'>
+          <div className='flex items-center gap-2'>
+            <div className='font-medium text-sm text-muted-foreground'>
+              {reply.user.name || reply.user.email}
+            </div>
+            {reply.isEdited && (
+              <span className='text-xs text-muted-foreground italic'>
+                {t('feedback:edited')}
+              </span>
+            )}
+          </div>
+          <div className='text-xs text-muted-foreground'>
+            {timeAgo(reply.createdAt, t('common:locale'))}
+          </div>
+        </div>
+        <div className='text-sm whitespace-pre-wrap break-words'>
+          {reply.content}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const FeedbackDetailDialog = ({
-  feedback,
+  feedbackId,
   isOpen,
   onClose,
 }: IFeedbackDetailDialogProps) => {
   const { t } = useTranslation()
   const [isChangingState, setIsChangingState] = useState(false)
-  const { changeFeedbackState } = useFeedbackStore()
+  const { feedbacks, changeFeedbackState } = useFeedbackStore()
+  const { replies, isLoading, isCreating, getReplies, limit } =
+    useFeedbackReplyStore()
+
+  const [replyContent, setReplyContent] = useState('')
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalReplies, setTotalReplies] = useState(0)
+
+  // Find the feedback from the store using the ID
+  const feedback = feedbacks.find((f) => f.id === feedbackId)
+
+  // Reset state when dialog opens with new feedback
+  useEffect(() => {
+    if (isOpen && feedbackId) {
+      setCurrentPage(0)
+      setReplyContent('')
+      if (feedback) {
+        setTotalReplies(feedback.stats?.totalReplies || 0)
+      }
+    }
+  }, [isOpen, feedbackId, feedback])
+
+  // Load replies when dialog opens or page changes
+  useEffect(() => {
+    if (isOpen && feedbackId) {
+      loadReplies()
+    }
+  }, [isOpen, feedbackId, currentPage])
 
   if (!feedback) return null
 
-  // Use actual reply count from stats if available, otherwise count from mock data
-  const replyCount =
-    feedback.stats?.totalReplies ??
-    mockReplies.filter((r) => r.feedbackId === feedback.id).length
+  // Calculate total pages for pagination
+  const totalPages = Math.ceil(totalReplies / limit)
+
+  // Load replies with pagination
+  const loadReplies = async () => {
+    if (!feedbackId) return
+
+    await getReplies(feedbackId, { page: currentPage })
+
+    // Update total replies count if available from feedback
+    if (feedback && feedback.stats?.totalReplies !== undefined) {
+      setTotalReplies(feedback.stats.totalReplies)
+    }
+  }
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      handlePageChange(currentPage - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      handlePageChange(currentPage + 1)
+    }
+  }
+
+  // Handle reply submission
+  const handleReplySubmit = async () => {
+    if (!feedback || !replyContent.trim() || isCreating) return
+
+    try {
+      await useFeedbackReplyStore
+        .getState()
+        .createReply(feedbackId, { content: replyContent.trim() })
+
+      // Clear the input
+      setReplyContent('')
+
+      // Show success toast
+      toast.success(t('feedback:reply_sent'), {
+        description: t('feedback:reply_sent_description'),
+      })
+    } catch (error) {
+      // Show error toast
+      toast.error(t('feedback:reply_error'), {
+        description:
+          (error as Error).message || t('feedback:reply_error_description'),
+      })
+    }
+  }
+
+  // Handle key press in textarea
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Submit on Ctrl+Enter or Command+Enter
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault()
+      handleReplySubmit()
+    }
+  }
 
   // Handle state change
   const handleStateChange = async (newState: string) => {
@@ -193,8 +318,8 @@ const FeedbackDetailDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className='w-full md:max-w-1xl overflow-y-auto max-h-[70vh] p-4 md:p-6 [&>button]:hidden'>
-        <div className='flex flex-col gap-12 mt-2 md:mt-0 text-left'>
+      <DialogContent className='w-full md:max-w-1xl overflow-y-auto h-[85vh] p-4 md:p-6 [&>button]:hidden'>
+        <div className='flex flex-col gap-8 mt-2 md:mt-0 text-left'>
           <div className='flex justify-between items-center'>
             <div className='flex flex-col gap-1'>
               <div className='text-xs text-muted-foreground'>
@@ -277,30 +402,102 @@ const FeedbackDetailDialog = ({
               <div className='text-sm'>{feedback.content}</div>
 
               {/* Replies section */}
-              <div className='space-y-3 mt-8'>
+              <div className='space-y-2 mt-8'>
                 {/* <div className='flex items-center justify-between'>
-              <span className='text-xs text-muted-foreground'>
-                {formatNumber(replyCount)} {t('feedback:replies')}
-              </span>
-            </div> */}
+                  <span className='text-xs text-muted-foreground'>
+                    {totalReplies}{' '}
+                    {totalReplies === 1
+                      ? t('feedback:reply')
+                      : t('feedback:replies')}
+                  </span>
+                  <span className='text-xs text-muted-foreground'>
+                    Ctrl + Enter to send
+                  </span>
+                </div> */}
 
-                <div className='mt-2 relative w-full'>
+                <div className='relative w-full'>
                   <Textarea
                     placeholder={t('feedback:write_reply')}
-                    className='resize-none text-xs pr-10 min-h-[120px]'
+                    className='resize-none text-xs pr-10 min-h-[100px]'
                     rows={4}
+                    value={replyContent}
+                    onChange={(e) => setReplyContent(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    disabled={isCreating}
                   />
-                  <Send className='text-primary absolute right-3 bottom-3 rounded-xl h-5 w-5 p-0 flex items-center justify-center cursor-pointer' />
+                  <Send
+                    onClick={handleReplySubmit}
+                    className={`absolute right-3 bottom-3 rounded-xl h-5 w-5 p-0 flex items-center justify-center ${replyContent.trim() && !isCreating ? 'text-primary cursor-pointer' : 'text-muted-foreground cursor-not-allowed'}`}
+                  />
                 </div>
+                <span className='flex justify-end text-xs text-muted-foreground'>
+                  {t('common:actions.ctrlEnterToSend')}
+                </span>
 
-                {/* Reply list would go here */}
-                {replyCount === 0 ? (
-                  <EmptyState text={t('feedback:no_replies_yet')} size='xs' />
-                ) : (
-                  <div className='text-sm text-muted-foreground italic text-center py-6 border border-dashed border-muted rounded-xl'>
-                    {t('feedback:replies_coming_soon')}
-                  </div>
-                )}
+                {/* Reply list */}
+                <div className='mt-4'>
+                  {isLoading && currentPage === 0 ? (
+                    <div className='flex justify-center items-center py-8'>
+                      <Spinner size='sm' />
+                    </div>
+                  ) : totalReplies === 0 ? (
+                    <EmptyState text={t('feedback:no_replies_yet')} size='xs' />
+                  ) : replies.length === 0 ? (
+                    <div className='p-4 text-center text-sm text-muted-foreground'>
+                      {t('feedback:no_replies_yet')}
+                    </div>
+                  ) : (
+                    <div>
+                      {replies.map((reply) => (
+                        <div key={reply.id} className='p-2'>
+                          <ReplyItem reply={reply} />
+                        </div>
+                      ))}
+
+                      {isLoading && currentPage > 0 && (
+                        <div className='flex justify-center items-center py-4'>
+                          <Spinner size='sm' />
+                        </div>
+                      )}
+
+                      {/* Pagination */}
+                      {totalReplies > 0 && (
+                        <div className='flex justify-between items-center mt-4 px-2'>
+                          <div className='text-xs text-muted-foreground'>
+                            {t('feedback:pagination.showing', {
+                              from: currentPage * limit + 1,
+                              to: Math.min(
+                                (currentPage + 1) * limit,
+                                totalReplies,
+                              ),
+                              total: totalReplies,
+                            })}
+                          </div>
+                          <div className='flex gap-2'>
+                            <Button
+                              variant='outline'
+                              size='sm'
+                              onClick={handlePrevPage}
+                              disabled={currentPage === 0}
+                              className='rounded-xl text-xs'
+                            >
+                              {t('feedback:pagination.prev')}
+                            </Button>
+                            <Button
+                              variant='outline'
+                              size='sm'
+                              onClick={handleNextPage}
+                              disabled={currentPage >= totalPages - 1}
+                              className='rounded-xl text-xs'
+                            >
+                              {t('feedback:pagination.next')}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

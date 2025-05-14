@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useTranslation } from '@/i18n'
-import { formatDateTime24h } from '@/lib/date'
+import { formatDateTime24h, timeAgo } from '@/lib/date'
 import { formatNumber } from '@/lib/number'
 import { cn } from '@/lib/utils'
 import { mockReplies } from '@/mock/mock-replies'
@@ -253,7 +253,7 @@ const FeedbackCard = ({ feedback }: IFeedbackCardProps) => {
           <div className='hidden md:contents'>
             <span>•</span>
             {/* Date */}
-            <span>{formatDateTime24h(feedback.createdAt)}</span>
+            <span>{timeAgo(feedback.createdAt, t('common:locale'))}</span>
             <span>•</span>
             {/* Country */}
             <span>{t(`countries:${feedback.countryCode}`)}</span>
