@@ -1,6 +1,8 @@
+import EmptyState from '@/app/components/root/empty-state'
 import { CampaignType, FeedbackState, IFeedback } from '@/app/models/feedback'
 import useFeedbackStore from '@/app/stores/feedback'
-import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import {
   Select,
   SelectContent,
@@ -8,9 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { useTranslation } from '@/i18n'
 import { formatDateTime24h } from '@/lib/date'
-import { formatNumber } from '@/lib/number'
 import { cn } from '@/lib/utils'
 import { mockReplies } from '@/mock/mock-replies'
 import {
@@ -21,6 +23,7 @@ import {
   Frown,
   Meh,
   ScanSearch,
+  Send,
   SmilePlus,
   Sparkles,
   Star,
@@ -28,8 +31,10 @@ import {
 import { ReactElement, useState } from 'react'
 import { toast } from 'sonner'
 
-interface IFeedbackCardProps {
-  feedback: IFeedback
+interface IFeedbackDetailDialogProps {
+  feedback: IFeedback | null
+  isOpen: boolean
+  onClose: () => void
 }
 
 interface IFeedbackRatingProps {
@@ -124,7 +129,6 @@ const StateSelectItem = ({ state, icon }: IStateSelectItemProps) => {
   return (
     <SelectItem value={state} className='text-xs'>
       <div className='flex items-center gap-3'>
-        {/* Render the icon with the desired size */}
         <div className='h-3 w-3 flex items-center justify-center'>{icon}</div>
         <span>{t(`feedback:state.${state}`)}</span>
       </div>
@@ -132,10 +136,16 @@ const StateSelectItem = ({ state, icon }: IStateSelectItemProps) => {
   )
 }
 
-const FeedbackCard = ({ feedback }: IFeedbackCardProps) => {
+const FeedbackDetailDialog = ({
+  feedback,
+  isOpen,
+  onClose,
+}: IFeedbackDetailDialogProps) => {
   const { t } = useTranslation()
   const [isChangingState, setIsChangingState] = useState(false)
   const { changeFeedbackState } = useFeedbackStore()
+
+  if (!feedback) return null
 
   // Use actual reply count from stats if available, otherwise count from mock data
   const replyCount =
@@ -182,138 +192,122 @@ const FeedbackCard = ({ feedback }: IFeedbackCardProps) => {
   }
 
   return (
-    <div
-      className={cn(
-        'rounded-xl border border-border p-4 flex flex-col md:flex-row gap-4',
-      )}
-    >
-      {/* Left Column: Feedback/NPS/CSAT tag + Rating + (Mobile: Date & Country) */}
-      <div className='flex flex-col gap-3 md:w-1/5'>
-        {/* Mobile view: Feedback type and country */}
-        <div className='flex justify-between items-center md:hidden'>
-          <div className='text-xs'>
-            {feedback.campaignType
-              ? t(
-                  `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
-                )
-              : t('feedback:campaignType.general')}
-          </div>
-
-          {/* Country - Mobile only */}
-          <div className='text-xs text-muted-foreground'>
-            {t(`countries:${feedback.countryCode}`)}
-          </div>
-        </div>
-
-        {/* Desktop view: Feedback type */}
-        <div className='hidden md:block text-xs'>
-          {feedback.campaignType
-            ? t(`feedback:campaignType.${feedback.campaignType.toLowerCase()}`)
-            : t('feedback:campaignType.general')}
-        </div>
-
-        {/* Mobile view: Rating and date */}
-        <div className='flex justify-between items-center md:hidden'>
-          <FeedbackRating
-            type={feedback.campaignType}
-            rating={feedback.rating}
-          />
-
-          {/* Date - Mobile only */}
-          <div className='text-xs text-muted-foreground'>
-            {formatDateTime24h(feedback.createdAt)}
-          </div>
-        </div>
-
-        {/* Desktop view: Rating */}
-        <div className='hidden md:block mt-1'>
-          <FeedbackRating
-            type={feedback.campaignType}
-            rating={feedback.rating}
-          />
-        </div>
-      </div>
-
-      {/* Right Column: Category-User-Date, Content, Stats-State */}
-      <div className='flex-1 flex flex-col gap-3'>
-        {/* Category - User - Date (Desktop only for Date and Country) */}
-        <div className='flex items-center gap-2 text-xs text-muted-foreground mt-2 md:mt-0'>
-          {/* Category */}
-          <span>{feedback.category.name || t('feedback:no_category')}</span>
-          <span>•</span>
-
-          {/* User info */}
-          <span className='underline underline-offset-1'>
-            {feedback.isAnonymous || (!feedback.email && !feedback.appUserId)
-              ? t('feedback:anonymous')
-              : feedback.email || feedback.appUserId}
-          </span>
-
-          {/* Date & Country - Desktop only */}
-          <div className='hidden md:contents'>
-            <span>•</span>
-            {/* Date */}
-            <span>{formatDateTime24h(feedback.createdAt)}</span>
-            <span>•</span>
-            {/* Country */}
-            <span>{t(`countries:${feedback.countryCode}`)}</span>
-          </div>
-        </div>
-
-        {/* Feedback content */}
-        <div className='text-sm'>{feedback.content}</div>
-
-        {/* Stats replies - State */}
-        <div className='flex items-center justify-between mt-auto'>
-          {/* Stats replies with Reply button */}
-          <div className='flex items-center gap-2'>
-            <span className='text-xs text-muted-foreground'>
-              {formatNumber(replyCount)} {t('feedback:replies')}
-            </span>
-
-            <Button
-              variant='ghost'
-              size='sm'
-              className='rounded-xl px-3 py-1 h-auto text-xs'
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className='w-full md:max-w-1xl overflow-y-auto max-h-[70vh] p-4 md:p-6 [&>button]:hidden'>
+        <div className='flex flex-col gap-12 mt-2 md:mt-0 text-left'>
+          <div className='flex justify-between items-center'>
+            <div className='flex flex-col gap-1'>
+              <div className='text-xs text-muted-foreground'>
+                {t(`countries:${feedback.countryCode}`)}
+              </div>
+              <div className='text-xs text-muted-foreground'>
+                {formatDateTime24h(feedback.createdAt)}
+              </div>
+            </div>
+            <Select
+              defaultValue={feedback.state}
+              onValueChange={handleStateChange}
+              disabled={isChangingState}
             >
-              {t('feedback:reply')}
-            </Button>
+              <SelectTrigger className='text-xs rounded-xl h-7 px-3'>
+                <SelectValue placeholder={t('feedback:state.select')} />
+              </SelectTrigger>
+              <SelectContent className='rounded-xl'>
+                <StateSelectItem
+                  state={FeedbackState.New}
+                  icon={<Sparkles />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.InReview}
+                  icon={<ScanSearch />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.Planned}
+                  icon={<Calendar />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.InProgress}
+                  icon={<CircleDotDashed />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.Completed}
+                  icon={<CheckCheck />}
+                />
+                <StateSelectItem
+                  state={FeedbackState.Declined}
+                  icon={<Ban />}
+                />
+              </SelectContent>
+            </Select>
           </div>
 
-          {/* State as select box */}
-          <Select
-            defaultValue={feedback.state}
-            onValueChange={handleStateChange}
-            disabled={isChangingState}
-          >
-            <SelectTrigger className='w-auto text-xs rounded-xl h-7 px-3'>
-              <SelectValue placeholder={t('feedback:state.select')} />
-            </SelectTrigger>
-            <SelectContent className='rounded-xl'>
-              <StateSelectItem state={FeedbackState.New} icon={<Sparkles />} />
-              <StateSelectItem
-                state={FeedbackState.InReview}
-                icon={<ScanSearch />}
+          <div className='flex flex-col gap-4'>
+            <div className='flex gap-2 items-center'>
+              <Badge variant='secondary'>
+                {feedback.campaignType
+                  ? t(
+                      `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
+                    )
+                  : t('feedback:campaignType.general')}
+              </Badge>
+              <FeedbackRating
+                type={feedback.campaignType}
+                rating={feedback.rating}
               />
-              <StateSelectItem
-                state={FeedbackState.Planned}
-                icon={<Calendar />}
-              />
-              <StateSelectItem
-                state={FeedbackState.InProgress}
-                icon={<CircleDotDashed />}
-              />
-              <StateSelectItem
-                state={FeedbackState.Completed}
-                icon={<CheckCheck />}
-              />
-              <StateSelectItem state={FeedbackState.Declined} icon={<Ban />} />
-            </SelectContent>
-          </Select>
+            </div>
+            <div className='space-y-2'>
+              {/* Category - User info */}
+              <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                {/* Category */}
+                <span>
+                  {feedback.category.name || t('feedback:no_category')}
+                </span>
+                <span>•</span>
+
+                {/* User info */}
+                <span className='underline underline-offset-1'>
+                  {feedback.isAnonymous ||
+                  (!feedback.email && !feedback.appUserId)
+                    ? t('feedback:anonymous')
+                    : feedback.email || feedback.appUserId}
+                </span>
+              </div>
+
+              {/* Feedback content */}
+              <div className='text-sm'>{feedback.content}</div>
+
+              {/* Replies section */}
+              <div className='space-y-3 mt-8'>
+                {/* <div className='flex items-center justify-between'>
+              <span className='text-xs text-muted-foreground'>
+                {formatNumber(replyCount)} {t('feedback:replies')}
+              </span>
+            </div> */}
+
+                <div className='mt-2 relative w-full'>
+                  <Textarea
+                    placeholder={t('feedback:write_reply')}
+                    className='resize-none text-xs pr-10 min-h-[120px]'
+                    rows={4}
+                  />
+                  <Send className='text-primary absolute right-3 bottom-3 rounded-xl h-5 w-5 p-0 flex items-center justify-center cursor-pointer' />
+                </div>
+
+                {/* Reply list would go here */}
+                {replyCount === 0 ? (
+                  <EmptyState text={t('feedback:no_replies_yet')} size='xs' />
+                ) : (
+                  <div className='text-sm text-muted-foreground italic text-center py-6 border border-dashed border-muted rounded-xl'>
+                    {t('feedback:replies_coming_soon')}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 
-export default FeedbackCard
+export default FeedbackDetailDialog

@@ -15,7 +15,9 @@
     "campaignType": "Loại",
     "selectCampaignType": "Chọn loại chiến dịch",
     "keyword": "Từ khóa",
-    "keywordPlaceholder": "Tìm kiếm theo từ khóa..."
+    "keywordPlaceholder": "Tìm kiếm theo từ khóa...",
+    "apply": "Áp dụng",
+    "selectedFilters": "Bộ lọc đã chọn:"
   },
   "campaignType": {
     "feedback": "Phản hồi",
@@ -46,6 +48,7 @@
     "completed": "Hoàn thành",
     "declined": "Từ chối",
     "select": "Chọn trạng thái",
+    "title": "Trạng thái",
     "change_success": "Đã thay đổi trạng thái",
     "change_success_description": "Trạng thái phản hồi đã được thay đổi thành {{state}}",
     "change_error": "Không thể thay đổi trạng thái",
@@ -57,5 +60,19 @@
     "next": "Tiếp"
   },
   "replies": "trả lời",
-  "reply": "Trả lời"
+  "reply": "Trả lời",
+  "add_reply": "Thêm trả lời",
+  "no_replies_yet": "Chưa có trả lời nào",
+  "replies_coming_soon": "Các trả lời sẽ được hiển thị ở đây",
+  "detail": {
+    "title": "Chi tiết phản hồi",
+    "close": "Đóng"
+  },
+  "category": "Danh mục",
+  "no_category": "Không có danh mục",
+  "user": "Người dùng",
+  "date": "Ngày",
+  "country": "Quốc gia",
+  "content": "Nội dung",
+  "write_reply": "Chia sẻ suy nghĩ của bạn..."
 }
