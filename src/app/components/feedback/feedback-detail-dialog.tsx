@@ -1,7 +1,8 @@
 import EmptyState from '@/app/components/root/empty-state'
 import { CampaignType, FeedbackState, IFeedback } from '@/app/models/feedback'
 import useFeedbackStore from '@/app/stores/feedback'
-import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
+import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import {
   Select,
   SelectContent,
@@ -192,59 +193,17 @@ const FeedbackDetailDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className='w-full md:max-w-1xl overflow-y-auto max-h-[70vh] p-4 [&>button]:hidden'>
-        <DialogHeader className='mt-2 text-left'>
-          {/* Feedback type and country */}
+      <DialogContent className='w-full md:max-w-1xl overflow-y-auto max-h-[70vh] p-4 md:p-6 [&>button]:hidden'>
+        <div className='flex flex-col gap-12 mt-2 md:mt-0 text-left'>
           <div className='flex justify-between items-center'>
-            <div className='text-xs'>
-              {feedback.campaignType
-                ? t(
-                    `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
-                  )
-                : t('feedback:campaignType.general')}
+            <div className='flex flex-col gap-1'>
+              <div className='text-xs text-muted-foreground'>
+                {t(`countries:${feedback.countryCode}`)}
+              </div>
+              <div className='text-xs text-muted-foreground'>
+                {formatDateTime24h(feedback.createdAt)}
+              </div>
             </div>
-
-            {/* Country */}
-            <div className='text-xs text-muted-foreground'>
-              {t(`countries:${feedback.countryCode}`)}
-            </div>
-          </div>
-
-          {/* Rating and date */}
-          <div className='flex justify-between items-center mt-1'>
-            <FeedbackRating
-              type={feedback.campaignType}
-              rating={feedback.rating}
-            />
-
-            {/* Date */}
-            <div className='text-xs text-muted-foreground'>
-              {formatDateTime24h(feedback.createdAt)}
-            </div>
-          </div>
-        </DialogHeader>
-
-        <div className='mt-8 space-y-2'>
-          {/* Category - User info */}
-          <div className='flex items-center gap-2 text-xs text-muted-foreground'>
-            {/* Category */}
-            <span>{feedback.category.name || t('feedback:no_category')}</span>
-            <span>•</span>
-
-            {/* User info */}
-            <span className='underline underline-offset-1'>
-              {feedback.isAnonymous || (!feedback.email && !feedback.appUserId)
-                ? t('feedback:anonymous')
-                : feedback.email || feedback.appUserId}
-            </span>
-          </div>
-
-          {/* Feedback content */}
-          <div className='text-sm'>{feedback.content}</div>
-
-          {/* State management */}
-          <div className='flex items-center justify-end mt-4 w-full'>
-            {/* State as select box */}
             <Select
               defaultValue={feedback.state}
               onValueChange={handleStateChange}
@@ -282,31 +241,68 @@ const FeedbackDetailDialog = ({
             </Select>
           </div>
 
-          {/* Replies section */}
-          <div className='space-y-3 mt-8'>
-            {/* <div className='flex items-center justify-between'>
+          <div className='flex flex-col gap-4'>
+            <div className='flex gap-2 items-center'>
+              <Badge variant='secondary'>
+                {feedback.campaignType
+                  ? t(
+                      `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
+                    )
+                  : t('feedback:campaignType.general')}
+              </Badge>
+              <FeedbackRating
+                type={feedback.campaignType}
+                rating={feedback.rating}
+              />
+            </div>
+            <div className='space-y-2'>
+              {/* Category - User info */}
+              <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                {/* Category */}
+                <span>
+                  {feedback.category.name || t('feedback:no_category')}
+                </span>
+                <span>•</span>
+
+                {/* User info */}
+                <span className='underline underline-offset-1'>
+                  {feedback.isAnonymous ||
+                  (!feedback.email && !feedback.appUserId)
+                    ? t('feedback:anonymous')
+                    : feedback.email || feedback.appUserId}
+                </span>
+              </div>
+
+              {/* Feedback content */}
+              <div className='text-sm'>{feedback.content}</div>
+
+              {/* Replies section */}
+              <div className='space-y-3 mt-8'>
+                {/* <div className='flex items-center justify-between'>
               <span className='text-xs text-muted-foreground'>
                 {formatNumber(replyCount)} {t('feedback:replies')}
               </span>
             </div> */}
 
-            <div className='mt-2 relative w-full'>
-              <Textarea
-                placeholder={t('feedback:write_reply')}
-                className='resize-none text-xs pr-10'
-                rows={3}
-              />
-              <Send className='text-primary absolute right-3 bottom-3 rounded-xl h-4 w-4 p-0 flex items-center justify-center cursor-pointer' />
-            </div>
+                <div className='mt-2 relative w-full'>
+                  <Textarea
+                    placeholder={t('feedback:write_reply')}
+                    className='resize-none text-xs pr-10 min-h-[120px]'
+                    rows={4}
+                  />
+                  <Send className='text-primary absolute right-3 bottom-3 rounded-xl h-5 w-5 p-0 flex items-center justify-center cursor-pointer' />
+                </div>
 
-            {/* Reply list would go here */}
-            {replyCount === 0 ? (
-              <EmptyState text={t('feedback:no_replies_yet')} size='xs' />
-            ) : (
-              <div className='text-sm text-muted-foreground italic text-center py-6 border border-dashed border-muted rounded-xl'>
-                {t('feedback:replies_coming_soon')}
+                {/* Reply list would go here */}
+                {replyCount === 0 ? (
+                  <EmptyState text={t('feedback:no_replies_yet')} size='xs' />
+                ) : (
+                  <div className='text-sm text-muted-foreground italic text-center py-6 border border-dashed border-muted rounded-xl'>
+                    {t('feedback:replies_coming_soon')}
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </DialogContent>

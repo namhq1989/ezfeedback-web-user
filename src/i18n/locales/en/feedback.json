@@ -73,5 +73,6 @@
   "user": "User",
   "date": "Date",
   "country": "Country",
-  "content": "Content"
+  "content": "Content",
+  "write_reply": "Share your thoughts..."
 }
