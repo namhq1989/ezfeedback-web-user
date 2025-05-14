@@ -1,4 +1,5 @@
 {
+  "locale": "vi",
   "app": {
     "name": "EzFeedback",
     "tagline": "Thu thập phản hồi một cách dễ dàng"
@@ -13,7 +14,8 @@
     "confirm": "Xác nhận",
     "back": "Quay lại",
     "next": "Tiếp theo",
-    "prev": "Trước đó"
+    "prev": "Trước đó",
+    "ctrlEnterToSend": "Ctrl + Enter để gửi"
   },
   "common": {
     "save": "Lưu",

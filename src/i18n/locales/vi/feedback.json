@@ -64,6 +64,12 @@
   "add_reply": "Thêm trả lời",
   "no_replies_yet": "Chưa có trả lời nào",
   "replies_coming_soon": "Các trả lời sẽ được hiển thị ở đây",
+  "load_more_replies": "Tải thêm trả lời",
+  "edited": "đã chỉnh sửa",
+  "reply_sent": "Đã gửi trả lời",
+  "reply_sent_description": "Trả lời của bạn đã được gửi thành công",
+  "reply_error": "Không thể gửi trả lời",
+  "reply_error_description": "Đã xảy ra lỗi khi gửi trả lời của bạn. Vui lòng thử lại.",
   "detail": {
     "title": "Chi tiết phản hồi",
     "close": "Đóng"

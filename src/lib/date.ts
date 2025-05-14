@@ -1,3 +1,5 @@
+import { format } from 'timeago.js'
+
 const formatTime = (dateString: string): string => {
   const date = new Date(dateString)
   const now = new Date()
@@ -68,7 +70,19 @@ export const formatDateTime24h = (dateString: string): string => {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
+    timeZone: 'UTC',
   })
+}
+
+/**
+ * Format a date string to a relative time (e.g., "2 minutes ago") with i18n support
+ * @param dateString ISO date string
+ * @param locale Locale code (e.g., 'en', 'vi')
+ * @returns Relative time string
+ */
+export const timeAgo = (dateString: string, locale = 'en'): string => {
+  const utcDate = new Date(dateString)
+  return format(utcDate, locale)
 }
 
 export { formatDate, formatDateString, formatTime }

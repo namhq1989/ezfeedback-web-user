@@ -64,6 +64,12 @@
   "add_reply": "Add Reply",
   "no_replies_yet": "No replies yet",
   "replies_coming_soon": "Replies will be shown here",
+  "load_more_replies": "Load more replies",
+  "edited": "edited",
+  "reply_sent": "Reply sent",
+  "reply_sent_description": "Your reply has been sent successfully",
+  "reply_error": "Failed to send reply",
+  "reply_error_description": "There was an error sending your reply. Please try again.",
   "detail": {
     "title": "Feedback Details",
     "close": "Close"
