@@ -1,18 +1,21 @@
 import {
+  FeedbackCompactList,
   FeedbackFilters,
-  FeedbackFilterSheet,
-  FeedbackList,
   FeedbackPagination,
   IFeedbackFilters,
 } from '@/app/components/feedback'
 import useFeedbackStore from '@/app/stores/feedback'
 import useProjectStore from '@/app/stores/project'
-
-import { useEffect } from 'react'
+import { useTranslation } from '@/i18n'
+import { useEffect, useState } from 'react'
 
 const FeedbackPage = () => {
-  const { filters, feedbacks } = useFeedbackStore()
+  const { t } = useTranslation()
+  const { filters, feedbacks, isLoadingFeedbacks } = useFeedbackStore()
   const { selectedProject } = useProjectStore()
+  const [selectedFeedbackId, setSelectedFeedbackId] = useState<string | null>(
+    null,
+  )
 
   // Get store actions
   const { getFeedbacks, countFeedbacks, setFilters } = useFeedbackStore()
@@ -46,28 +49,42 @@ const FeedbackPage = () => {
     updateData()
   }
 
+  const handleFeedbackSelect = (feedbackId: string) => {
+    setSelectedFeedbackId(feedbackId)
+  }
+
   return (
     <div className='container mx-auto py-6 px-4 md:py-8 md:px-6'>
-      <div className='max-w-6xl mx-auto'>
-        {/* Mobile filter sheet - only visible on small screens */}
-        <div className='md:hidden mb-4'>
-          <FeedbackFilterSheet onFilterChange={handleFilterChange} />
+      {/* State filters - Mobile style matching user-menu-layout */}
+      <FeedbackFilters
+        onFilterChange={handleFilterChange}
+        stateFilterOnly={true}
+        horizontal={true}
+      />
+
+      <div className='flex flex-col md:flex-row gap-6'>
+        {/* Left column: Feedback List */}
+        <div className='w-full md:w-90 flex flex-col gap-4'>
+          {/* Feedback list */}
+          <FeedbackCompactList
+            feedbacks={feedbacks}
+            isLoading={isLoadingFeedbacks}
+            selectedFeedbackId={selectedFeedbackId}
+            onFeedbackSelect={handleFeedbackSelect}
+          />
+
+          {/* Pagination */}
+          {!isLoadingFeedbacks && feedbacks.length > 0 && (
+            <div className='mt-4'>
+              <FeedbackPagination />
+            </div>
+          )}
         </div>
 
-        {/* Responsive layout */}
-        <div className='flex flex-col md:flex-row gap-6'>
-          {/* Filter section - hidden on mobile, always visible on desktop */}
-          <div className='hidden md:block md:w-64'>
-            <FeedbackFilters onFilterChange={handleFilterChange} />
-          </div>
-
-          {/* Main content: Feedback list with pagination */}
-          <div className='flex-1 space-y-4'>
-            {/* Feedback list */}
-            <FeedbackList />
-
-            {/* Pagination - only show when there are feedbacks */}
-            {feedbacks.length > 0 && <FeedbackPagination />}
+        {/* Right column: Feedback Content */}
+        <div className='flex-1 border rounded-xl p-6 hidden md:flex items-center justify-center'>
+          <div className='text-muted-foreground'>
+            {t('feedback:content.select')}
           </div>
         </div>
       </div>

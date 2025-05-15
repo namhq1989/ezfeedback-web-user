@@ -41,6 +41,7 @@
   },
   "state": {
     "": "Không xác định",
+    "all": "Tất cả",
     "new": "Mới",
     "in_review": "Đang xem xét",
     "planned": "Đã lên kế hoạch",
@@ -79,6 +80,13 @@
   "user": "Người dùng",
   "date": "Ngày",
   "country": "Quốc gia",
-  "content": "Nội dung",
-  "write_reply": "Chia sẻ suy nghĩ của bạn..."
+  "contentLabel": "Nội dung",
+  "write_reply": "Chia sẻ suy nghĩ của bạn...",
+  "content": {
+    "select": "Nội dung phản hồi",
+    "loading": "Đang tải nội dung phản hồi..."
+  },
+  "unknown": "Không xác định",
+  "read": "Đã đọc",
+  "unread": "Chưa đọc"
 }

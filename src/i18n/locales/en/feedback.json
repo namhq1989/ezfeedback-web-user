@@ -41,6 +41,7 @@
   },
   "state": {
     "": "Unknown",
+    "all": "All",
     "new": "New",
     "in_review": "In Review",
     "planned": "Planned",
@@ -79,6 +80,13 @@
   "user": "User",
   "date": "Date",
   "country": "Country",
-  "content": "Content",
-  "write_reply": "Share your thoughts..."
+  "contentLabel": "Content",
+  "write_reply": "Share your thoughts...",
+  "content": {
+    "select": "Feedback content",
+    "loading": "Loading feedback content..."
+  },
+  "unknown": "Unknown",
+  "read": "Read",
+  "unread": "Unread"
 }

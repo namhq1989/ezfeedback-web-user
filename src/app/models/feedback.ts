@@ -1,3 +1,5 @@
+import { IUser } from '@/app/models/user'
+
 export interface IFeedback {
   id: string
   campaign: {
@@ -20,6 +22,7 @@ export interface IFeedback {
   stats: {
     totalReplies: number
   }
+  isRead: boolean
   createdAt: string
   updatedAt?: string
 }
@@ -33,6 +36,15 @@ export enum FeedbackState {
   Declined = 'declined',
 }
 
+export const FeedbackStateColors: Record<FeedbackState, string> = {
+  [FeedbackState.New]: 'blue-500',
+  [FeedbackState.InReview]: 'yellow-500',
+  [FeedbackState.Planned]: 'purple-500',
+  [FeedbackState.InProgress]: 'orange-500',
+  [FeedbackState.Completed]: 'green-500',
+  [FeedbackState.Declined]: 'red-500',
+}
+
 export type FeedbackStateType = keyof typeof FeedbackState
 
 export enum CampaignType {
@@ -42,3 +54,10 @@ export enum CampaignType {
 }
 
 export type CampaignTypeType = keyof typeof CampaignType
+
+export interface IFeedbackStateHistory {
+  id: string
+  state: FeedbackState
+  createdAt: string
+  user: IUser
+}

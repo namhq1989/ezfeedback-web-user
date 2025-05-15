@@ -1,21 +1,37 @@
 import feedbackApi from '@/app/api/feedback'
-import { IGetFeedbacksRequest } from '@/app/api/feedback/feedback-types'
-import { FeedbackState, IFeedback } from '@/app/models/feedback'
+import {
+  IGetFeedbackStateHistoryRequest,
+  IGetFeedbacksRequest,
+} from '@/app/api/feedback/feedback-types'
+import {
+  FeedbackState,
+  IFeedback,
+  IFeedbackStateHistory,
+} from '@/app/models/feedback'
 import useProjectStore from '@/app/stores/project'
 import { create } from 'zustand/react'
 
 export interface IFeedbackStore {
   feedbacks: IFeedback[]
+  stateHistories: IFeedbackStateHistory[]
   isLoadingFeedbacks: boolean
+  isLoadingStateHistories: boolean
   isChangingFeedbackState: boolean
   isCountingFeedbacks: boolean
   error: string | null
   limit: number
+  stateHistoriesLimit: number
   totalCount: number
   filters: IGetFeedbacksRequest
   getFeedbacks: (params?: IGetFeedbacksRequest) => Promise<IFeedback[]>
   countFeedbacks: (params?: IGetFeedbacksRequest) => Promise<number>
+  getFeedbackStateHistories: (
+    feedbackId: string,
+    params?: IGetFeedbackStateHistoryRequest,
+  ) => Promise<IFeedbackStateHistory[]>
   setFeedbacks: (feedbacks: IFeedback[]) => void
+  setStateHistories: (histories: IFeedbackStateHistory[]) => void
+  clearStateHistories: () => void
   setFilters: (filters: IGetFeedbacksRequest) => void
   changeFeedbackState: (id: string, state: FeedbackState) => Promise<boolean>
   incrementReplyCount: (feedbackId: string) => void
@@ -23,11 +39,14 @@ export interface IFeedbackStore {
 
 const useFeedbackStore = create<IFeedbackStore>((set, get) => ({
   feedbacks: [],
+  stateHistories: [],
   isLoadingFeedbacks: false,
+  isLoadingStateHistories: false,
   isChangingFeedbackState: false,
   isCountingFeedbacks: false,
   error: null,
   limit: 20,
+  stateHistoriesLimit: 50,
   totalCount: 0,
   filters: {
     page: 0,
@@ -159,13 +178,7 @@ const useFeedbackStore = create<IFeedbackStore>((set, get) => ({
     try {
       set({ isChangingFeedbackState: true, error: null })
 
-      // Get project ID from project store
-      const { selectedProject } = useProjectStore.getState()
-      if (!selectedProject?.id) {
-        throw new Error('No project selected')
-      }
-
-      await feedbackApi.changeFeedbackState(id, { state }, selectedProject.id)
+      await feedbackApi.changeFeedbackState(id, { state })
 
       // Update the feedback in the store
       const { feedbacks } = get()
@@ -186,6 +199,44 @@ const useFeedbackStore = create<IFeedbackStore>((set, get) => ({
       })
       return false
     }
+  },
+
+  getFeedbackStateHistories: async (
+    feedbackId: string,
+    params?: IGetFeedbackStateHistoryRequest,
+  ) => {
+    try {
+      set({ isLoadingStateHistories: true, error: null })
+
+      const response = await feedbackApi.getFeedbackStateHistories(
+        feedbackId,
+        params,
+      )
+      const histories = response.histories || []
+      const limit = response.limit || 50
+
+      set({
+        stateHistories: histories,
+        stateHistoriesLimit: limit,
+        isLoadingStateHistories: false,
+      })
+
+      return histories
+    } catch (error) {
+      set({
+        error: (error as Error).message,
+        isLoadingStateHistories: false,
+      })
+      return []
+    }
+  },
+
+  setStateHistories: (histories: IFeedbackStateHistory[]) => {
+    set({ stateHistories: histories })
+  },
+
+  clearStateHistories: () => {
+    set({ stateHistories: [] })
   },
 
   incrementReplyCount: (feedbackId: string) => {

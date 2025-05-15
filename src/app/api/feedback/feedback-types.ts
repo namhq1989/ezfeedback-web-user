@@ -1,4 +1,9 @@
-import { CampaignType, FeedbackState, IFeedback } from '@/app/models/feedback'
+import {
+  CampaignType,
+  FeedbackState,
+  IFeedback,
+  IFeedbackStateHistory,
+} from '@/app/models/feedback'
 
 //
 // GET FEEDBACKS
@@ -11,6 +16,7 @@ export interface IGetFeedbacksRequest {
   keyword?: string
   state?: FeedbackState
   rating?: number
+  isRead?: boolean
   page?: number
 }
 
@@ -44,4 +50,17 @@ export interface ICountFeedbacksRequest {
 
 export interface ICountFeedbacksResponse {
   total: number
+}
+
+//
+// GET FEEDBACK STATE HISTORY
+//
+
+export interface IGetFeedbackStateHistoryRequest {
+  page?: number
+}
+
+export interface IGetFeedbackStateHistoryResponse {
+  histories: IFeedbackStateHistory[]
+  limit: number
 }
