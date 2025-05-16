@@ -11,11 +11,12 @@ import { Toggle } from '@/components/ui/toggle'
 import { useTranslation } from '@/i18n'
 import { cn } from '@/lib/utils'
 import {
-  CheckCircle,
-  Clock,
+  Calendar,
+  CheckCheck,
   Inbox,
-  PanelLeft,
   PlayCircle,
+  ScanSearch,
+  Sparkles,
   XCircle,
 } from 'lucide-react'
 import { useState } from 'react'
@@ -114,19 +115,19 @@ const FeedbackFilters = ({
     switch (state) {
       case FeedbackState.New:
         return (
-          <Inbox
+          <Sparkles
             className={`w-4 h-4 text-${FeedbackStateColors[FeedbackState.New]}`}
           />
         )
       case FeedbackState.InReview:
         return (
-          <PanelLeft
+          <ScanSearch
             className={`w-4 h-4 text-${FeedbackStateColors[FeedbackState.InReview]}`}
           />
         )
       case FeedbackState.Planned:
         return (
-          <Clock
+          <Calendar
             className={`w-4 h-4 text-${FeedbackStateColors[FeedbackState.Planned]}`}
           />
         )
@@ -138,7 +139,7 @@ const FeedbackFilters = ({
         )
       case FeedbackState.Completed:
         return (
-          <CheckCircle
+          <CheckCheck
             className={`w-4 h-4 text-${FeedbackStateColors[FeedbackState.Completed]}`}
           />
         )

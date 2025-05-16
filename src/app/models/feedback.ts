@@ -37,12 +37,12 @@ export enum FeedbackState {
 }
 
 export const FeedbackStateColors: Record<FeedbackState, string> = {
-  [FeedbackState.New]: 'blue-500',
-  [FeedbackState.InReview]: 'yellow-500',
-  [FeedbackState.Planned]: 'purple-500',
-  [FeedbackState.InProgress]: 'orange-500',
-  [FeedbackState.Completed]: 'green-500',
-  [FeedbackState.Declined]: 'red-500',
+  [FeedbackState.New]: 'blue-600',
+  [FeedbackState.InReview]: 'yellow-600',
+  [FeedbackState.Planned]: 'purple-600',
+  [FeedbackState.InProgress]: 'orange-600',
+  [FeedbackState.Completed]: 'green-600',
+  [FeedbackState.Declined]: 'red-600',
 }
 
 export type FeedbackStateType = keyof typeof FeedbackState

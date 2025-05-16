@@ -23,7 +23,7 @@ const FeedbackCompactList = ({
   const { t } = useTranslation()
 
   return (
-    <div className='flex-1 overflow-hidden'>
+    <div className='flex-1 overflow-hidden border rounded-xl p-2'>
       {isLoading ? (
         <div className='flex justify-center items-center h-96'>
           <Spinner size='md' />
@@ -41,12 +41,23 @@ const FeedbackCompactList = ({
             <div
               key={feedback.id}
               className={cn(
-                'p-4 cursor-pointer hover:bg-muted/30 hover:rounded-xl rounded-xl transition-colors',
-                selectedFeedbackId === feedback.id && 'bg-muted/50',
+                'p-4 cursor-pointer hover:bg-muted hover:rounded-xl rounded-xl transition-colors',
+                selectedFeedbackId === feedback.id && 'bg-muted',
               )}
               onClick={() => onFeedbackSelect(feedback.id)}
             >
               <div className='flex flex-col gap-2'>
+                <div className='flex gap-2 items-center'>
+                  <div
+                    className={cn(
+                      'w-4 h-2 rounded-full',
+                      `bg-${FeedbackStateColors[feedback.state]}`,
+                    )}
+                  />
+                  <span className='flex gap-1 text-xs text-muted-foreground'>
+                    {timeAgo(feedback.createdAt, t('common:locale'))}
+                  </span>
+                </div>
                 {/* Line 1: User (left), campaign type (right) */}
                 <div className='flex justify-between items-center'>
                   <span className='text-sm font-medium'>
@@ -66,36 +77,14 @@ const FeedbackCompactList = ({
 
                 {/* Line 2: Creation date (left), rating (right) */}
                 <div className='flex justify-between items-center'>
-                  <div className='flex gap-1 text-xs text-muted-foreground'>
-                    <span>
-                      {timeAgo(feedback.createdAt, t('common:locale'))}
-                    </span>
-                  </div>
+                  <span className='text-xs text-muted-foreground'>
+                    {feedback.stats.totalReplies} {t('feedback:replies')}
+                  </span>
                   <FeedbackRating
                     type={feedback.campaignType}
                     rating={feedback.rating}
                     size='sm'
                   />
-                </div>
-
-                {/* Line 3: State (left), replies stats (right) */}
-                <div className='flex justify-between items-center'>
-                  <div className='text-xs flex items-center gap-1'>
-                    <div
-                      className={cn(
-                        'w-2 h-2 rounded-full',
-                        `bg-${FeedbackStateColors[feedback.state]}`,
-                      )}
-                    />
-                    <span
-                      className={`text-${FeedbackStateColors[feedback.state]}`}
-                    >
-                      {t(`feedback:state.${feedback.state}`)}
-                    </span>
-                  </div>
-                  <div className='text-xs text-muted-foreground'>
-                    {feedback.stats.totalReplies} {t('feedback:replies')}
-                  </div>
                 </div>
               </div>
             </div>
