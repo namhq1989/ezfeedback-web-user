@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { useTranslation } from '@/i18n'
 import { timeAgo } from '@/lib/date'
@@ -126,8 +125,8 @@ const FeedbackDetail = ({
   }
 
   return (
-    <div className='flex flex-col gap-4 h-full pl-0 md:pl-4'>
-      {/* New Header */}
+    <div className='flex flex-col gap-8 h-full md:px-12 md:py-6'>
+      {/* Header - Keep as current */}
       <div className='flex items-center justify-between'>
         {/* Left side */}
         <div className='flex flex-col gap-2'>
@@ -228,125 +227,156 @@ const FeedbackDetail = ({
           )}
         </div>
       </div>
-      <Separator />
-      {/* Column 1: Feedback Data and Replies */}
-      <div className='flex justify-between mt-8'>
-        <div className='flex flex-col gap-8 mt-8'>
-          <div className='flex flex-col gap-8 mr-8'>
-            {/* Section 1: Feedback Data */}
-            <div className='flex flex-col gap-8'>
-              <div className='flex flex-col justify-center gap-3'>
-                <div className='flex gap-2'>
-                  <Badge className='text-xs font-medium'>
-                    {feedback.campaignType
-                      ? t(
-                          `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
-                        )
-                      : t('feedback:campaignType.general')}
-                  </Badge>
-                  <FeedbackRating
-                    type={feedback.campaignType}
-                    rating={feedback.rating}
-                    size='md'
-                  />
+
+      {/* Content rows with bg-container class */}
+      {/* Row 1: Feedback type, rating, content */}
+      <div className='bg-container rounded-xl p-6'>
+        <div className='flex flex-col gap-4'>
+          <div className='flex items-center gap-3'>
+            <Badge className='text-xs font-medium'>
+              {feedback.campaignType
+                ? t(
+                    `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
+                  )
+                : t('feedback:campaignType.general')}
+            </Badge>
+            <FeedbackRating
+              type={feedback.campaignType}
+              rating={feedback.rating}
+              size='md'
+            />
+          </div>
+          <div className='mt-2'>
+            <p className='whitespace-pre-wrap text-sm'>
+              {feedback.content || '-'}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Row 2: State history as timeline */}
+      <div>
+        <h3 className='text-sm font-medium mb-4'>Histories</h3>
+
+        <div className='relative'>
+          {/* Timeline line */}
+          <div className='absolute left-3 top-1 bottom-0 w-0.5 bg-muted z-0'></div>
+
+          {/* Timeline items */}
+          <div className='space-y-6 relative z-10'>
+            {/* Default creation history item */}
+            <div className='pl-10 relative'>
+              {/* Timeline dot */}
+              <div
+                className={`absolute left-0 top-1 w-6 h-6 rounded-full border-2 border-background flex items-center justify-center bg-${FeedbackStateColors[FeedbackState.New]}`}
+              >
+                <div className='w-2 h-2 rounded-full bg-background'></div>
+              </div>
+
+              {/* Content */}
+              <div className='rounded-xl p-3 hover:bg-muted/10 transition-colors'>
+                <div className='flex items-center gap-2 mb-1'>
+                  <Avatar className='h-5 w-5'>
+                    <AvatarFallback className='text-[10px]'>
+                      {feedback.isAnonymous
+                        ? 'AN'
+                        : feedback.email?.substring(0, 2).toUpperCase() || 'US'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className='text-xs font-medium'>
+                    {feedback.isAnonymous
+                      ? t('feedback:anonymous')
+                      : feedback.email || feedback.appUserId || 'User'}
+                  </span>
                 </div>
 
-                <p className='whitespace-pre-wrap text-sm'>
-                  {feedback.content || '-'}
-                </p>
+                <div className='flex items-center gap-2 mb-1'>
+                  <Badge
+                    className={`bg-${FeedbackStateColors[FeedbackState.New]} text-white text-xs hover:bg-${FeedbackStateColors[FeedbackState.New]}/90`}
+                  >
+                    {t('feedback:created')}
+                  </Badge>
+                </div>
+
+                <div className='text-xs text-muted-foreground'>
+                  {timeAgo(feedback.createdAt, t('common:locale'))}
+                </div>
               </div>
             </div>
-          </div>
-          {/* Column 2: State History Timeline */}
-          <div className='flex border rounded-xl p-5 overflow-auto'>
-            <h3 className='text-sm font-medium mb-4'>
-              {t('feedback:stateHistory')}
-            </h3>
 
-            {stateHistory.length === 0 ? (
-              <div className='flex items-center justify-center h-32 text-muted-foreground text-sm'>
-                {t('feedback:noHistory')}
-              </div>
-            ) : (
-              <div className='relative'>
-                {/* Timeline line */}
-                <div className='absolute left-3 top-1 bottom-0 w-0.5 bg-muted z-0'></div>
+            {/* State history items */}
+            {stateHistory.map((history) => (
+              <div key={history.id} className='pl-10 relative'>
+                {/* Timeline dot */}
+                <div
+                  className={`absolute left-0 top-1 w-6 h-6 rounded-full border-2 border-background flex items-center justify-center bg-${FeedbackStateColors[history.state]}`}
+                >
+                  <div className='w-2 h-2 rounded-full bg-background'></div>
+                </div>
 
-                {/* Timeline items */}
-                <div className='space-y-6 relative z-10'>
-                  {stateHistory.map((history) => (
-                    <div key={history.id} className='pl-10 relative'>
-                      {/* Timeline dot */}
-                      <div
-                        className={`absolute left-0 top-1 w-6 h-6 rounded-full border-2 border-background flex items-center justify-center bg-${FeedbackStateColors[history.state]}`}
-                      >
-                        <div className='w-2 h-2 rounded-full bg-background'></div>
-                      </div>
+                {/* Content */}
+                <div className='rounded-xl p-3 hover:bg-muted/10 transition-colors'>
+                  <div className='flex items-center gap-2 mb-1'>
+                    <Avatar className='h-5 w-5'>
+                      <AvatarFallback className='text-[10px]'>
+                        {history.user.name.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className='text-xs font-medium'>
+                      {history.user.name}
+                    </span>
+                  </div>
 
-                      {/* Content */}
-                      <div className='border rounded-xl p-3 hover:bg-muted/10 transition-colors'>
-                        <div className='flex items-center gap-2 mb-1'>
-                          <Avatar className='h-5 w-5'>
-                            <AvatarFallback className='text-[10px]'>
-                              {history.user.name.substring(0, 2).toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className='text-xs font-medium'>
-                            {history.user.name}
-                          </span>
-                        </div>
+                  <div className='flex items-center gap-2 mb-1'>
+                    <Badge
+                      className={`bg-${FeedbackStateColors[history.state]} text-white text-xs hover:bg-${FeedbackStateColors[history.state]}/90`}
+                    >
+                      {t(`feedback:state.${history.state}`)}
+                    </Badge>
+                  </div>
 
-                        <div className='flex items-center gap-2 mb-1'>
-                          <Badge
-                            className={`bg-${FeedbackStateColors[history.state]} text-white text-xs hover:bg-${FeedbackStateColors[history.state]}/90`}
-                          >
-                            {t(`feedback:state.${history.state}`)}
-                          </Badge>
-                        </div>
-
-                        <div className='text-xs text-muted-foreground'>
-                          {timeAgo(history.createdAt, t('common:locale'))}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                  <div className='text-xs text-muted-foreground'>
+                    {timeAgo(history.createdAt, t('common:locale'))}
+                  </div>
                 </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
 
-        {/* Section 2: Replies */}
-        <div className='flex flex-col gap-4'>
-          {/* Reply input */}
-          <div className='relative w-full'>
-            <Textarea
-              placeholder={t('feedback:write_reply')}
-              className='resize-none text-xs pr-10 min-h-[100px] rounded-xl'
-              rows={4}
-              value={replyContent}
-              onChange={(e) => setReplyContent(e.target.value)}
-              onKeyDown={handleKeyPress}
-              disabled={isCreating}
-            />
-            <Send
-              onClick={handleReplySubmit}
-              className={`absolute right-4 bottom-8 h-5 w-5 p-0 flex items-center justify-center ${replyContent.trim() && !isCreating ? 'text-primary cursor-pointer' : 'text-muted-foreground cursor-not-allowed'}`}
-            />
-            <div className='flex justify-end mt-2 mr-1'>
-              <span className='text-xs text-muted-foreground'>
-                {t('common:actions.ctrlEnterToSend')}
-              </span>
+        {/* Row 3: Replies */}
+        <div>
+          <div className='flex flex-col gap-4'>
+            {/* Reply input */}
+            <div className='relative w-full'>
+              <Textarea
+                placeholder={t('feedback:write_reply')}
+                className='resize-none text-xs pr-10 min-h-[100px] rounded-xl'
+                rows={4}
+                value={replyContent}
+                onChange={(e) => setReplyContent(e.target.value)}
+                onKeyDown={handleKeyPress}
+                disabled={isCreating}
+              />
+              <Send
+                onClick={handleReplySubmit}
+                className={`absolute right-4 bottom-8 h-5 w-5 p-0 flex items-center justify-center ${replyContent.trim() && !isCreating ? 'text-primary cursor-pointer' : 'text-muted-foreground cursor-not-allowed'}`}
+              />
+              <div className='flex justify-end mt-2 mr-1'>
+                <span className='text-xs text-muted-foreground'>
+                  {t('common:actions.ctrlEnterToSend')}
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* Replies list */}
-          <div className='overflow-auto'>
-            <FeedbackReplies
-              replies={replies}
-              isLoading={isLoadingReplies}
-              totalReplies={feedback.stats.totalReplies}
-            />
+            {/* Replies list */}
+            <div className='overflow-auto'>
+              <FeedbackReplies
+                replies={replies}
+                isLoading={isLoadingReplies}
+                totalReplies={feedback.stats.totalReplies}
+              />
+            </div>
           </div>
         </div>
       </div>

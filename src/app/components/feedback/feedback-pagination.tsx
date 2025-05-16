@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button'
 import { useTranslation } from '@/i18n'
 import { formatNumber } from '@/lib/number'
 
-const FeedbackPagination = () => {
+interface IFeedbackPaginationProps {}
+
+const FeedbackPagination = ({}: IFeedbackPaginationProps) => {
   const { t } = useTranslation()
   const { totalCount, limit, filters, setFilters } = useFeedbackStore()
   const totalPages = Math.ceil(totalCount / limit)

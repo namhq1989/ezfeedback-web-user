@@ -49,6 +49,7 @@
     "completed": "Completed",
     "declined": "Declined",
     "select": "Select state",
+    "created": "Created",
     "title": "State",
     "change_success": "State changed",
     "change_success_description": "Feedback state changed to {{state}}",

@@ -49,6 +49,7 @@
     "completed": "Hoàn thành",
     "declined": "Từ chối",
     "select": "Chọn trạng thái",
+    "created": "Đã tạo",
     "title": "Trạng thái",
     "change_success": "Đã thay đổi trạng thái",
     "change_success_description": "Trạng thái phản hồi đã được thay đổi thành {{state}}",

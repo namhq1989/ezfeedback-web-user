@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { useTranslation } from '@/i18n'
 import { timeAgo } from '@/lib/date'
 import { cn } from '@/lib/utils'
+import { Clock, MessageCircle } from 'lucide-react'
 
 interface IFeedbackCompactListProps {
   feedbacks: IFeedback[]
@@ -23,7 +24,7 @@ const FeedbackCompactList = ({
   const { t } = useTranslation()
 
   return (
-    <div className='flex-1 overflow-hidden border rounded-xl p-2'>
+    <div className='flex-1 overflow-hidden'>
       {isLoading ? (
         <div className='flex justify-center items-center h-96'>
           <Spinner size='md' />
@@ -36,55 +37,49 @@ const FeedbackCompactList = ({
           />
         </div>
       ) : (
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col divide-y divide-border'>
           {feedbacks.map((feedback) => (
             <div
               key={feedback.id}
               className={cn(
-                'p-4 cursor-pointer hover:bg-muted hover:rounded-xl rounded-xl transition-colors',
+                'p-4 cursor-pointer hover:bg-muted transition-colors h-[140px] flex flex-col justify-between',
                 selectedFeedbackId === feedback.id && 'bg-muted',
               )}
               onClick={() => onFeedbackSelect(feedback.id)}
             >
-              <div className='flex flex-col gap-2'>
-                <div className='flex gap-2 items-center'>
-                  <div
-                    className={cn(
-                      'w-4 h-2 rounded-full',
-                      `bg-${FeedbackStateColors[feedback.state]}`,
-                    )}
-                  />
-                  <span className='flex gap-1 text-xs text-muted-foreground'>
-                    {timeAgo(feedback.createdAt, t('common:locale'))}
-                  </span>
-                </div>
-                {/* Line 1: User (left), campaign type (right) */}
-                <div className='flex justify-between items-center'>
-                  <span className='text-sm font-medium'>
-                    {feedback.isAnonymous ||
-                    (!feedback.email && !feedback.appUserId)
-                      ? t('feedback:anonymous')
-                      : feedback.email || feedback.appUserId}
-                  </span>
-                  <Badge variant='outline'>
-                    {feedback.campaignType
-                      ? t(
-                          `feedback:campaignType.${feedback.campaignType.toLowerCase()}`,
-                        )
-                      : t('feedback:campaignType.general')}
-                  </Badge>
-                </div>
+              {/* Line 1: Rating (left), State (right) */}
+              <div className='flex justify-between items-center'>
+                <FeedbackRating
+                  type={feedback.campaignType}
+                  rating={feedback.rating}
+                  size='sm'
+                />
+                <Badge
+                  className={cn(
+                    'text-xs font-medium',
+                    `bg-${FeedbackStateColors[feedback.state]} text-${FeedbackStateColors[feedback.state]}/30`,
+                  )}
+                >
+                  {t(`feedback:state.${feedback.state}`)}
+                </Badge>
+              </div>
 
-                {/* Line 2: Creation date (left), rating (right) */}
-                <div className='flex justify-between items-center'>
-                  <span className='text-xs text-muted-foreground'>
+              {/* Line 2: Content with max 2 lines */}
+              <p className='text-sm line-clamp-2 min-h-[40px]'>
+                {feedback.content || '-'}
+              </p>
+
+              {/* Line 3: Creation date and replies count */}
+              <div className='flex justify-between items-center text-xs text-muted-foreground'>
+                <div className='flex items-center gap-1'>
+                  <Clock className='w-3.5 h-3.5' />
+                  <span>{timeAgo(feedback.createdAt, t('common:locale'))}</span>
+                </div>
+                <div className='flex items-center gap-1'>
+                  <MessageCircle className='w-3.5 h-3.5' />
+                  <span>
                     {feedback.stats.totalReplies} {t('feedback:replies')}
                   </span>
-                  <FeedbackRating
-                    type={feedback.campaignType}
-                    rating={feedback.rating}
-                    size='sm'
-                  />
                 </div>
               </div>
             </div>
